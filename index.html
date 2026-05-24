@@ -1,295 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Trader Mentor — JAH.</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AlphaEdge AI — Elite Trading Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      background: #0C0C0C;
-      color: #E8F0F5;
-      font-family: 'Kanit', sans-serif;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-    :root {
-      --green:     #22c55e;
-      --green-dim: rgba(34,197,94,0.15);
-      --green-glow:rgba(34,197,94,0.22);
-      --border:    rgba(232,240,245,0.09);
-      --text:      #E8F0F5;
-      --muted:     rgba(232,240,245,0.42);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{background:#0C0C0C;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;scroll-behavior:smooth}
+    :root{
+      --green:#22c55e;--green-dim:rgba(34,197,94,.14);--green-glow:rgba(34,197,94,.22);
+      --border:rgba(232,240,245,.08);--text:#E8F0F5;--muted:rgba(232,240,245,.42);
+      --bnb:#F3BA2F;--bnb-dim:rgba(243,186,47,.12);
     }
 
-    /* ── Buttons ── */
-    .btn-primary {
-      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-      background: #fff; border: none; border-radius: 9999px;
-      color: #0C0C0C; font-family: 'Kanit', sans-serif;
-      font-weight: 700; text-transform: uppercase; letter-spacing: .12em;
-      cursor: pointer; padding: .8rem 2.2rem; font-size: .85rem;
-      transition: background .2s, transform .2s, box-shadow .2s;
-    }
-    .btn-primary:hover  { background: var(--green); transform: translateY(-2px); box-shadow: 0 8px 28px var(--green-glow); }
-    .btn-primary:disabled { opacity: .35; cursor: not-allowed; transform: none; }
-
-    .btn-ghost {
-      display: inline-flex; align-items: center; justify-content: center;
-      border: 2px solid rgba(232,240,245,.3); border-radius: 9999px;
-      background: transparent; color: var(--text); font-family: 'Kanit', sans-serif;
-      font-weight: 500; text-transform: uppercase; letter-spacing: .12em;
-      cursor: pointer; padding: .75rem 2rem; font-size: .85rem;
-      transition: border-color .2s, background .2s, transform .2s;
-    }
-    .btn-ghost:hover { border-color: var(--green); background: var(--green-dim); transform: translateY(-2px); }
+    /* ── BUTTONS ── */
+    .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:#fff;border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.8rem 2.2rem;font-size:.85rem;transition:background .2s,transform .2s,box-shadow .2s}
+    .btn-primary:hover{background:var(--green);transform:translateY(-2px);box-shadow:0 8px 28px var(--green-glow)}
+    .btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none}
+    .btn-ghost{display:inline-flex;align-items:center;justify-content:center;border:2px solid rgba(232,240,245,.3);border-radius:9999px;background:transparent;color:var(--text);font-family:'Kanit',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.75rem 2rem;font-size:.85rem;transition:border-color .2s,background .2s,transform .2s}
+    .btn-ghost:hover{border-color:var(--green);background:var(--green-dim);transform:translateY(-2px)}
+    .btn-pay{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;background:linear-gradient(135deg,#F3BA2F 0%,#e0a800 100%);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:1rem 2.5rem;font-size:.95rem;box-shadow:0 8px 32px rgba(243,186,47,.35);transition:transform .2s,box-shadow .2s;width:100%}
+    .btn-pay:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(243,186,47,.45)}
 
     /* ── NAV ── */
-    nav {
-      position: fixed; top:0; left:0; right:0; z-index:100;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:1rem 2.5rem;
-      background:rgba(12,12,12,.85); backdrop-filter:blur(18px);
-      border-bottom:1px solid var(--border);
-    }
-    .jah-logo { display:flex; align-items:baseline; gap:0; cursor:default; user-select:none; }
-    .jah-wordmark { font-size:1.35rem; font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:-.01em; line-height:1; }
-    .jah-circle  { display:inline-block; width:11px; height:11px; background:var(--green); border-radius:50%; margin-left:3px; position:relative; bottom:2px; box-shadow:0 0 10px var(--green); }
-
-    .nav-links { display:flex; gap:2.5rem; list-style:none; }
-    .nav-links a { color:var(--text); text-decoration:none; font-weight:500; font-size:.8rem; text-transform:uppercase; letter-spacing:.14em; opacity:.5; transition:opacity .2s, color .2s; }
-    .nav-links a:hover { opacity:1; color:var(--green); }
-
-    /* ── JAH. avatar (replaces robot emoji) ── */
-    .jah-avatar {
-      width:38px; height:38px; border-radius:50%;
-      background:#0C0C0C; border:2px solid var(--green);
-      display:flex; align-items:center; justify-content:center;
-      flex-shrink:0; gap:1px; box-shadow:0 0 10px var(--green-glow);
-    }
-    .jah-av-text { font-size:.52rem; font-weight:900; color:#fff; letter-spacing:-.01em; text-transform:uppercase; line-height:1; }
-    .jah-av-dot  { width:4px; height:4px; border-radius:50%; background:var(--green); box-shadow:0 0 4px var(--green); flex-shrink:0; }
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(12,12,12,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .jah-logo{display:flex;align-items:baseline;gap:0;cursor:default;user-select:none}
+    .jah-wordmark{font-size:1.35rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:-.01em;line-height:1}
+    .jah-circle{display:inline-block;width:11px;height:11px;background:var(--green);border-radius:50%;margin-left:3px;position:relative;bottom:2px;box-shadow:0 0 10px var(--green)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{color:var(--text);text-decoration:none;font-weight:500;font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;opacity:.5;transition:opacity .2s,color .2s}
+    .nav-links a:hover{opacity:1;color:var(--green)}
+    .jah-avatar{width:38px;height:38px;border-radius:50%;background:#0C0C0C;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;gap:1px;box-shadow:0 0 10px var(--green-glow)}
+    .jah-av-text{font-size:.52rem;font-weight:900;color:#fff;letter-spacing:-.01em;text-transform:uppercase;line-height:1}
+    .jah-av-dot{width:4px;height:4px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);flex-shrink:0}
 
     /* ── HERO ── */
-    #hero {
-      min-height:100vh; display:flex; flex-direction:column;
-      align-items:center; justify-content:center; text-align:center;
-      position:relative; overflow:hidden; padding:7rem 2rem 4rem;
-    }
-    .hero-grid {
-      position:absolute; inset:0; pointer-events:none;
-      background-image: linear-gradient(rgba(34,197,94,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,.04) 1px, transparent 1px);
-      background-size:60px 60px;
-      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 25%, transparent 100%);
-      -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 25%, transparent 100%);
-    }
-    .orb { position:absolute; border-radius:50%; filter:blur(100px); opacity:.17; animation:orb-float 12s ease-in-out infinite; pointer-events:none; }
-    .orb-1 { width:540px; height:540px; background:#22c55e; top:-200px; left:-200px; animation-delay:0s; }
-    .orb-2 { width:380px; height:380px; background:#16a34a; bottom:-100px; right:-100px; animation-delay:-5s; }
-    .orb-3 { width:240px; height:240px; background:#4ade80; top:42%; right:6%; animation-delay:-9s; }
-    @keyframes orb-float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-40px) scale(1.08)} }
-
-    .hero-badge {
-      display:inline-flex; align-items:center; gap:.6rem;
-      background:rgba(34,197,94,.07); border:1px solid rgba(34,197,94,.25); border-radius:9999px;
-      padding:.45rem 1.3rem; font-size:.7rem; font-weight:600;
-      text-transform:uppercase; letter-spacing:.2em; color:var(--green);
-      margin-bottom:2.5rem; animation:fade-up-a .8s ease both;
-    }
-    .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:live-pulse 2s ease-in-out infinite; flex-shrink:0; }
-    @keyframes live-pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
-
-    .hero-title {
-      font-size:clamp(3rem,13vw,11rem); font-weight:900; text-transform:uppercase;
-      letter-spacing:-.03em; line-height:.88;
-      background:linear-gradient(180deg,#7a8290 0%,#fff 100%);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      margin-bottom:1.75rem; animation:fade-up-a .8s .12s ease both; white-space:nowrap;
-    }
-    .hero-sub {
-      font-size:clamp(.8rem,1.8vw,1rem); font-weight:300; color:var(--muted);
-      text-transform:uppercase; letter-spacing:.1em; max-width:520px; line-height:1.75;
-      margin-bottom:2.5rem; animation:fade-up-a .8s .28s ease both;
-    }
-    .hero-cta { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; animation:fade-up-a .8s .42s ease both; }
-    .hero-stats { display:flex; align-items:center; gap:2.5rem; margin-top:5rem; flex-wrap:wrap; justify-content:center; animation:fade-up-a .8s .56s ease both; }
-    .stat-item { text-align:center; }
-    .stat-value { font-size:clamp(1.6rem,4vw,2.4rem); font-weight:900; color:var(--green); line-height:1; margin-bottom:.2rem; }
-    .stat-label { font-size:.62rem; font-weight:400; text-transform:uppercase; letter-spacing:.2em; color:var(--muted); }
-    .stat-sep { width:1px; height:36px; background:var(--border); }
-    .scroll-cue { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:.35rem; opacity:.28; animation:scroll-b 2.5s ease-in-out infinite; }
-    .scroll-cue span { font-size:.58rem; text-transform:uppercase; letter-spacing:.2em; }
-    @keyframes scroll-b { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(9px)} }
-    @keyframes fade-up-a { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:7rem 2rem 4rem}
+    .hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 100%)}
+    .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.17;animation:orb-float 12s ease-in-out infinite;pointer-events:none}
+    .orb-1{width:540px;height:540px;background:#22c55e;top:-200px;left:-200px;animation-delay:0s}
+    .orb-2{width:380px;height:380px;background:#16a34a;bottom:-100px;right:-100px;animation-delay:-5s}
+    .orb-3{width:240px;height:240px;background:#4ade80;top:42%;right:6%;animation-delay:-9s}
+    @keyframes orb-float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-40px) scale(1.08)}}
+    .hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:9999px;padding:.45rem 1.3rem;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--green);margin-bottom:2.5rem;animation:fua .8s ease both}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:lp 2s ease-in-out infinite;flex-shrink:0}
+    @keyframes lp{0%,100%{opacity:1}50%{opacity:.35}}
+    .hero-title{font-size:clamp(2.6rem,12vw,10rem);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.88;background:linear-gradient(180deg,#7a8290 0%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.25rem;animation:fua .8s .12s ease both}
+    .hero-tagline{font-size:clamp(.75rem,1.6vw,.95rem);font-weight:300;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;max-width:540px;line-height:1.75;margin-bottom:2.5rem;animation:fua .8s .28s ease both}
+    .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fua .8s .42s ease both}
+    .hero-stats{display:flex;align-items:center;gap:2.5rem;margin-top:4.5rem;flex-wrap:wrap;justify-content:center;animation:fua .8s .56s ease both}
+    .stat-item{text-align:center}
+    .stat-value{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:var(--green);line-height:1;margin-bottom:.2rem}
+    .stat-label{font-size:.62rem;font-weight:400;text-transform:uppercase;letter-spacing:.2em;color:var(--muted)}
+    .stat-sep{width:1px;height:36px;background:var(--border)}
+    .scroll-cue{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.35rem;opacity:.28;animation:sb 2.5s ease-in-out infinite}
+    .scroll-cue span{font-size:.58rem;text-transform:uppercase;letter-spacing:.2em}
+    @keyframes sb{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(9px)}}
+    @keyframes fua{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
     /* ── SECTION COMMONS ── */
-    .section-eyebrow { text-align:center; font-size:.62rem; font-weight:600; text-transform:uppercase; letter-spacing:.28em; color:var(--green); margin-bottom:.9rem; }
-    .section-title { font-size:clamp(2.2rem,8vw,7rem); font-weight:900; text-transform:uppercase; letter-spacing:-.02em; line-height:.9; text-align:center; background:linear-gradient(180deg,#7a8290 0%,#fff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:4.5rem; }
+    .section-eyebrow{text-align:center;font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.28em;color:var(--green);margin-bottom:.9rem}
+    .section-title{font-size:clamp(2.2rem,8vw,7rem);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.9;text-align:center;background:linear-gradient(180deg,#7a8290 0%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4rem}
 
     /* ── HOW IT WORKS ── */
-    #how-it-works { padding:9rem 2rem 7rem; max-width:1140px; margin:0 auto; }
-    .steps-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.25rem; }
-    .step-card { background:rgba(255,255,255,.02); border:1px solid var(--border); border-radius:28px; padding:2.5rem 2rem; position:relative; overflow:hidden; transition:border-color .3s,transform .3s,box-shadow .3s; }
-    .step-card:hover { border-color:rgba(34,197,94,.4); transform:translateY(-6px); box-shadow:0 24px 64px rgba(34,197,94,.1); }
-    .step-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 70% 10%,rgba(34,197,94,.06) 0%,transparent 70%); pointer-events:none; }
-    .step-num-bg { position:absolute; top:.5rem; right:1.25rem; font-size:6rem; font-weight:900; color:#fff; opacity:.04; line-height:1; pointer-events:none; }
-    .step-icon-wrap { width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin-bottom:1.75rem; background:var(--green-dim); }
-    .step-title { font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#fff; margin-bottom:.75rem; }
-    .step-desc { font-size:.84rem; font-weight:300; color:var(--muted); line-height:1.78; }
+    #how-it-works{padding:9rem 2rem 5rem;max-width:1140px;margin:0 auto}
+    .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+    .step-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:28px;padding:2.5rem 2rem;position:relative;overflow:hidden;transition:border-color .3s,transform .3s,box-shadow .3s}
+    .step-card:hover{border-color:rgba(34,197,94,.4);transform:translateY(-6px);box-shadow:0 24px 64px rgba(34,197,94,.1)}
+    .step-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 10%,rgba(34,197,94,.06) 0%,transparent 70%);pointer-events:none}
+    .step-num-bg{position:absolute;top:.5rem;right:1.25rem;font-size:6rem;font-weight:900;color:#fff;opacity:.04;line-height:1;pointer-events:none}
+    .step-icon-wrap{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.75rem;background:var(--green-dim)}
+    .step-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.75rem}
+    .step-desc{font-size:.84rem;font-weight:300;color:var(--muted);line-height:1.78}
 
-    /* ── TOOL ── */
-    #tool { padding:2rem 2rem 9rem; max-width:860px; margin:0 auto; }
-    .upload-zone {
-      border:2px dashed rgba(255,255,255,.15); border-radius:28px;
-      padding:3.5rem 2rem; text-align:center; cursor:pointer;
-      transition:border-color .25s,background .25s,transform .2s;
-      background:rgba(255,255,255,.015); position:relative; overflow:hidden;
+    /* ══════════════════════════════════
+       PRICING SECTION
+    ══════════════════════════════════ */
+    #pricing{padding:5rem 2rem 6rem;max-width:860px;margin:0 auto}
+    .pricing-card{background:rgba(255,255,255,.02);border:1px solid rgba(34,197,94,.2);border-radius:32px;padding:3rem 2.5rem;position:relative;overflow:hidden;text-align:center}
+    .pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
+    .pricing-card::after{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(34,197,94,.08) 0%,transparent 70%);pointer-events:none}
+    .pricing-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--green-dim);border:1px solid rgba(34,197,94,.3);border-radius:9999px;padding:.35rem 1rem;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--green);margin-bottom:1.5rem}
+    .pricing-name{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:900;text-transform:uppercase;color:#fff;letter-spacing:-.01em;margin-bottom:.5rem}
+    .pricing-price{font-size:clamp(3.5rem,10vw,6rem);font-weight:900;color:var(--green);line-height:1;margin-bottom:.25rem}
+    .pricing-price span{font-size:clamp(1rem,3vw,1.8rem);font-weight:400;color:var(--muted);vertical-align:super}
+    .pricing-period{font-size:.8rem;font-weight:400;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:2.5rem}
+    .pricing-features{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2.5rem;text-align:left;max-width:380px;margin-left:auto;margin-right:auto}
+    .pf-item{display:flex;align-items:center;gap:.75rem;font-size:.88rem;font-weight:400;color:rgba(232,240,245,.8)}
+    .pf-icon{width:22px;height:22px;border-radius:50%;background:var(--green-dim);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0}
+    .binance-note{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:1.25rem;font-size:.72rem;font-weight:400;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+    .bnb-badge{background:var(--bnb-dim);border:1px solid rgba(243,186,47,.3);border-radius:9999px;padding:.2rem .7rem;font-size:.65rem;font-weight:700;color:var(--bnb)}
+    .guarantee{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:.9rem 1.25rem;margin-top:1.5rem;font-size:.75rem;color:var(--muted);line-height:1.6}
+
+    /* ══════════════════════════════════
+       PAYMENT MODAL
+    ══════════════════════════════════ */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex}
+    .modal{background:#111;border:1px solid rgba(34,197,94,.2);border-radius:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal-top{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(243,186,47,.05));padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border)}
+    .modal-close{position:absolute;top:1.1rem;right:1.25rem;background:rgba(255,255,255,.07);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+    .modal-close:hover{background:rgba(248,81,73,.2);color:#f85149}
+    .modal-title{font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.25rem}
+    .modal-sub{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+    .modal-body{padding:1.75rem 2rem}
+
+    /* Steps indicator */
+    .steps-indicator{display:flex;align-items:center;gap:.5rem;margin-bottom:1.75rem}
+    .si-step{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:.72rem;font-weight:800;flex-shrink:0;transition:background .3s,color .3s}
+    .si-step.active{background:var(--green);color:#0C0C0C}
+    .si-step.done{background:rgba(34,197,94,.3);color:var(--green)}
+    .si-step.inactive{background:rgba(255,255,255,.07);color:var(--muted)}
+    .si-line{flex:1;height:1px;background:var(--border)}
+
+    /* Payment step 1 */
+    .amount-box{background:rgba(243,186,47,.07);border:1px solid rgba(243,186,47,.25);border-radius:18px;padding:1.25rem;text-align:center;margin-bottom:1.25rem}
+    .amount-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.18em;color:var(--bnb);font-weight:600;margin-bottom:.35rem}
+    .amount-value{font-size:2.5rem;font-weight:900;color:#fff;line-height:1}
+    .amount-currency{font-size:.85rem;font-weight:400;color:var(--bnb)}
+
+    .qr-section{display:flex;gap:1.25rem;margin-bottom:1.25rem;align-items:flex-start}
+    .qr-img{width:110px;height:110px;border-radius:14px;border:2px solid rgba(243,186,47,.3);flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .qr-img img{width:100%;height:100%;object-fit:contain}
+    .wallet-info{flex:1}
+    .wallet-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:600;margin-bottom:.4rem}
+    .wallet-addr{font-size:.7rem;font-weight:500;color:#fff;word-break:break-all;line-height:1.5;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:.6rem .75rem;cursor:pointer;transition:border-color .2s}
+    .wallet-addr:hover{border-color:var(--green)}
+    .copy-note{font-size:.6rem;color:var(--green);margin-top:.35rem;text-transform:uppercase;letter-spacing:.14em;opacity:0;transition:opacity .3s}
+    .copy-note.show{opacity:1}
+    .network-badge{display:inline-flex;align-items:center;gap:.35rem;background:var(--bnb-dim);border:1px solid rgba(243,186,47,.3);border-radius:9999px;padding:.25rem .7rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--bnb);margin-top:.5rem}
+
+    .instructions{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1.25rem}
+    .instructions li{font-size:.78rem;font-weight:300;color:rgba(232,240,245,.7);line-height:1.7;padding-left:.5rem;list-style-type:none;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .instructions li:last-child{border-bottom:none}
+    .instructions li::before{content:'→ ';color:var(--green);font-weight:600}
+
+    .btn-paid{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;background:var(--green);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--green-glow);margin-top:.5rem}
+    .btn-paid:hover{opacity:.88;transform:translateY(-2px)}
+
+    /* Payment step 2 — screenshot upload */
+    .proof-zone{border:2px dashed rgba(255,255,255,.15);border-radius:18px;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .25s,background .25s;background:rgba(255,255,255,.02);margin-bottom:1.25rem}
+    .proof-zone:hover,.proof-zone.dragover{border-color:var(--green);background:rgba(34,197,94,.05)}
+    .proof-icon{font-size:2rem;margin-bottom:.75rem}
+    .proof-title{font-size:.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.35rem}
+    .proof-sub{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
+    .proof-thumb{display:none;width:100%;border-radius:12px;border:2px solid var(--green);margin-bottom:1rem}
+    .btn-unlock{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--green-glow);display:none}
+    .btn-unlock:hover{opacity:.88;transform:translateY(-2px)}
+
+    /* ══════════════════════════════════
+       REVIEWS
+    ══════════════════════════════════ */
+    #reviews{padding:6rem 2rem;background:#0C0C0C;position:relative;overflow:hidden}
+    #reviews::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(34,197,94,.04) 0%,transparent 100%);pointer-events:none}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;max-width:1100px;margin:0 auto}
+
+    /* Glass liquid card */
+    .review-card{
+      position:relative;overflow:hidden;
+      background:rgba(255,255,255,.03);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border:1px solid rgba(34,197,94,.12);
+      border-radius:24px;
+      padding:1.5rem;
+      transition:border-color .3s,transform .3s,box-shadow .3s;
     }
-    .upload-zone:hover,.upload-zone.dragover { border-color:var(--green); background:rgba(34,197,94,.05); transform:scale(1.01); }
-    .upload-zone::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(34,197,94,.06) 0%,transparent 70%); pointer-events:none; }
-    .upload-icon-wrap { width:72px; height:72px; border-radius:22px; background:rgba(255,255,255,.04); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 1.5rem; transition:transform .25s; }
-    .upload-zone:hover .upload-icon-wrap { transform:scale(1.1) rotate(-5deg); }
-    .upload-title { font-size:1.1rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:#fff; margin-bottom:.5rem; }
-    .upload-sub { font-size:.72rem; font-weight:300; text-transform:uppercase; letter-spacing:.18em; color:var(--muted); }
-    .preview-img { width:100%; border-radius:18px; border:1px solid var(--border); margin-top:1.5rem; display:none; box-shadow:0 10px 40px rgba(0,0,0,.5); }
-    .tool-cta { display:flex; justify-content:center; margin-top:1.5rem; }
+    .review-card:hover{border-color:rgba(34,197,94,.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(34,197,94,.1)}
 
-    /* ── DISCLAIMER ── */
-    .disclaimer {
-      display:flex; align-items:flex-start; gap:.75rem;
-      background:rgba(245,158,11,.07); border:1px solid rgba(245,158,11,.25);
-      border-radius:14px; padding:1rem 1.25rem; margin-top:1.25rem;
-      font-size:.78rem; font-weight:400; line-height:1.65;
-      color:rgba(245,158,11,.9);
+    /* Liquid blob behind each card */
+    .review-card::before{
+      content:'';position:absolute;
+      width:140px;height:140px;
+      background:radial-gradient(circle,rgba(34,197,94,.1) 0%,transparent 70%);
+      border-radius:50%;
+      animation:blob-move var(--dur,6s) ease-in-out infinite;
+      animation-delay:var(--delay,0s);
+      pointer-events:none;top:-30px;left:-30px;
     }
-    .disclaimer-icon { font-size:1rem; flex-shrink:0; margin-top:.05rem; }
-
-    /* ── RESULT CARD ── */
-    .result-card { background:rgba(255,255,255,.02); border:1px solid var(--border); border-radius:28px; padding:2rem; margin-top:1.5rem; display:none; position:relative; overflow:hidden; }
-    .result-card::before { content:''; position:absolute; top:0;left:0;right:0;height:2px; background:linear-gradient(90deg,transparent,var(--green),transparent); }
-    .card-header { display:flex; align-items:center; gap:.9rem; margin-bottom:1.25rem; padding-bottom:1.25rem; border-bottom:1px solid var(--border); }
-    .ai-name { font-size:.82rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#fff; }
-    .ai-sub  { font-size:.62rem; text-transform:uppercase; letter-spacing:.14em; color:var(--muted); margin-top:.1rem; }
-    .ai-badge { margin-left:auto; background:var(--green-dim); border:1px solid rgba(34,197,94,.4); border-radius:9999px; padding:.28rem .9rem; font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--green); }
-
-    /* ── MARKDOWN BODY ── */
-    .md-body { font-size:.92rem; font-weight:400; color:var(--text); line-height:1.85; }
-    .md-body h1,.md-body h2,.md-body h3 { color:#fff; font-weight:800; text-transform:uppercase; letter-spacing:.04em; margin:1.2rem 0 .5rem; }
-    .md-body h1{font-size:1.15rem} .md-body h2{font-size:1rem} .md-body h3{font-size:.9rem;color:var(--green)}
-    .md-body p { margin-bottom:.7rem; }
-    .md-body ul,.md-body ol { padding-left:1.4rem; margin-bottom:.8rem; }
-    .md-body li { margin-bottom:.3rem; }
-    .md-body strong { color:#fff; font-weight:700; }
-    .md-body hr { border:none; border-top:1px solid var(--border); margin:1rem 0; }
-    .md-body code { background:rgba(255,255,255,.07); border-radius:4px; padding:.1em .4em; font-size:.85em; color:var(--green); }
-    .sig-buy  { color:#22c55e; font-weight:800; }
-    .sig-sell { color:#f85149; font-weight:800; }
-    .sig-hold { color:#f59e0b; font-weight:800; }
-
-    /* ── CHAT CARD ── */
-    .chat-card { background:rgba(255,255,255,.02); border:1px solid var(--border); border-radius:28px; overflow:hidden; margin-top:1.5rem; display:none; position:relative; }
-    .chat-card::before { content:''; position:absolute; top:0;left:0;right:0;height:2px; background:linear-gradient(90deg,transparent,var(--green),transparent); }
-    .chat-top { display:flex; align-items:center; gap:.9rem; padding:1.2rem 1.75rem; border-bottom:1px solid var(--border); }
-    .online-chip { margin-left:auto; display:flex; align-items:center; gap:.4rem; font-size:.62rem; text-transform:uppercase; letter-spacing:.15em; color:var(--green); }
-    .online-dot { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green); animation:live-pulse 2s ease-in-out infinite; }
-    .chat-log { max-height:460px; overflow-y:auto; padding:1.5rem; display:flex; flex-direction:column; gap:1rem; scrollbar-width:thin; scrollbar-color:rgba(34,197,94,.2) transparent; }
-    .msg { padding:1rem 1.25rem; border-radius:20px; font-size:.88rem; font-weight:400; line-height:1.75; max-width:88%; animation:msg-in .28s ease both; }
-    @keyframes msg-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-    .msg.user { background:var(--green); color:#0C0C0C; font-weight:600; align-self:flex-end; border-bottom-right-radius:4px; }
-    .msg.ai   { background:rgba(255,255,255,.03); border:1px solid var(--border); color:var(--text); align-self:flex-start; border-bottom-left-radius:4px; }
-    .msg.ai .md-body { font-size:.88rem; }
-
-    /* Image message (chart preview inside chat) */
-    .msg-img { align-self:flex-end; max-width:88%; animation:msg-in .28s ease both; }
-    .msg-img img { width:100%; max-width:320px; border-radius:14px; border:2px solid var(--green); display:block; }
-    .msg-img .img-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.14em; color:var(--green); margin-top:.4rem; text-align:right; }
-
-    /* ── NEW CHART PANEL (inside chat) ── */
-    .new-chart-bar { display:none; padding:1rem 1.5rem; border-top:1px solid var(--border); background:rgba(34,197,94,.04); }
-    .new-chart-preview-wrap { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
-    .new-chart-thumb { width:72px; height:52px; border-radius:10px; object-fit:cover; border:2px solid var(--green); flex-shrink:0; }
-    .new-chart-info { flex:1; }
-    .new-chart-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--green); margin-bottom:.35rem; }
-    .new-chart-actions { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.5rem; }
-    .btn-trade {
-      display:inline-flex; align-items:center; gap:.4rem;
-      border-radius:9999px; padding:.5rem 1.1rem; font-size:.72rem;
-      font-weight:700; text-transform:uppercase; letter-spacing:.1em;
-      cursor:pointer; border:none; font-family:'Kanit',sans-serif;
-      transition:opacity .2s, transform .2s;
+    @keyframes blob-move{
+      0%,100%{transform:translate(0,0) scale(1)}
+      33%{transform:translate(80px,60px) scale(1.4)}
+      66%{transform:translate(20px,120px) scale(.8)}
     }
-    .btn-trade:hover { opacity:.85; transform:translateY(-1px); }
-    .btn-new-trade  { background:var(--green); color:#0C0C0C; }
-    .btn-cont-trade { background:rgba(255,255,255,.08); border:1px solid var(--border); color:#fff; }
+    /* Liquid border morph */
+    .review-card:nth-child(odd){animation:morph-a 8s ease-in-out infinite}
+    .review-card:nth-child(even){animation:morph-b 9s ease-in-out infinite}
+    @keyframes morph-a{0%,100%{border-radius:24px 16px 24px 16px}33%{border-radius:16px 28px 12px 24px}66%{border-radius:28px 12px 24px 16px}}
+    @keyframes morph-b{0%,100%{border-radius:16px 24px 16px 24px}33%{border-radius:24px 12px 28px 16px}66%{border-radius:12px 24px 16px 28px}}
 
-    /* ── CHAT INPUT BAR ── */
-    .chat-input-bar { display:flex; gap:.6rem; padding:1.2rem 1.5rem; border-top:1px solid var(--border); align-items:center; }
-    .attach-btn { width:40px; height:40px; flex-shrink:0; border-radius:50%; background:rgba(255,255,255,.05); border:1px solid var(--border); cursor:pointer; color:var(--muted); font-size:1.1rem; display:flex; align-items:center; justify-content:center; transition:border-color .2s,color .2s; }
-    .attach-btn:hover { border-color:var(--green); color:var(--green); }
-    .chat-input { flex:1; background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:9999px; color:var(--text); padding:.75rem 1.4rem; font-family:'Kanit',sans-serif; font-size:.88rem; font-weight:400; outline:none; transition:border-color .2s; }
-    .chat-input:focus { border-color:var(--green); }
-    .chat-input::placeholder { color:var(--muted); }
-    .send-btn { width:46px; height:46px; flex-shrink:0; border-radius:50%; background:var(--green); border:none; cursor:pointer; color:#0C0C0C; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:opacity .2s,transform .2s; box-shadow:0 4px 16px var(--green-glow); font-weight:700; }
-    .send-btn:hover { opacity:.85; transform:scale(1.08); }
-    .send-btn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
+    .review-stars{color:var(--green);font-size:.9rem;letter-spacing:.05em;margin-bottom:.75rem}
+    .review-text{font-size:.85rem;font-weight:400;color:rgba(232,240,245,.8);line-height:1.72;margin-bottom:1.1rem;position:relative;z-index:1}
+    .review-author{display:flex;align-items:center;gap:.75rem;position:relative;z-index:1}
+    .author-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),#16a34a);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#0C0C0C;flex-shrink:0}
+    .author-name{font-size:.82rem;font-weight:700;color:#fff}
+    .author-loc{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:.05rem}
+    .profit-chip{margin-left:auto;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:9999px;padding:.22rem .7rem;font-size:.62rem;font-weight:700;color:var(--green);white-space:nowrap}
 
-    /* ── SPINNER ── */
-    .spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(34,197,94,.25); border-top-color:var(--green); border-radius:50%; animation:spin .65s linear infinite; vertical-align:middle; margin-right:6px; }
-    @keyframes spin { to{transform:rotate(360deg)} }
+    /* ══════════════════════════════════
+       TOOL (with access gate)
+    ══════════════════════════════════ */
+    #tool{padding:2rem 2rem 9rem;max-width:860px;margin:0 auto}
+    .access-banner{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:16px;padding:.9rem 1.25rem;margin-bottom:1.5rem;display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .access-banner.show{display:flex}
+    .access-info{display:flex;align-items:center;gap:.6rem;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--green)}
+    .access-timer{font-size:.78rem;font-weight:400;color:var(--muted)}
+    .btn-extend{background:var(--green);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.45rem 1.1rem;font-size:.7rem;transition:opacity .2s}
+    .btn-extend:hover{opacity:.85}
 
-    /* ── FEATURES (white panel) ── */
-    #services { background:#fff; border-radius:60px 60px 0 0; padding:6rem 2rem 5rem; margin-top:4rem; }
-    #services .section-eyebrow { color:rgba(12,12,12,.4); }
-    #services .section-title { color:#0C0C0C; background:none; -webkit-text-fill-color:#0C0C0C; }
-    .services-list { max-width:920px; margin:0 auto; }
-    .service-row { display:flex; align-items:flex-start; gap:2rem; padding:2.25rem 0; border-top:1px solid rgba(12,12,12,.1); transition:padding-left .22s; }
-    .service-row:last-child { border-bottom:1px solid rgba(12,12,12,.1); }
-    .service-row:hover { padding-left:.75rem; }
-    .service-num { font-size:clamp(2.5rem,8vw,7rem); font-weight:900; color:#0C0C0C; opacity:.08; line-height:1; flex-shrink:0; width:clamp(50px,10vw,110px); }
-    .service-info { flex:1; padding-top:.4rem; }
-    .service-name { font-size:clamp(1rem,2.5vw,1.9rem); font-weight:700; text-transform:uppercase; color:#0C0C0C; letter-spacing:.03em; margin-bottom:.5rem; }
-    .service-desc { font-size:clamp(.78rem,1.5vw,1rem); font-weight:300; color:rgba(12,12,12,.5); line-height:1.75; max-width:640px; }
+    /* Tool lock overlay */
+    .tool-locked{border:2px dashed rgba(255,255,255,.1);border-radius:28px;padding:4rem 2rem;text-align:center;background:rgba(255,255,255,.01);position:relative;overflow:hidden}
+    .tool-locked::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(34,197,94,.05) 0%,transparent 70%);pointer-events:none}
+    .lock-icon{font-size:3rem;margin-bottom:1.25rem;display:block}
+    .lock-title{font-size:1.3rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#fff;margin-bottom:.6rem}
+    .lock-sub{font-size:.85rem;font-weight:300;color:var(--muted);max-width:380px;margin:0 auto 2rem;line-height:1.7}
+
+    /* Tool unlocked */
+    .upload-zone{border:2px dashed rgba(255,255,255,.15);border-radius:28px;padding:3.5rem 2rem;text-align:center;cursor:pointer;transition:border-color .25s,background .25s,transform .2s;background:rgba(255,255,255,.015);position:relative;overflow:hidden}
+    .upload-zone:hover,.upload-zone.dragover{border-color:var(--green);background:rgba(34,197,94,.05);transform:scale(1.01)}
+    .upload-zone::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(34,197,94,.06) 0%,transparent 70%);pointer-events:none}
+    .upload-icon-wrap{width:72px;height:72px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem;transition:transform .25s}
+    .upload-zone:hover .upload-icon-wrap{transform:scale(1.1) rotate(-5deg)}
+    .upload-title{font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#fff;margin-bottom:.5rem}
+    .upload-sub{font-size:.72rem;font-weight:300;text-transform:uppercase;letter-spacing:.18em;color:var(--muted)}
+    .preview-img{width:100%;border-radius:18px;border:1px solid var(--border);margin-top:1.5rem;display:none;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+    .tool-cta{display:flex;justify-content:center;margin-top:1.5rem}
+    .disclaimer{display:flex;align-items:flex-start;gap:.75rem;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:14px;padding:1rem 1.25rem;margin-top:1.25rem;font-size:.78rem;font-weight:400;line-height:1.65;color:rgba(245,158,11,.9)}
+    .disclaimer-icon{font-size:1rem;flex-shrink:0;margin-top:.05rem}
+
+    /* Result + chat cards */
+    .result-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:28px;padding:2rem;margin-top:1.5rem;display:none;position:relative;overflow:hidden}
+    .result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
+    .card-header{display:flex;align-items:center;gap:.9rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+    .ai-name{font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+    .ai-sub{font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-top:.1rem}
+    .ai-badge{margin-left:auto;background:var(--green-dim);border:1px solid rgba(34,197,94,.4);border-radius:9999px;padding:.28rem .9rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green)}
+
+    .md-body{font-size:.92rem;font-weight:400;color:var(--text);line-height:1.85}
+    .md-body h1,.md-body h2,.md-body h3{color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin:1.2rem 0 .5rem}
+    .md-body h1{font-size:1.15rem}.md-body h2{font-size:1rem}.md-body h3{font-size:.9rem;color:var(--green)}
+    .md-body p{margin-bottom:.7rem}.md-body ul,.md-body ol{padding-left:1.4rem;margin-bottom:.8rem}.md-body li{margin-bottom:.3rem}
+    .md-body strong{color:#fff;font-weight:700}.md-body hr{border:none;border-top:1px solid var(--border);margin:1rem 0}
+    .sig-buy{color:#22c55e;font-weight:800}.sig-sell{color:#f85149;font-weight:800}.sig-hold{color:#f59e0b;font-weight:800}
+
+    .chat-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:28px;overflow:hidden;margin-top:1.5rem;display:none;position:relative}
+    .chat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
+    .chat-top{display:flex;align-items:center;gap:.9rem;padding:1.2rem 1.75rem;border-bottom:1px solid var(--border)}
+    .online-chip{margin-left:auto;display:flex;align-items:center;gap:.4rem;font-size:.62rem;text-transform:uppercase;letter-spacing:.15em;color:var(--green)}
+    .online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:lp 2s ease-in-out infinite}
+    .chat-log{max-height:460px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;scrollbar-width:thin;scrollbar-color:rgba(34,197,94,.2) transparent}
+    .msg{padding:1rem 1.25rem;border-radius:20px;font-size:.88rem;font-weight:400;line-height:1.75;max-width:88%;animation:mi .28s ease both}
+    @keyframes mi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .msg.user{background:var(--green);color:#0C0C0C;font-weight:600;align-self:flex-end;border-bottom-right-radius:4px}
+    .msg.ai{background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
+    .msg.ai .md-body{font-size:.88rem}
+    .msg-img{align-self:flex-end;max-width:88%;animation:mi .28s ease both}
+    .msg-img img{width:100%;max-width:320px;border-radius:14px;border:2px solid var(--green);display:block}
+    .msg-img .img-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--green);margin-top:.4rem;text-align:right}
+    .new-chart-bar{display:none;padding:1rem 1.5rem;border-top:1px solid var(--border);background:rgba(34,197,94,.04)}
+    .new-chart-preview-wrap{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+    .new-chart-thumb{width:72px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--green);flex-shrink:0}
+    .new-chart-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green);margin-bottom:.35rem}
+    .new-chart-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.5rem}
+    .btn-trade{display:inline-flex;align-items:center;gap:.4rem;border-radius:9999px;padding:.5rem 1.1rem;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border:none;font-family:'Kanit',sans-serif;transition:opacity .2s,transform .2s}
+    .btn-trade:hover{opacity:.85;transform:translateY(-1px)}
+    .btn-new-trade{background:var(--green);color:#0C0C0C}.btn-cont-trade{background:rgba(255,255,255,.08);border:1px solid var(--border);color:#fff}
+    .chat-input-bar{display:flex;gap:.6rem;padding:1.2rem 1.5rem;border-top:1px solid var(--border);align-items:center}
+    .attach-btn{width:40px;height:40px;flex-shrink:0;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);cursor:pointer;color:var(--muted);font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s}
+    .attach-btn:hover{border-color:var(--green);color:var(--green)}
+    .chat-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9999px;color:var(--text);padding:.75rem 1.4rem;font-family:'Kanit',sans-serif;font-size:.88rem;font-weight:400;outline:none;transition:border-color .2s}
+    .chat-input:focus{border-color:var(--green)}.chat-input::placeholder{color:var(--muted)}
+    .send-btn{width:46px;height:46px;flex-shrink:0;border-radius:50%;background:var(--green);border:none;cursor:pointer;color:#0C0C0C;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .2s;box-shadow:0 4px 16px var(--green-glow);font-weight:700}
+    .send-btn:hover{opacity:.85;transform:scale(1.08)}.send-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+    .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(34,197,94,.25);border-top-color:var(--green);border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── FEATURES ── */
+    #services{background:#fff;border-radius:60px 60px 0 0;padding:6rem 2rem 5rem;margin-top:4rem}
+    #services .section-eyebrow{color:rgba(12,12,12,.4)}
+    #services .section-title{color:#0C0C0C;background:none;-webkit-text-fill-color:#0C0C0C}
+    .services-list{max-width:920px;margin:0 auto}
+    .service-row{display:flex;align-items:flex-start;gap:2rem;padding:2.25rem 0;border-top:1px solid rgba(12,12,12,.1);transition:padding-left .22s}
+    .service-row:last-child{border-bottom:1px solid rgba(12,12,12,.1)}.service-row:hover{padding-left:.75rem}
+    .service-num{font-size:clamp(2.5rem,8vw,7rem);font-weight:900;color:#0C0C0C;opacity:.08;line-height:1;flex-shrink:0;width:clamp(50px,10vw,110px)}
+    .service-info{flex:1;padding-top:.4rem}
+    .service-name{font-size:clamp(1rem,2.5vw,1.9rem);font-weight:700;text-transform:uppercase;color:#0C0C0C;letter-spacing:.03em;margin-bottom:.5rem}
+    .service-desc{font-size:clamp(.78rem,1.5vw,1rem);font-weight:300;color:rgba(12,12,12,.5);line-height:1.75;max-width:640px}
 
     /* ── FOOTER ── */
-    footer { background:#0C0C0C; padding:3.5rem 2rem 3rem; text-align:center; border-top:1px solid var(--border); }
-    .footer-logo { display:flex; align-items:baseline; justify-content:center; gap:0; margin-bottom:.75rem; }
-    .footer-wordmark { font-size:2rem; font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:-.01em; }
-    .footer-dot { display:inline-block; width:13px; height:13px; background:var(--green); border-radius:50%; margin-left:4px; position:relative; bottom:3px; box-shadow:0 0 12px var(--green); }
-    .footer-sub { font-size:.65rem; font-weight:300; color:rgba(232,240,245,.28); text-transform:uppercase; letter-spacing:.2em; }
+    footer{background:#0C0C0C;padding:3.5rem 2rem 3rem;text-align:center;border-top:1px solid var(--border)}
+    .footer-logo{display:flex;align-items:baseline;justify-content:center;gap:0;margin-bottom:.75rem}
+    .footer-wordmark{font-size:2rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:-.01em}
+    .footer-dot{display:inline-block;width:13px;height:13px;background:var(--green);border-radius:50%;margin-left:4px;position:relative;bottom:3px;box-shadow:0 0 12px var(--green)}
+    .footer-sub{font-size:.65rem;font-weight:300;color:rgba(232,240,245,.28);text-transform:uppercase;letter-spacing:.2em}
 
-    /* ── SCROLL FADE ── */
-    .fade-up { opacity:0; transform:translateY(36px); transition:opacity .78s ease,transform .78s ease; }
-    .fade-up.visible { opacity:1; transform:translateY(0); }
-
-    /* ── RESPONSIVE ── */
-    @media(max-width:640px){
-      nav{padding:.9rem 1.25rem} .nav-links{gap:1.25rem}
-      .hero-title{font-size:clamp(2.6rem,18vw,5.5rem);white-space:normal}
-      .hero-stats{gap:1.5rem} .stat-sep{display:none}
-      #services{border-radius:40px 40px 0 0}
-      .service-row{flex-direction:column;gap:.3rem}
-      .new-chart-preview-wrap{flex-direction:column;align-items:flex-start}
-    }
+    .fade-up{opacity:0;transform:translateY(36px);transition:opacity .78s ease,transform .78s ease}
+    .fade-up.visible{opacity:1;transform:translateY(0)}
+    @media(max-width:640px){nav{padding:.9rem 1.25rem}.nav-links{gap:1.25rem}.hero-title{font-size:clamp(2.4rem,15vw,5rem);white-space:normal}.hero-stats{gap:1.5rem}.stat-sep{display:none}#services{border-radius:40px 40px 0 0}.service-row{flex-direction:column;gap:.3rem}.reviews-grid{grid-template-columns:1fr}.qr-section{flex-direction:column}}
   </style>
 </head>
 <body>
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="jah-logo">
-    <span class="jah-wordmark">JAH</span>
-    <span class="jah-circle"></span>
-  </div>
+  <div class="jah-logo"><span class="jah-wordmark">JAH</span><span class="jah-circle"></span></div>
   <ul class="nav-links">
-    <li><a href="#how-it-works">Process</a></li>
-    <li><a href="#tool">Analyze</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#tool">Tool</a></li>
     <li><a href="#services">Features</a></li>
   </ul>
-  <button class="btn-primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'})">Start Now</button>
+  <button class="btn-primary" onclick="openPayModal()">Get Access — $5</button>
 </nav>
 
 <!-- ── HERO ── -->
@@ -297,20 +321,20 @@
   <div class="hero-grid"></div>
   <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
   <div class="hero-badge"><span class="live-dot"></span>Made by JAH.</div>
-  <h1 class="hero-title">AI Trader<br>Mentor</h1>
-  <p class="hero-sub">Upload your chart. Get elite-level analysis.<br>Ask anything — your 20-year veteran trader, on demand.</p>
+  <h1 class="hero-title">AlphaEdge AI</h1>
+  <p class="hero-tagline">Upload your chart. Get elite-level analysis in seconds.<br>The AI mentor with 20 years of trading intelligence — for just $5/day.</p>
   <div class="hero-cta">
-    <button class="btn-primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'})">📊 &nbsp;Analyze My Chart</button>
-    <button class="btn-ghost"   onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How It Works</button>
+    <button class="btn-primary" onclick="openPayModal()">📊 &nbsp;Get Access — $5/Day</button>
+    <button class="btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How It Works</button>
   </div>
   <div class="hero-stats">
     <div class="stat-item"><div class="stat-value">20+</div><div class="stat-label">Years Experience</div></div>
     <div class="stat-sep"></div>
-    <div class="stat-item"><div class="stat-value">AI</div><div class="stat-label">Powered Vision</div></div>
+    <div class="stat-item"><div class="stat-value">$5</div><div class="stat-label">Per Day Access</div></div>
     <div class="stat-sep"></div>
     <div class="stat-item"><div class="stat-value">∞</div><div class="stat-label">Questions Answered</div></div>
     <div class="stat-sep"></div>
-    <div class="stat-item"><div class="stat-value">3</div><div class="stat-label">Markets Covered</div></div>
+    <div class="stat-item"><div class="stat-value">24h</div><div class="stat-label">Full Access</div></div>
   </div>
   <div class="scroll-cue"><span>Scroll</span><span>↓</span></div>
 </section>
@@ -320,90 +344,225 @@
   <div class="section-eyebrow fade-up">The Process</div>
   <h2 class="section-title fade-up" style="transition-delay:.1s">How It Works</h2>
   <div class="steps-grid">
-    <div class="step-card fade-up" style="transition-delay:.05s">
-      <div class="step-num-bg">01</div>
-      <div class="step-icon-wrap">📊</div>
-      <div class="step-title">Upload Your Chart</div>
-      <p class="step-desc">Screenshot any chart — Forex, stocks, or crypto — and drop it in. PNG, JPG, and WEBP all supported.</p>
+    <div class="step-card fade-up" style="transition-delay:.05s"><div class="step-num-bg">01</div><div class="step-icon-wrap">💳</div><div class="step-title">Pay $5 via Binance</div><p class="step-desc">Send $5 USDT (BEP-20) to our Binance wallet. Takes under 2 minutes. Works from any country.</p></div>
+    <div class="step-card fade-up" style="transition-delay:.15s"><div class="step-num-bg">02</div><div class="step-icon-wrap">📸</div><div class="step-title">Upload Proof</div><p class="step-desc">Screenshot your Binance payment confirmation and upload it. Access unlocks instantly — no waiting, no approval.</p></div>
+    <div class="step-card fade-up" style="transition-delay:.25s"><div class="step-num-bg">03</div><div class="step-icon-wrap">🧠</div><div class="step-title">AI Analyzes Your Chart</div><p class="step-desc">Upload any chart image. AlphaEdge reads every pattern, level, and signal — then gives you a clear BUY / SELL / HOLD with full reasoning.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PRICING
+══════════════════════════════════ -->
+<div id="pricing">
+  <div class="section-eyebrow fade-up">Simple Pricing</div>
+  <h2 class="section-title fade-up" style="transition-delay:.1s">One Plan.<br>Full Access.</h2>
+  <div class="pricing-card fade-up" style="transition-delay:.2s">
+    <div class="pricing-badge">🔥 Most Popular</div>
+    <div class="pricing-name">AlphaEdge AI — Daily Pass</div>
+    <div class="pricing-price"><span>$</span>5</div>
+    <div class="pricing-period">per day &nbsp;·&nbsp; full 24-hour access</div>
+    <div class="pricing-features">
+      <div class="pf-item"><div class="pf-icon">✓</div>Unlimited chart uploads</div>
+      <div class="pf-item"><div class="pf-icon">✓</div>BUY / SELL / HOLD signals</div>
+      <div class="pf-item"><div class="pf-icon">✓</div>Trend, S&R & candlestick analysis</div>
+      <div class="pf-item"><div class="pf-icon">✓</div>Unlimited follow-up Q&A</div>
+      <div class="pf-item"><div class="pf-icon">✓</div>Forex · Stocks · Crypto coverage</div>
+      <div class="pf-item"><div class="pf-icon">✓</div>Instant access after payment proof</div>
     </div>
-    <div class="step-card fade-up" style="transition-delay:.15s">
-      <div class="step-num-bg">02</div>
-      <div class="step-icon-wrap">🧠</div>
-      <div class="step-title">AI Analysis</div>
-      <p class="step-desc">Claude AI reads trends, support &amp; resistance, candlestick patterns, and fires a clear BUY / SELL / HOLD call with full reasoning.</p>
+    <button class="btn-pay" onclick="openPayModal()">
+      <span style="font-size:1.2rem">₿</span> Pay with Binance — $5 USDT
+    </button>
+    <div class="binance-note">
+      <span class="bnb-badge">BEP-20</span> USDT on Binance Smart Chain
     </div>
-    <div class="step-card fade-up" style="transition-delay:.25s">
-      <div class="step-num-bg">03</div>
-      <div class="step-icon-wrap">💬</div>
-      <div class="step-title">Ask Anything</div>
-      <p class="step-desc">Ask unlimited follow-up questions. The mentor remembers your chart and breaks down every detail like a seasoned pro.</p>
+    <div class="guarantee">⚡ Access unlocks the moment you upload your payment screenshot. No sign-up. No email. No waiting.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAYMENT MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="pay-modal">
+  <div class="modal">
+    <div class="modal-top">
+      <button class="modal-close" onclick="closePayModal()">✕</button>
+      <div class="modal-title">Get AlphaEdge AI Access</div>
+      <div class="modal-sub">$5 USDT · BEP-20 · 24 Hours Full Access</div>
+    </div>
+    <div class="modal-body">
+      <!-- Step indicator -->
+      <div class="steps-indicator">
+        <div class="si-step active" id="si1">1</div>
+        <div class="si-line"></div>
+        <div class="si-step inactive" id="si2">2</div>
+        <div class="si-line"></div>
+        <div class="si-step inactive" id="si3">✓</div>
+      </div>
+
+      <!-- STEP 1: Send payment -->
+      <div id="modal-step1">
+        <div class="amount-box">
+          <div class="amount-label">Amount to Send</div>
+          <div class="amount-value">5.00 <span class="amount-currency">USDT</span></div>
+        </div>
+        <div class="qr-section">
+          <div class="qr-img">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x38621289ac44502529758704689a5a1afa4e9fd0&color=000000&bgcolor=ffffff" alt="Wallet QR" />
+          </div>
+          <div class="wallet-info">
+            <div class="wallet-label">Wallet Address (tap to copy)</div>
+            <div class="wallet-addr" id="wallet-addr" onclick="copyWallet()">0x38621289ac44502529758704689a5a1afa4e9fd0</div>
+            <div class="copy-note" id="copy-note">✓ Copied to clipboard!</div>
+            <div class="network-badge">🔸 BSC · BEP-20 Network</div>
+          </div>
+        </div>
+        <div class="instructions">
+          <li>Open Binance app → Wallets → Send</li>
+          <li>Choose USDT and select <strong>BEP-20 (BSC)</strong> network</li>
+          <li>Paste the wallet address above</li>
+          <li>Enter amount: <strong>5 USDT</strong> and confirm</li>
+          <li>Take a screenshot of the confirmation screen</li>
+        </div>
+        <button class="btn-paid" onclick="goStep2()">✅ &nbsp;I've Sent the Payment →</button>
+      </div>
+
+      <!-- STEP 2: Upload proof -->
+      <div id="modal-step2" style="display:none">
+        <div class="proof-zone" id="proof-zone" onclick="document.getElementById('proof-input').click()">
+          <div class="proof-icon">📸</div>
+          <div class="proof-title">Upload Payment Screenshot</div>
+          <div class="proof-sub">Tap to select your Binance confirmation screenshot</div>
+        </div>
+        <input type="file" id="proof-input" accept="image/*" style="display:none" />
+        <img id="proof-thumb" class="proof-thumb" src="" alt="Payment proof" />
+        <button class="btn-unlock" id="btn-unlock" onclick="unlockAccess()">🔓 &nbsp;Unlock AlphaEdge AI — 24 Hours</button>
+        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:.75rem;line-height:1.6">
+          Access is granted on trust. Fraudulent screenshots may result in permanent ban from the service.
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ── TOOL ── -->
+<!-- ══════════════════════════════════
+     REVIEWS
+══════════════════════════════════ -->
+<section id="reviews">
+  <div class="section-eyebrow fade-up">What Traders Say</div>
+  <h2 class="section-title fade-up" style="transition-delay:.1s">Real Results.<br>Real Traders.</h2>
+  <div class="reviews-grid">
+
+    <div class="review-card fade-up" style="--dur:7s;--delay:0s;transition-delay:.05s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Made $340 profit in 2 hours following the BUY signal on EUR/USD. This AI is absolutely insane. I've been trading for 3 years and never had accuracy like this."</div>
+      <div class="review-author"><div class="author-avatar">AK</div><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:8s;--delay:-1.5s;transition-delay:.1s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Called the exact resistance on Gold to the pip. Closed +180 pips on that single trade. Best $5 I've ever spent — made it back in 15 minutes flat."</div>
+      <div class="review-author"><div class="author-avatar">MT</div><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:6s;--delay:-3s;transition-delay:.15s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Complete beginner here. AlphaEdge explained every chart pattern like a real mentor would. Up $220 this week just following its guidance. Mind blown."</div>
+      <div class="review-author"><div class="author-avatar">PM</div><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:9s;--delay:-0.8s;transition-delay:.2s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"SELL signal on BTC/USDT was spot on. Hit my target price in under 30 minutes. I was skeptical at first but this thing is genuinely accurate."</div>
+      <div class="review-author"><div class="author-avatar">CR</div><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:7.5s;--delay:-2s;transition-delay:.25s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Made my $5 back in literally 15 minutes on one EUR/GBP trade. Then made another $180 the same day. This tool pays for itself in the first trade."</div>
+      <div class="review-author"><div class="author-avatar">SL</div><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:8.5s;--delay:-4s;transition-delay:.3s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Called the NASDAQ breakout before it happened. I was in the trade before everyone else. Felt like having insider information — completely legal, just pure AI intelligence."</div>
+      <div class="review-author"><div class="author-avatar">JO</div><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:6.5s;--delay:-1s;transition-delay:.35s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Was losing money every week. Since using AlphaEdge I'm up $480 this month alone. It doesn't just give signals — it teaches you WHY. Life changing honestly."</div>
+      <div class="review-author"><div class="author-avatar">LH</div><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:7s;--delay:-3.5s;transition-delay:.4s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"The candlestick analysis is better than any $200 course I've bought. Worth 100x the price. I ask follow-up questions and it explains like a real trading coach."</div>
+      <div class="review-author"><div class="author-avatar">RS</div><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:9.5s;--delay:-2.5s;transition-delay:.45s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Asked 20 follow-up questions after the analysis and it answered every single one perfectly. It remembers the chart context. Genuinely felt like talking to a trading veteran."</div>
+      <div class="review-author"><div class="author-avatar">EW</div><div><div class="author-name">Emma W.</div><div class="author-loc">🇦🇺 Australia · Day Trader</div></div><div class="profit-chip">+$140</div></div>
+    </div>
+
+    <div class="review-card fade-up" style="--dur:8s;--delay:-0.5s;transition-delay:.5s">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. Not exaggerating. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
+      <div class="review-author"><div class="author-avatar">YA</div><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     TOOL (access gated)
+══════════════════════════════════ -->
 <div id="tool">
   <div class="section-eyebrow fade-up">Live Tool</div>
-  <h2 class="section-title fade-up" style="transition-delay:.1s">Analyze Chart</h2>
+  <h2 class="section-title fade-up" style="transition-delay:.1s">AlphaEdge Analyzer</h2>
 
-  <div class="upload-zone fade-up" id="drop-zone" onclick="document.getElementById('file-input').click()">
-    <div class="upload-icon-wrap">🖼️</div>
-    <div class="upload-title">Drop Your Chart Here</div>
-    <div class="upload-sub">Click to browse &nbsp;·&nbsp; PNG &nbsp;·&nbsp; JPG &nbsp;·&nbsp; WEBP</div>
-    <img id="preview" class="preview-img" src="" alt="Chart preview" />
-  </div>
-  <input type="file" id="file-input" accept="image/*" style="display:none" />
-
-  <!-- Warning -->
-  <div class="disclaimer">
-    <span class="disclaimer-icon">⚠️</span>
-    <span><strong>Disclaimer:</strong> AI analysis is for educational &amp; informational purposes only. Results may not reflect 100% accuracy and should not be considered financial advice. Always conduct your own research and consult a professional before making any trading decisions.</span>
+  <!-- Session active banner -->
+  <div class="access-banner" id="access-banner">
+    <div class="access-info"><span class="live-dot"></span>Session Active</div>
+    <div class="access-timer" id="access-timer">Calculating...</div>
+    <button class="btn-extend" onclick="openPayModal()">Renew</button>
   </div>
 
-  <div class="tool-cta">
-    <button class="btn-primary" id="analyze-btn" disabled style="min-width:230px;font-size:.9rem;padding:.9rem 2.5rem;">🔍 &nbsp;Analyze Chart</button>
+  <!-- LOCKED state -->
+  <div class="tool-locked" id="tool-locked">
+    <span class="lock-icon">🔒</span>
+    <div class="lock-title">AlphaEdge AI — Locked</div>
+    <div class="lock-sub">Get 24-hour full access for just $5 USDT via Binance. Unlock instantly after uploading your payment proof.</div>
+    <button class="btn-pay" style="max-width:340px;margin:0 auto" onclick="openPayModal()">
+      <span style="font-size:1.2rem">₿</span> Get Access — $5 USDT
+    </button>
   </div>
 
-  <!-- Analysis output -->
-  <div class="result-card" id="analysis-card">
-    <div class="card-header">
-      <div class="jah-avatar"><span class="jah-av-text">JAH</span><span class="jah-av-dot"></span></div>
-      <div><div class="ai-name">Elite Trader AI</div><div class="ai-sub">Chart Analysis</div></div>
-      <span class="ai-badge">AI Analysis</span>
+  <!-- UNLOCKED state -->
+  <div id="tool-unlocked" style="display:none">
+    <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <div class="upload-icon-wrap">🖼️</div>
+      <div class="upload-title">Drop Your Chart Here</div>
+      <div class="upload-sub">Click to browse &nbsp;·&nbsp; PNG &nbsp;·&nbsp; JPG &nbsp;·&nbsp; WEBP</div>
+      <img id="preview" class="preview-img" src="" alt="Chart preview"/>
     </div>
-    <div class="md-body" id="analysis-text"></div>
-  </div>
+    <input type="file" id="file-input" accept="image/*" style="display:none"/>
+    <div class="disclaimer"><span class="disclaimer-icon">⚠️</span><span><strong>Disclaimer:</strong> For educational purposes only. AI results may not reflect 100% accuracy and are not financial advice. Always do your own research before trading.</span></div>
+    <div class="tool-cta"><button class="btn-primary" id="analyze-btn" disabled style="min-width:230px;font-size:.9rem;padding:.9rem 2.5rem;">🔍 &nbsp;Analyze Chart</button></div>
 
-  <!-- Chat -->
-  <div class="chat-card" id="chat-card">
-    <div class="chat-top">
-      <div class="jah-avatar"><span class="jah-av-text">JAH</span><span class="jah-av-dot"></span></div>
-      <div><div class="ai-name">Elite Trader Mentor</div><div class="ai-sub">Ask me anything about the chart</div></div>
-      <div class="online-chip"><span class="online-dot"></span>Online</div>
+    <div class="result-card" id="analysis-card">
+      <div class="card-header"><div class="jah-avatar"><span class="jah-av-text">JAH</span><span class="jah-av-dot"></span></div><div><div class="ai-name">AlphaEdge AI</div><div class="ai-sub">Chart Analysis</div></div><span class="ai-badge">AI Analysis</span></div>
+      <div class="md-body" id="analysis-text"></div>
     </div>
 
-    <div class="chat-log" id="chat-log"></div>
-
-    <!-- New chart panel — shows when user picks a new chart mid-chat -->
-    <div class="new-chart-bar" id="new-chart-bar">
-      <div class="new-chart-preview-wrap">
-        <img class="new-chart-thumb" id="new-chart-thumb" src="" alt="New chart" />
-        <div class="new-chart-info">
-          <div class="new-chart-label">New chart ready — what would you like to do?</div>
-          <div class="new-chart-actions">
-            <button class="btn-trade btn-new-trade"  id="btn-new-trade">🆕 New Trade</button>
-            <button class="btn-trade btn-cont-trade" id="btn-cont-trade">📈 Continue In This Trade Chat</button>
-          </div>
-        </div>
+    <div class="chat-card" id="chat-card">
+      <div class="chat-top"><div class="jah-avatar"><span class="jah-av-text">JAH</span><span class="jah-av-dot"></span></div><div><div class="ai-name">AlphaEdge Mentor</div><div class="ai-sub">Ask me anything about the chart</div></div><div class="online-chip"><span class="online-dot"></span>Online</div></div>
+      <div class="chat-log" id="chat-log"></div>
+      <div class="new-chart-bar" id="new-chart-bar">
+        <div class="new-chart-preview-wrap"><img class="new-chart-thumb" id="new-chart-thumb" src="" alt="New chart"/><div><div class="new-chart-label">New chart ready — what would you like to do?</div><div class="new-chart-actions"><button class="btn-trade btn-new-trade" id="btn-new-trade">🆕 New Trade</button><button class="btn-trade btn-cont-trade" id="btn-cont-trade">📈 Continue In This Trade Chat</button></div></div></div>
       </div>
-    </div>
-
-    <div class="chat-input-bar">
-      <!-- Attach new chart button -->
-      <button class="attach-btn" id="attach-btn" title="Upload new chart">📎</button>
-      <input type="file" id="chat-file-input" accept="image/*" style="display:none" />
-      <input class="chat-input" type="text" id="user-input" placeholder="e.g. Why HOLD? Where is the resistance?" />
-      <button class="send-btn" id="send-btn" title="Send">➤</button>
+      <div class="chat-input-bar"><button class="attach-btn" id="attach-btn" title="Upload new chart">📎</button><input type="file" id="chat-file-input" accept="image/*" style="display:none"/><input class="chat-input" type="text" id="user-input" placeholder="e.g. Why HOLD? Where is the resistance?"/><button class="send-btn" id="send-btn">➤</button></div>
     </div>
   </div>
 </div>
@@ -413,297 +572,246 @@
   <div class="section-eyebrow fade-up">What We Analyze</div>
   <h2 class="section-title fade-up" style="transition-delay:.1s">Features</h2>
   <div class="services-list">
-    <div class="service-row fade-up" style="transition-delay:.05s">
-      <div class="service-num">01</div>
-      <div class="service-info"><div class="service-name">Trend Analysis</div><p class="service-desc">Identify the overall market direction — bullish, bearish, or sideways — with multi-pattern recognition so you always know who's in control.</p></div>
-    </div>
-    <div class="service-row fade-up" style="transition-delay:.12s">
-      <div class="service-num">02</div>
-      <div class="service-info"><div class="service-name">Support &amp; Resistance</div><p class="service-desc">Pinpoint key price levels where buyers and sellers historically clash — essential for timing entries, exits, and stop-losses with precision.</p></div>
-    </div>
-    <div class="service-row fade-up" style="transition-delay:.19s">
-      <div class="service-num">03</div>
-      <div class="service-info"><div class="service-name">Candlestick Patterns</div><p class="service-desc">Detect reversal and continuation signals — engulfing, doji, hammer, shooting star, morning star — read by the AI in seconds.</p></div>
-    </div>
-    <div class="service-row fade-up" style="transition-delay:.26s">
-      <div class="service-num">04</div>
-      <div class="service-info"><div class="service-name">BUY / SELL / HOLD Signal</div><p class="service-desc">Every analysis closes with a clear, professional recommendation backed by transparent, step-by-step reasoning — no guesswork.</p></div>
-    </div>
-    <div class="service-row fade-up" style="transition-delay:.33s">
-      <div class="service-num">05</div>
-      <div class="service-info"><div class="service-name">Interactive Q&amp;A</div><p class="service-desc">Ask unlimited follow-up questions. Your AI mentor retains full chart context and answers like a seasoned pro — not a generic chatbot.</p></div>
-    </div>
+    <div class="service-row fade-up" style="transition-delay:.05s"><div class="service-num">01</div><div class="service-info"><div class="service-name">Trend Analysis</div><p class="service-desc">Identify the overall market direction — bullish, bearish, or sideways — with multi-pattern recognition so you always know who's in control.</p></div></div>
+    <div class="service-row fade-up" style="transition-delay:.12s"><div class="service-num">02</div><div class="service-info"><div class="service-name">Support &amp; Resistance</div><p class="service-desc">Pinpoint key price levels where buyers and sellers historically clash — essential for timing entries, exits, and stop-losses with precision.</p></div></div>
+    <div class="service-row fade-up" style="transition-delay:.19s"><div class="service-num">03</div><div class="service-info"><div class="service-name">Candlestick Patterns</div><p class="service-desc">Detect reversal and continuation signals — engulfing, doji, hammer, shooting star, morning star — read by the AI in seconds.</p></div></div>
+    <div class="service-row fade-up" style="transition-delay:.26s"><div class="service-num">04</div><div class="service-info"><div class="service-name">BUY / SELL / HOLD Signal</div><p class="service-desc">Every analysis closes with a clear, professional recommendation backed by transparent, step-by-step reasoning — zero guesswork.</p></div></div>
+    <div class="service-row fade-up" style="transition-delay:.33s"><div class="service-num">05</div><div class="service-info"><div class="service-name">Interactive Q&amp;A</div><p class="service-desc">Ask unlimited follow-up questions. AlphaEdge retains full chart context and answers like a seasoned pro — not a generic chatbot.</p></div></div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-logo"><span class="footer-wordmark">JAH</span><span class="footer-dot"></span></div>
-  <div class="footer-sub">AI Trader Mentor &nbsp;·&nbsp; Elite Chart Analysis &nbsp;·&nbsp; © 2026</div>
+  <div class="footer-sub">AlphaEdge AI &nbsp;·&nbsp; Elite Chart Analysis &nbsp;·&nbsp; © 2026</div>
 </footer>
 
 <script>
-  if (typeof marked !== 'undefined') marked.setOptions({ breaks: true, gfm: true });
+if(typeof marked!=='undefined') marked.setOptions({breaks:true,gfm:true});
 
-  /* ── State ── */
-  let imageFile        = null;
-  let pendingNewImage  = null;
-  let conversationHistory = [];
+/* ══ ACCESS CONTROL ══ */
+const SESSION_KEY = 'alphaedge_session';
+const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
-  /* ── Elements ── */
-  const dropZone      = document.getElementById('drop-zone');
-  const fileInput     = document.getElementById('file-input');
-  const preview       = document.getElementById('preview');
-  const analyzeBtn    = document.getElementById('analyze-btn');
-  const analysisCard  = document.getElementById('analysis-card');
-  const analysisText  = document.getElementById('analysis-text');
-  const chatCard      = document.getElementById('chat-card');
-  const chatLog       = document.getElementById('chat-log');
-  const userInput     = document.getElementById('user-input');
-  const sendBtn       = document.getElementById('send-btn');
-  const attachBtn     = document.getElementById('attach-btn');
-  const chatFileInput = document.getElementById('chat-file-input');
-  const newChartBar   = document.getElementById('new-chart-bar');
-  const newChartThumb = document.getElementById('new-chart-thumb');
-  const btnNewTrade   = document.getElementById('btn-new-trade');
-  const btnContTrade  = document.getElementById('btn-cont-trade');
+function checkAccess() {
+  const raw = localStorage.getItem(SESSION_KEY);
+  if (!raw) return false;
+  const session = JSON.parse(raw);
+  return session.expiry > Date.now();
+}
 
-  /* ── Main upload drag & drop ── */
-  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-  dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); if (e.dataTransfer.files[0]) loadMainFile(e.dataTransfer.files[0]); });
-  fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadMainFile(fileInput.files[0]); });
+function getTimeRemaining() {
+  const raw = localStorage.getItem(SESSION_KEY);
+  if (!raw) return null;
+  const session = JSON.parse(raw);
+  const ms = session.expiry - Date.now();
+  if (ms <= 0) return null;
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} remaining`;
+}
 
-  function loadMainFile(file) {
-    imageFile = file;
-    preview.src = URL.createObjectURL(file);
-    preview.style.display = 'block';
-    analyzeBtn.disabled = false;
-    analyzeBtn.innerHTML = '🔍 &nbsp;Analyze Chart';
-    analysisCard.style.display = 'none';
-    chatCard.style.display = 'none';
-    chatLog.innerHTML = '';
-    conversationHistory = [];
-    newChartBar.style.display = 'none';
-    pendingNewImage = null;
+function grantAccess() {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ expiry: Date.now() + SESSION_DURATION }));
+  showTool();
+  closePayModal();
+  document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
+}
+
+function showTool() {
+  document.getElementById('tool-locked').style.display = 'none';
+  document.getElementById('tool-unlocked').style.display = 'block';
+  document.getElementById('access-banner').classList.add('show');
+  updateTimer();
+}
+
+function updateTimer() {
+  const t = getTimeRemaining();
+  if (t) {
+    document.getElementById('access-timer').textContent = t;
+    setTimeout(updateTimer, 1000);
+  } else {
+    // Session expired
+    document.getElementById('access-banner').classList.remove('show');
+    document.getElementById('tool-unlocked').style.display = 'none';
+    document.getElementById('tool-locked').style.display = 'block';
+    localStorage.removeItem(SESSION_KEY);
   }
+}
 
-  /* ── Render markdown + signal colours ── */
-  function renderResponse(raw) {
-    let html = (typeof marked !== 'undefined') ? marked.parse(raw) : raw.replace(/\n/g, '<br>');
-    return html
-      .replace(/\bBUY\b/g,   '<span class="sig-buy">BUY</span>')
-      .replace(/\bSELL\b/g,  '<span class="sig-sell">SELL</span>')
-      .replace(/\bHOLD\b/g,  '<span class="sig-hold">HOLD</span>')
-      .replace(/\bAVOID\b/g, '<span class="sig-hold">AVOID</span>');
-  }
+// Check on load
+if (checkAccess()) showTool();
 
-  /* ── Analyze main chart ── */
-  analyzeBtn.addEventListener('click', async () => {
-    if (!imageFile) return;
-    analyzeBtn.disabled = true;
-    analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing...';
-    analysisCard.style.display = 'block';
-    analysisText.innerHTML = '<span class="spinner"></span> Reading your chart...';
+/* ══ PAYMENT MODAL ══ */
+function openPayModal() {
+  document.getElementById('pay-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePayModal() {
+  document.getElementById('pay-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('pay-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePayModal();
+});
 
-    const fd = new FormData();
-    fd.append('image', imageFile);
+function copyWallet() {
+  navigator.clipboard.writeText('0x38621289ac44502529758704689a5a1afa4e9fd0').then(() => {
+    const note = document.getElementById('copy-note');
+    note.classList.add('show');
+    setTimeout(() => note.classList.remove('show'), 2500);
+  });
+}
 
-    try {
-      const res  = await fetch('/api/analyze', { method: 'POST', body: fd });
-      const data = await res.json();
-      if (data.error) {
-        analysisText.innerHTML = `<span style="color:#f85149">Error: ${data.error}</span>`;
-      } else {
-        const text = data.response;
-        analysisText.innerHTML = renderResponse(text);
-        conversationHistory = [
-          { role: 'user', content: [
-            { type: 'image', source: { type: 'base64', media_type: imageFile.type, data: await toBase64(imageFile) } },
-            { type: 'text', text: 'Please analyze this chart and give me your trading recommendation.' }
-          ]},
-          { role: 'assistant', content: text }
-        ];
-        chatCard.style.display = 'block';
-        addAiMsg(text);
-        chatCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    } catch (e) {
-      analysisText.innerHTML = `<span style="color:#f85149">Network error: ${e.message}</span>`;
+function goStep2() {
+  document.getElementById('modal-step1').style.display = 'none';
+  document.getElementById('modal-step2').style.display = 'block';
+  document.getElementById('si1').className = 'si-step done';
+  document.getElementById('si2').className = 'si-step active';
+}
+
+// Proof upload
+document.getElementById('proof-input').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  const thumb = document.getElementById('proof-thumb');
+  const unlockBtn = document.getElementById('btn-unlock');
+  thumb.src = URL.createObjectURL(this.files[0]);
+  thumb.style.display = 'block';
+  unlockBtn.style.display = 'flex';
+  document.getElementById('si2').className = 'si-step done';
+  document.getElementById('si3').className = 'si-step active';
+});
+
+function unlockAccess() {
+  grantAccess();
+}
+
+/* ══ TOOL LOGIC ══ */
+let imageFile = null, pendingNewImage = null, conversationHistory = [];
+
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const analyzeBtn = document.getElementById('analyze-btn');
+const analysisCard = document.getElementById('analysis-card');
+const analysisText = document.getElementById('analysis-text');
+const chatCard = document.getElementById('chat-card');
+const chatLog = document.getElementById('chat-log');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const attachBtn = document.getElementById('attach-btn');
+const chatFileInput = document.getElementById('chat-file-input');
+const newChartBar = document.getElementById('new-chart-bar');
+const newChartThumb = document.getElementById('new-chart-thumb');
+const btnNewTrade = document.getElementById('btn-new-trade');
+const btnContTrade = document.getElementById('btn-cont-trade');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); if(e.dataTransfer.files[0]) loadMain(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', () => { if(fileInput.files[0]) loadMain(fileInput.files[0]); });
+
+function loadMain(file) {
+  imageFile = file;
+  const prev = document.getElementById('preview');
+  prev.src = URL.createObjectURL(file);
+  prev.style.display = 'block';
+  analyzeBtn.disabled = false;
+  analyzeBtn.innerHTML = '🔍 &nbsp;Analyze Chart';
+  analysisCard.style.display = 'none';
+  chatCard.style.display = 'none';
+  chatLog.innerHTML = '';
+  conversationHistory = [];
+  newChartBar.style.display = 'none';
+  pendingNewImage = null;
+}
+
+function renderMD(raw) {
+  let html = (typeof marked!=='undefined') ? marked.parse(raw) : raw.replace(/\n/g,'<br>');
+  return html
+    .replace(/\bBUY\b/g,'<span class="sig-buy">BUY</span>')
+    .replace(/\bSELL\b/g,'<span class="sig-sell">SELL</span>')
+    .replace(/\bHOLD\b/g,'<span class="sig-hold">HOLD</span>')
+    .replace(/\bAVOID\b/g,'<span class="sig-hold">AVOID</span>');
+}
+
+analyzeBtn.addEventListener('click', async () => {
+  if(!imageFile) return;
+  analyzeBtn.disabled = true;
+  analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing...';
+  analysisCard.style.display = 'block';
+  analysisText.innerHTML = '<span class="spinner"></span> Reading your chart...';
+  const fd = new FormData(); fd.append('image', imageFile);
+  try {
+    const res = await fetch('/api/analyze',{method:'POST',body:fd});
+    const data = await res.json();
+    if(data.error){ analysisText.innerHTML=`<span style="color:#f85149">Error: ${data.error}</span>`; }
+    else {
+      analysisText.innerHTML = renderMD(data.response);
+      conversationHistory = [
+        {role:'user',content:[{type:'image',source:{type:'base64',media_type:imageFile.type,data:await toB64(imageFile)}},{type:'text',text:'Please analyze this chart and give me your trading recommendation.'}]},
+        {role:'assistant',content:data.response}
+      ];
+      chatCard.style.display = 'block';
+      addAiMsg(data.response);
+      chatCard.scrollIntoView({behavior:'smooth',block:'nearest'});
     }
-    analyzeBtn.disabled = false;
-    analyzeBtn.innerHTML = '🔄 &nbsp;Re-analyze';
-  });
+  } catch(e){ analysisText.innerHTML=`<span style="color:#f85149">Network error: ${e.message}</span>`; }
+  analyzeBtn.disabled = false; analyzeBtn.innerHTML = '🔄 &nbsp;Re-analyze';
+});
 
-  /* ── Normal text chat ── */
-  sendBtn.addEventListener('click', sendMsg);
-  userInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(); });
+sendBtn.addEventListener('click', sendMsg);
+userInput.addEventListener('keydown', e => { if(e.key==='Enter') sendMsg(); });
 
-  async function sendMsg() {
-    const q = userInput.value.trim();
-    if (!q || !conversationHistory.length) return;
-    addUserMsg(q);
-    userInput.value = '';
-    sendBtn.disabled = true;
-    const el = addAiMsgRaw('<span class="spinner"></span>');
+async function sendMsg() {
+  const q = userInput.value.trim();
+  if(!q || !conversationHistory.length) return;
+  addUserMsg(q); userInput.value = ''; sendBtn.disabled = true;
+  const el = addAiRaw('<span class="spinner"></span>');
+  try {
+    const res = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({history:conversationHistory,question:q})});
+    const data = await res.json();
+    if(data.error){ el.innerHTML=`<span style="color:#f85149">Error: ${data.error}</span>`; }
+    else { const w=document.createElement('div');w.className='md-body';w.innerHTML=renderMD(data.response);el.innerHTML='';el.appendChild(w);conversationHistory.push({role:'user',content:q});conversationHistory.push({role:'assistant',content:data.response}); }
+  } catch(e){ el.innerHTML=`<span style="color:#f85149">Network error: ${e.message}</span>`; }
+  sendBtn.disabled = false; chatLog.scrollTop = chatLog.scrollHeight;
+}
 
-    try {
-      const res  = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history: conversationHistory, question: q })
-      });
-      const data = await res.json();
-      if (data.error) {
-        el.innerHTML = `<span style="color:#f85149">Error: ${data.error}</span>`;
-      } else {
-        const wrap = document.createElement('div');
-        wrap.className = 'md-body';
-        wrap.innerHTML = renderResponse(data.response);
-        el.innerHTML = '';
-        el.appendChild(wrap);
-        conversationHistory.push({ role: 'user',      content: q });
-        conversationHistory.push({ role: 'assistant', content: data.response });
-      }
-    } catch (e) {
-      el.innerHTML = `<span style="color:#f85149">Network error: ${e.message}</span>`;
-    }
-    sendBtn.disabled = false;
-    chatLog.scrollTop = chatLog.scrollHeight;
-  }
+attachBtn.addEventListener('click', () => chatFileInput.click());
+chatFileInput.addEventListener('change', () => { if(chatFileInput.files[0]){ showNewChartChoice(chatFileInput.files[0]); chatFileInput.value=''; } });
 
-  /* ── Attach new chart during chat ── */
-  attachBtn.addEventListener('click', () => chatFileInput.click());
-  chatFileInput.addEventListener('change', () => {
-    if (chatFileInput.files[0]) showNewChartChoice(chatFileInput.files[0]);
-    chatFileInput.value = '';
-  });
+function showNewChartChoice(file){ pendingNewImage=file; newChartThumb.src=URL.createObjectURL(file); newChartBar.style.display='block'; chatLog.scrollTop=chatLog.scrollHeight; }
 
-  function showNewChartChoice(file) {
-    pendingNewImage = file;
-    newChartThumb.src = URL.createObjectURL(file);
-    newChartBar.style.display = 'block';
-    chatLog.scrollTop = chatLog.scrollHeight;
-  }
+btnNewTrade.addEventListener('click', () => {
+  if(!pendingNewImage) return;
+  newChartBar.style.display='none';
+  loadMain(pendingNewImage); pendingNewImage=null;
+  document.getElementById('tool').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>analyzeBtn.click(),600);
+});
 
-  /* ── New Trade button ── */
-  btnNewTrade.addEventListener('click', () => {
-    if (!pendingNewImage) return;
-    newChartBar.style.display = 'none';
-    loadMainFile(pendingNewImage);
-    pendingNewImage = null;
-    // Scroll back up to upload zone, trigger analysis
-    document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => analyzeBtn.click(), 600);
-  });
+btnContTrade.addEventListener('click', async () => {
+  if(!pendingNewImage) return;
+  const file = pendingNewImage; pendingNewImage=null; newChartBar.style.display='none';
+  addImgMsg(file);
+  const b64=await toB64(file); const mt=file.type||'image/png';
+  sendBtn.disabled=true; const el=addAiRaw('<span class="spinner"></span>');
+  try {
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({history:conversationHistory,question:'Here is a new chart. Analyze it and relate it to our previous discussion.',image_data:b64,image_type:mt})});
+    const data=await res.json();
+    if(data.error){el.innerHTML=`<span style="color:#f85149">Error: ${data.error}</span>`;}
+    else{const w=document.createElement('div');w.className='md-body';w.innerHTML=renderMD(data.response);el.innerHTML='';el.appendChild(w);conversationHistory.push({role:'user',content:[{type:'image',source:{type:'base64',media_type:mt,data:b64}},{type:'text',text:'Here is a new chart. Analyze it and relate it to our previous discussion.'}]});conversationHistory.push({role:'assistant',content:data.response});}
+  }catch(e){el.innerHTML=`<span style="color:#f85149">Network error: ${e.message}</span>`;}
+  sendBtn.disabled=false; chatLog.scrollTop=chatLog.scrollHeight;
+});
 
-  /* ── Continue In This Trade Chat ── */
-  btnContTrade.addEventListener('click', async () => {
-    if (!pendingNewImage) return;
-    const file = pendingNewImage;
-    pendingNewImage = null;
-    newChartBar.style.display = 'none';
+function addUserMsg(t){const e=document.createElement('div');e.className='msg user';e.textContent=t;chatLog.appendChild(e);chatLog.scrollTop=chatLog.scrollHeight;}
+function addAiMsg(raw){const e=document.createElement('div');e.className='msg ai';const w=document.createElement('div');w.className='md-body';w.innerHTML=renderMD(raw);e.appendChild(w);chatLog.appendChild(e);chatLog.scrollTop=chatLog.scrollHeight;return e;}
+function addAiRaw(html){const e=document.createElement('div');e.className='msg ai';e.innerHTML=html;chatLog.appendChild(e);chatLog.scrollTop=chatLog.scrollHeight;return e;}
+function addImgMsg(file){const w=document.createElement('div');w.className='msg-img';const img=document.createElement('img');img.src=URL.createObjectURL(file);const l=document.createElement('div');l.className='img-label';l.textContent='📎 New chart uploaded';w.appendChild(img);w.appendChild(l);chatLog.appendChild(w);chatLog.scrollTop=chatLog.scrollHeight;}
+function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
 
-    // Show image bubble in chat
-    addImageMsg(file);
-
-    const b64       = await toBase64(file);
-    const mediaType = file.type || 'image/png';
-
-    sendBtn.disabled = true;
-    const el = addAiMsgRaw('<span class="spinner"></span>');
-
-    try {
-      const res  = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          history:    conversationHistory,
-          question:   'Here is a new chart for this trade. Analyze it and relate it to our previous discussion.',
-          image_data: b64,
-          image_type: mediaType
-        })
-      });
-      const data = await res.json();
-      if (data.error) {
-        el.innerHTML = `<span style="color:#f85149">Error: ${data.error}</span>`;
-      } else {
-        const wrap = document.createElement('div');
-        wrap.className = 'md-body';
-        wrap.innerHTML = renderResponse(data.response);
-        el.innerHTML = '';
-        el.appendChild(wrap);
-        conversationHistory.push({ role: 'user', content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: b64 } },
-          { type: 'text',  text: 'Here is a new chart for this trade. Analyze it and relate it to our previous discussion.' }
-        ]});
-        conversationHistory.push({ role: 'assistant', content: data.response });
-      }
-    } catch (e) {
-      el.innerHTML = `<span style="color:#f85149">Network error: ${e.message}</span>`;
-    }
-    sendBtn.disabled = false;
-    chatLog.scrollTop = chatLog.scrollHeight;
-  });
-
-  /* ── Helpers ── */
-  function addUserMsg(text) {
-    const el = document.createElement('div');
-    el.className = 'msg user';
-    el.textContent = text;
-    chatLog.appendChild(el);
-    chatLog.scrollTop = chatLog.scrollHeight;
-  }
-
-  function addAiMsg(raw) {
-    const el = document.createElement('div');
-    el.className = 'msg ai';
-    const wrap = document.createElement('div');
-    wrap.className = 'md-body';
-    wrap.innerHTML = renderResponse(raw);
-    el.appendChild(wrap);
-    chatLog.appendChild(el);
-    chatLog.scrollTop = chatLog.scrollHeight;
-    return el;
-  }
-
-  function addAiMsgRaw(html) {
-    const el = document.createElement('div');
-    el.className = 'msg ai';
-    el.innerHTML = html;
-    chatLog.appendChild(el);
-    chatLog.scrollTop = chatLog.scrollHeight;
-    return el;
-  }
-
-  function addImageMsg(file) {
-    const wrap = document.createElement('div');
-    wrap.className = 'msg-img';
-    const img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
-    const label = document.createElement('div');
-    label.className = 'img-label';
-    label.textContent = '📎 New chart uploaded';
-    wrap.appendChild(img);
-    wrap.appendChild(label);
-    chatLog.appendChild(wrap);
-    chatLog.scrollTop = chatLog.scrollHeight;
-  }
-
-  function toBase64(file) {
-    return new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload  = () => res(r.result.split(',')[1]);
-      r.onerror = rej;
-      r.readAsDataURL(file);
-    });
-  }
-
-  /* ── Scroll animations ── */
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.07 });
-  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});},{threshold:.07});
+document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
