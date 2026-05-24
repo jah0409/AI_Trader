@@ -11,7 +11,8 @@ SYSTEM_PROMPT = (
     "and candlestick patterns. Give a clear recommendation (BUY/SELL/HOLD) and a brief reason. "
     "After your analysis, always end with: 'Are you confused about anything? Feel free to ask me!' "
     "When the user asks follow-up questions, answer them clearly and professionally, "
-    "drawing on the chart context you already analyzed."
+    "drawing on the chart context you already analyzed. "
+    "When given a new chart mid-conversation, analyze it fully and reference the previous discussion if relevant."
 )
 
 
@@ -72,13 +73,38 @@ def chat():
         if not data:
             return jsonify({"error": "No JSON body received."}), 400
 
-        history = data.get("history", [])
+        history  = data.get("history", [])
         question = data.get("question", "").strip()
+        # Optional: new chart uploaded during chat
+        image_data  = data.get("image_data")   # base64 string
+        image_type  = data.get("image_type", "image/png")
 
-        if not question:
-            return jsonify({"error": "No question provided."}), 400
+        if not question and not image_data:
+            return jsonify({"error": "No question or image provided."}), 400
 
-        history.append({"role": "user", "content": question})
+        # Build user message — multimodal if a new chart image is included
+        if image_data:
+            user_content = [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": image_type,
+                        "data": image_data,
+                    },
+                },
+                {
+                    "type": "text",
+                    "text": question if question else (
+                        "Here is a new chart I want to discuss. "
+                        "Please analyze it and reference our previous conversation if relevant."
+                    ),
+                },
+            ]
+        else:
+            user_content = question
+
+        history.append({"role": "user", "content": user_content})
 
         client = get_client()
         message = client.messages.create(
