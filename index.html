@@ -821,17 +821,19 @@ async function handleAuth() {
       if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
     } else {
       const { data, error } = await sb.auth.signUp({ email, password });
-      // Bypass confirmation requirement on frontend (Assuming Supabase has confirmation disabled or we just reload)
-      if(!error) { window.location.reload(); }
       if (error) throw error;
-      if (data.session) {
-        // Auto-confirmed
-        closeAuthModal();
-        if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
-      } else {
-        showAuthSuccess('✅ Check your email to confirm your account, then sign in.');
-        switchAuthTab('signin');
-      }
+
+      showAuthSuccess('✅ Account created successfully! Please wait...');
+
+      setTimeout(() => {
+        if (data.session) {
+          closeAuthModal();
+          if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
+          window.location.reload();
+        } else {
+          window.location.reload();
+        }
+      }, 1500);
     }
   } catch (err) {
     showAuthError(err.message || 'Something went wrong. Please try again.');
