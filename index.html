@@ -49,7 +49,7 @@
     /* ── AUTH MODAL ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
     .modal-overlay.open{display:flex}
-    .modal{background:#111;border:1px solid rgba(34,197,94,.2);border-radius:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal{background:#111;border:1px solid rgba(34,197,94,.2);border-radius:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative;margin:0 auto}
     .modal-top{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(243,186,47,.05));padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border)}
     .modal-close{position:absolute;top:1.1rem;right:1.25rem;background:rgba(255,255,255,.07);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
     .modal-close:hover{background:rgba(248,81,73,.2);color:#f85149}
@@ -61,10 +61,17 @@
     .auth-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem}
     .auth-tab{background:transparent;border:1px solid var(--border);border-radius:9999px;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.45rem 1.25rem;transition:all .2s;flex:1}
     .auth-tab.active{background:var(--green);border-color:var(--green);color:#0C0C0C}
-    .auth-field{margin-bottom:1rem}
+    .auth-field{margin-bottom:1rem;position:relative}
     .auth-field label{display:block;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:.45rem}
-    .auth-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:.8rem 1rem;font-family:'Kanit',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
-    .auth-field input:focus{border-color:var(--green)}
+    .auth-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:.8rem 1rem;font-family:'Kanit',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s, box-shadow .2s;box-shadow:inset 0 2px 4px rgba(0,0,0,0.2)}
+    .auth-field input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(34,197,94,0.2), inset 0 2px 4px rgba(0,0,0,0.2)}
+    .pwd-toggle{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;padding:0;transition:color 0.2s}
+    .pwd-toggle:hover{color:var(--text)}
+    .auth-forgot{display:block;text-align:right;font-size:0.75rem;color:var(--muted);margin-top:0.4rem;text-decoration:none;cursor:pointer;transition:color 0.2s}
+    .auth-forgot:hover{color:var(--green)}
+    .auth-switch{text-align:center;font-size:0.8rem;color:var(--muted);margin-top:1.25rem;cursor:pointer;transition:color 0.2s}
+    .auth-switch span{color:var(--green);font-weight:600}
+    .auth-switch:hover{color:#fff}
     .auth-field input::placeholder{color:var(--muted)}
     .auth-msg{display:none;font-size:.78rem;margin-bottom:1rem;padding:.65rem 1rem;border-radius:10px;line-height:1.5}
     .auth-msg.error{color:var(--red);background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.2);display:block}
@@ -295,6 +302,25 @@
     .fade-up{opacity:0;transform:translateY(36px);transition:opacity .78s ease,transform .78s ease}
     .fade-up.visible{opacity:1;transform:translateY(0)}
     @media(max-width:640px){nav{padding:.9rem 1.25rem}.nav-links{gap:1.25rem}.hero-title{font-size:clamp(2.4rem,15vw,5rem);white-space:normal}.hero-stats{gap:1.5rem}.stat-sep{display:none}#services{border-radius:40px 40px 0 0}.service-row{flex-direction:column;gap:.3rem}.reviews-grid{grid-template-columns:1fr}.qr-section{flex-direction:column}.admin-stats-grid{grid-template-columns:1fr}.nav-user-email{max-width:110px}}
+
+    @media (max-width: 768px) {
+      .modal { max-width: 92vw; border-radius: 20px; }
+      .modal-body, .modal-top { padding: 1.25rem; }
+      .auth-field input { font-size: 16px; /* prevent iOS zoom */ }
+      .nav-inner { padding: 1rem; }
+      .hero-title { font-size: 3rem; }
+      .hero-tagline { font-size: 0.95rem; padding: 0 0.5rem; br { display: none; } }
+      .qr-section { flex-direction: column; align-items: center; text-align: center; }
+      .wallet-info { width: 100%; }
+      .wallet-addr { word-break: break-all; font-size: 0.65rem; padding: 0.75rem 0.5rem; }
+      .instructions li { font-size: 0.75rem; }
+      .step-grid { grid-template-columns: 1fr; }
+      .service-row { flex-direction: column; gap: 0.75rem; }
+      #chat-area { width: 100vw; border-radius: 0; max-height: calc(100dvh - 60px); }
+      #dash-content { padding: 1rem; margin-left: 0; width: 100vw; }
+      .btn-auth { padding: 0.8rem 1.5rem; }
+      .app-layout { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
@@ -338,11 +364,21 @@
         <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
       </div>
       <div class="auth-field"><label>Email Address</label><input type="email" id="auth-email" placeholder="your@email.com" /></div>
-      <div class="auth-field"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••" /></div>
+      <div class="auth-field">
+        <label>Password</label>
+        <div style="position:relative;">
+          <input type="password" id="auth-password" placeholder="••••••••" style="padding-right: 2.5rem;" />
+          <button type="button" class="pwd-toggle" id="pwd-toggle-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password visibility">👁️</button>
+        </div>
+        <div id="forgot-password-link-container" style="display:none;">
+          <a class="auth-forgot" onclick="handleForgotPassword()">Forgot Password?</a>
+        </div>
+      </div>
       <div class="auth-msg" id="auth-error"></div>
       <div class="auth-msg" id="auth-success"></div>
       <button class="btn-auth" id="auth-submit-btn" onclick="handleAuth()">Sign In</button>
-      <p style="text-align:center;margin-top:1rem;font-size:.7rem;color:var(--muted);line-height:1.6">Your account tracks your 24h access sessions.<br>Payments are verified by AI — no manual review.</p>
+      <div class="auth-switch" id="auth-switch-text" onclick="switchAuthTab(authTab === 'signin' ? 'signup' : 'signin')"></div>
+      <p style="text-align:center;margin-top:1.5rem;font-size:.7rem;color:var(--muted);line-height:1.6">Your account tracks your 24h access sessions.<br>Payments are verified by AI — no manual review.</p>
     </div>
   </div>
 </div>
@@ -376,7 +412,7 @@
   <h2 class="section-title fade-up" style="transition-delay:.1s">How It Works</h2>
   <div class="steps-grid">
     <div class="step-card fade-up" style="transition-delay:.05s"><div class="step-num-bg">01</div><div class="step-icon-wrap">👤</div><div class="step-title">Create Free Account</div><p class="step-desc">Sign up with your email and password. Your account tracks your sessions and payment history across devices.</p></div>
-    <div class="step-card fade-up" style="transition-delay:.15s"><div class="step-num-bg">02</div><div class="step-icon-wrap">💳</div><div class="step-title">Pay $5 via Binance</div><p class="step-desc">Send $5 USDT (BEP-20) to our Binance wallet. Upload your confirmation screenshot — our AI verifies it instantly.</p></div>
+    <div class="step-card fade-up" style="transition-delay:.15s"><div class="step-num-bg">02</div><div class="step-icon-wrap">💳</div><div class="step-title">Pay $5 via Crypto</div><p class="step-desc">Send $5 USDT (BEP-20) from any wallet (Binance, Trust Wallet, MetaMask). Upload your confirmation screenshot — verified instantly.</p></div>
     <div class="step-card fade-up" style="transition-delay:.25s"><div class="step-num-bg">03</div><div class="step-icon-wrap">🧠</div><div class="step-title">AI Analyzes Your Chart</div><p class="step-desc">Upload any chart image. AlphaEdge reads every pattern, level, and signal — then gives you a clear BUY / SELL / HOLD.</p></div>
   </div>
 </div>
@@ -414,7 +450,7 @@
     <div class="modal-top">
       <button class="modal-close" onclick="closePayModal()">✕</button>
       <div class="modal-title">Get AlphaEdge Access</div>
-      <div class="modal-sub">$5 USDT · BEP-20 · 24 Hours Full Access</div>
+      <div class="modal-sub">$5 USDT · BEP-20 (BSC Network) · Universal Wallet Support</div>
     </div>
     <div class="modal-body">
       <div class="steps-indicator">
@@ -427,6 +463,7 @@
 
       <!-- STEP 1: Send payment -->
       <div id="modal-step1">
+        <div class="auth-msg success" id="pay-toast" style="display:none; margin-bottom:1rem;"></div>
         <div class="amount-box">
           <div class="amount-label">Amount to Send</div>
           <div class="amount-value">5.00 <span class="amount-currency">USDT</span></div>
@@ -439,15 +476,25 @@
             <div class="wallet-label">Wallet Address (tap to copy)</div>
             <div class="wallet-addr" id="wallet-addr" onclick="copyWallet()">0x38621289ac44502529758704689a5a1afa4e9fd0</div>
             <div class="copy-note" id="copy-note">✓ Copied!</div>
-            <div class="network-badge">🔸 BSC · BEP-20 Network</div>
+            <div class="network-badge" style="margin-bottom:0.5rem;">🔸 BEP-20 (BSC Network)</div>
+            <div style="font-size:0.75rem; color:var(--muted); line-height:1.4; margin-bottom:0.5rem;">Compatible with Binance, Trust Wallet, MetaMask, OKX, Bybit, KuCoin, and any wallet supporting BEP-20 USDT.</div>
+            <div style="display:flex; gap:0.5rem; justify-content:center; margin-bottom:1rem;">
+              <span title="Binance">🟡</span>
+              <span title="MetaMask">🦊</span>
+              <span title="Trust Wallet">🛡️</span>
+              <span title="OKX">⚫</span>
+            </div>
+            <div style="background:rgba(243,186,47,0.1); border-left:3px solid #f3ba2f; color:#f3ba2f; padding:0.5rem; font-size:0.75rem; text-align:left; border-radius:4px; margin-bottom:1rem;">
+              <strong>⚠ WARNING:</strong> Only send USDT using the BEP-20 (BSC) network. Sending through ERC20 or TRC20 may result in lost funds.
+            </div>
           </div>
         </div>
         <div class="instructions">
-          <li>Open Binance app → Wallets → Send</li>
-          <li>Choose USDT and select <strong>BEP-20 (BSC)</strong> network</li>
-          <li>Paste the wallet address above</li>
+          <li>Open your preferred crypto wallet or exchange</li>
+          <li>Choose USDT and select <strong>BEP-20 (BSC) network</strong></li>
+          <li>Paste the wallet address above or scan QR</li>
           <li>Enter amount: <strong>5 USDT</strong> and confirm</li>
-          <li>Take a screenshot of the confirmation screen</li>
+          <li>Wait for blockchain confirmation and take a screenshot</li>
         </div>
         <button class="btn-paid" onclick="goStep2()">✅ &nbsp;I've Sent the Payment →</button>
       </div>
@@ -455,11 +502,11 @@
       <!-- STEP 2: Upload proof -->
       <div id="modal-step2" style="display:none">
         <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.75rem;color:var(--green);line-height:1.6">
-          🤖 <strong>Claude AI</strong> will verify your screenshot automatically — checks Binance, wallet address, amount, and status.
+          🤖 <strong>AlphaEdge AI</strong> will verify your screenshot automatically — checks wallet address, amount, and status on the blockchain.
         </div>
         <div class="proof-zone" id="proof-zone" onclick="document.getElementById('proof-input').click()">
           <div class="proof-icon">📸</div>
-          <div class="proof-title">Upload Binance Confirmation</div>
+          <div class="proof-title">Upload Transaction Confirmation</div>
           <div class="proof-sub">Tap to select your payment screenshot</div>
         </div>
         <input type="file" id="proof-input" accept="image/*" style="display:none" />
@@ -561,7 +608,7 @@
   <div class="tool-locked" id="tool-locked">
     <span class="lock-icon">🔒</span>
     <div class="lock-title">AlphaEdge — Locked</div>
-    <div class="lock-sub">Create a free account, pay $5 USDT via Binance, and unlock 24-hour full access. Claude AI verifies your payment instantly.</div>
+    <div class="lock-sub">Create a free account, pay $5 USDT (BEP-20), and unlock 24-hour full access. AI verifies your payment instantly.</div>
     <button class="btn-pay" style="max-width:340px;margin:0 auto" onclick="handleGetAccess()">
       <span style="font-size:1.2rem">₿</span> Get Access — $5 USDT
     </button>
@@ -786,16 +833,53 @@ function switchAuthTab(tab) {
   document.getElementById('tab-signin').className = 'auth-tab' + (tab === 'signin' ? ' active' : '');
   document.getElementById('tab-signup').className = 'auth-tab' + (tab === 'signup' ? ' active' : '');
   document.getElementById('auth-submit-btn').textContent = tab === 'signin' ? 'Sign In' : 'Create Account';
+
+  const forgotContainer = document.getElementById('forgot-password-link-container');
+  if(forgotContainer) forgotContainer.style.display = tab === 'signin' ? 'block' : 'none';
+
+  const switchText = document.getElementById('auth-switch-text');
+  if(switchText) switchText.innerHTML = tab === 'signin' ? "Don't have an account? <span>Create Account</span>" : "Already a user? <span>Sign In</span>";
+
   clearAuthMsgs();
 }
 function clearAuthMsgs() {
   const e = document.getElementById('auth-error');
-  const s = document.getElementById('auth-success');
+  const s = document.getElementById('pay-toast');
   e.className = 'auth-msg'; e.textContent = '';
   s.className = 'auth-msg'; s.textContent = '';
 }
 function showAuthError(msg)   { const e=document.getElementById('auth-error'); e.textContent=msg; e.className='auth-msg error'; }
+
+
 function showAuthSuccess(msg) { const s=document.getElementById('auth-success'); s.textContent=msg; s.className='auth-msg success'; }
+
+function togglePasswordVisibility() {
+  const input = document.getElementById('auth-password');
+  const btn = document.getElementById('pwd-toggle-btn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🔒'; }
+  else { input.type = 'password'; btn.textContent = '👁️'; }
+}
+
+async function handleForgotPassword() {
+  const email = document.getElementById('auth-email').value.trim();
+  if (!email) { showAuthError('Please enter your email address to reset password.'); return; }
+
+  const btn = document.getElementById('auth-submit-btn');
+  const originalText = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  clearAuthMsgs();
+
+  try {
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    if (error) throw error;
+    showAuthSuccess('✅ Password reset email sent. Check your inbox.');
+  } catch (err) {
+    showAuthError(err.message || 'Failed to send reset email.');
+  } finally {
+    btn.disabled = false; btn.innerHTML = originalText;
+  }
+}
+
 
 document.getElementById('auth-modal').addEventListener('click', function(e) {
   if (e.target === this) closeAuthModal();
@@ -947,7 +1031,7 @@ async function validateAndUnlock() {
       }, 1800);
     } else {
       const e = document.getElementById('unlock-error');
-      e.innerHTML = `❌ <strong>Payment not verified.</strong><br>${data.reason || 'Please upload a clear Binance confirmation screenshot.'}`;
+      e.innerHTML = `❌ <strong>Payment not verified.</strong><br>${data.reason || 'Please upload a clear transaction confirmation screenshot.'}`;
       e.style.display = 'block';
       btn.disabled = false;
       btn.innerHTML = '🔍 &nbsp;Try Again';
@@ -1156,14 +1240,6 @@ function toB64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); 
 const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold:.07 });
 document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
 
-    // Mobile menu toggle
-    const menuToggle = document.getElementById('menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    if (menuToggle && navMenu) {
-      menuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-      });
-    }
 </script>
 </body>
 </html>
