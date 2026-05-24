@@ -8,13 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html,body{background:#0C0C0C;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;scroll-behavior:smooth}
     :root{
       --green:#22c55e;--green-dim:rgba(34,197,94,.14);--green-glow:rgba(34,197,94,.22);
       --border:rgba(232,240,245,.08);--text:#E8F0F5;--muted:rgba(232,240,245,.42);
-      --bnb:#F3BA2F;--bnb-dim:rgba(243,186,47,.12);
+      --bnb:#F3BA2F;--bnb-dim:rgba(243,186,47,.12);--red:#f85149;
     }
 
     /* ── BUTTONS ── */
@@ -25,6 +26,7 @@
     .btn-ghost:hover{border-color:var(--green);background:var(--green-dim);transform:translateY(-2px)}
     .btn-pay{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;background:linear-gradient(135deg,#F3BA2F 0%,#e0a800 100%);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:1rem 2.5rem;font-size:.95rem;box-shadow:0 8px 32px rgba(243,186,47,.35);transition:transform .2s,box-shadow .2s;width:100%}
     .btn-pay:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(243,186,47,.45)}
+    .btn-pay:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
     /* ── NAV ── */
     nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(12,12,12,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
@@ -37,6 +39,39 @@
     .jah-avatar{width:38px;height:38px;border-radius:50%;background:#0C0C0C;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;gap:1px;box-shadow:0 0 10px var(--green-glow)}
     .jah-av-text{font-size:.52rem;font-weight:900;color:#fff;letter-spacing:-.01em;text-transform:uppercase;line-height:1}
     .jah-av-dot{width:4px;height:4px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);flex-shrink:0}
+    /* Nav auth area */
+    #nav-loggedin{display:none;align-items:center;gap:.75rem}
+    .nav-user-email{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .admin-badge{background:linear-gradient(135deg,var(--green),#16a34a);border-radius:9999px;padding:.2rem .7rem;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#0C0C0C}
+    .btn-nav-sm{background:transparent;border:1px solid var(--border);border-radius:9999px;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.38rem .9rem;transition:border-color .2s,color .2s}
+    .btn-nav-sm:hover{border-color:var(--red);color:var(--red)}
+
+    /* ── AUTH MODAL ── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex}
+    .modal{background:#111;border:1px solid rgba(34,197,94,.2);border-radius:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal-top{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(243,186,47,.05));padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border)}
+    .modal-close{position:absolute;top:1.1rem;right:1.25rem;background:rgba(255,255,255,.07);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+    .modal-close:hover{background:rgba(248,81,73,.2);color:#f85149}
+    .modal-title{font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.25rem}
+    .modal-sub{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+    .modal-body{padding:1.75rem 2rem}
+
+    /* Auth tabs */
+    .auth-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem}
+    .auth-tab{background:transparent;border:1px solid var(--border);border-radius:9999px;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.45rem 1.25rem;transition:all .2s;flex:1}
+    .auth-tab.active{background:var(--green);border-color:var(--green);color:#0C0C0C}
+    .auth-field{margin-bottom:1rem}
+    .auth-field label{display:block;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:.45rem}
+    .auth-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:.8rem 1rem;font-family:'Kanit',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
+    .auth-field input:focus{border-color:var(--green)}
+    .auth-field input::placeholder{color:var(--muted)}
+    .auth-msg{display:none;font-size:.78rem;margin-bottom:1rem;padding:.65rem 1rem;border-radius:10px;line-height:1.5}
+    .auth-msg.error{color:var(--red);background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.2);display:block}
+    .auth-msg.success{color:var(--green);background:var(--green-dim);border:1px solid rgba(34,197,94,.3);display:block}
+    .btn-auth{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--green);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--green-glow)}
+    .btn-auth:hover{opacity:.88;transform:translateY(-2px)}
+    .btn-auth:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
     /* ── HERO ── */
     #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:7rem 2rem 4rem}
@@ -77,9 +112,7 @@
     .step-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.75rem}
     .step-desc{font-size:.84rem;font-weight:300;color:var(--muted);line-height:1.78}
 
-    /* ══════════════════════════════════
-       PRICING SECTION
-    ══════════════════════════════════ */
+    /* ── PRICING ── */
     #pricing{padding:5rem 2rem 6rem;max-width:860px;margin:0 auto}
     .pricing-card{background:rgba(255,255,255,.02);border:1px solid rgba(34,197,94,.2);border-radius:32px;padding:3rem 2.5rem;position:relative;overflow:hidden;text-align:center}
     .pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
@@ -96,33 +129,17 @@
     .bnb-badge{background:var(--bnb-dim);border:1px solid rgba(243,186,47,.3);border-radius:9999px;padding:.2rem .7rem;font-size:.65rem;font-weight:700;color:var(--bnb)}
     .guarantee{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:.9rem 1.25rem;margin-top:1.5rem;font-size:.75rem;color:var(--muted);line-height:1.6}
 
-    /* ══════════════════════════════════
-       PAYMENT MODAL
-    ══════════════════════════════════ */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
-    .modal-overlay.open{display:flex}
-    .modal{background:#111;border:1px solid rgba(34,197,94,.2);border-radius:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative}
-    .modal-top{background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(243,186,47,.05));padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border)}
-    .modal-close{position:absolute;top:1.1rem;right:1.25rem;background:rgba(255,255,255,.07);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
-    .modal-close:hover{background:rgba(248,81,73,.2);color:#f85149}
-    .modal-title{font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.25rem}
-    .modal-sub{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-    .modal-body{padding:1.75rem 2rem}
-
-    /* Steps indicator */
+    /* ── PAYMENT MODAL ── */
     .steps-indicator{display:flex;align-items:center;gap:.5rem;margin-bottom:1.75rem}
     .si-step{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:.72rem;font-weight:800;flex-shrink:0;transition:background .3s,color .3s}
     .si-step.active{background:var(--green);color:#0C0C0C}
     .si-step.done{background:rgba(34,197,94,.3);color:var(--green)}
     .si-step.inactive{background:rgba(255,255,255,.07);color:var(--muted)}
     .si-line{flex:1;height:1px;background:var(--border)}
-
-    /* Payment step 1 */
     .amount-box{background:rgba(243,186,47,.07);border:1px solid rgba(243,186,47,.25);border-radius:18px;padding:1.25rem;text-align:center;margin-bottom:1.25rem}
     .amount-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.18em;color:var(--bnb);font-weight:600;margin-bottom:.35rem}
     .amount-value{font-size:2.5rem;font-weight:900;color:#fff;line-height:1}
     .amount-currency{font-size:.85rem;font-weight:400;color:var(--bnb)}
-
     .qr-section{display:flex;gap:1.25rem;margin-bottom:1.25rem;align-items:flex-start}
     .qr-img{width:110px;height:110px;border-radius:14px;border:2px solid rgba(243,186,47,.3);flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
     .qr-img img{width:100%;height:100%;object-fit:contain}
@@ -133,76 +150,45 @@
     .copy-note{font-size:.6rem;color:var(--green);margin-top:.35rem;text-transform:uppercase;letter-spacing:.14em;opacity:0;transition:opacity .3s}
     .copy-note.show{opacity:1}
     .network-badge{display:inline-flex;align-items:center;gap:.35rem;background:var(--bnb-dim);border:1px solid rgba(243,186,47,.3);border-radius:9999px;padding:.25rem .7rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--bnb);margin-top:.5rem}
-
     .instructions{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1.25rem}
-    .instructions li{font-size:.78rem;font-weight:300;color:rgba(232,240,245,.7);line-height:1.7;padding-left:.5rem;list-style-type:none;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .instructions li{font-size:.78rem;font-weight:300;color:rgba(232,240,245,.7);line-height:1.7;list-style-type:none;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
     .instructions li:last-child{border-bottom:none}
     .instructions li::before{content:'→ ';color:var(--green);font-weight:600}
-
     .btn-paid{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;background:var(--green);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--green-glow);margin-top:.5rem}
     .btn-paid:hover{opacity:.88;transform:translateY(-2px)}
-
-    /* Payment step 2 — screenshot upload */
     .proof-zone{border:2px dashed rgba(255,255,255,.15);border-radius:18px;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .25s,background .25s;background:rgba(255,255,255,.02);margin-bottom:1.25rem}
     .proof-zone:hover,.proof-zone.dragover{border-color:var(--green);background:rgba(34,197,94,.05)}
     .proof-icon{font-size:2rem;margin-bottom:.75rem}
     .proof-title{font-size:.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.35rem}
     .proof-sub{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
     .proof-thumb{display:none;width:100%;border-radius:12px;border:2px solid var(--green);margin-bottom:1rem}
-    .btn-unlock{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--green-glow);display:none}
+    .btn-unlock{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--green-glow)}
     .btn-unlock:hover{opacity:.88;transform:translateY(-2px)}
+    .btn-unlock:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .unlock-error{display:none;font-size:.78rem;padding:.65rem 1rem;border-radius:10px;margin-top:.75rem;color:var(--red);background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.2);line-height:1.5}
+    .unlock-success{display:none;font-size:.78rem;padding:.65rem 1rem;border-radius:10px;margin-top:.75rem;color:var(--green);background:var(--green-dim);border:1px solid rgba(34,197,94,.3);line-height:1.5}
 
-    /* ══════════════════════════════════
-       REVIEWS
-    ══════════════════════════════════ */
+    /* ── REVIEWS ── */
     #reviews{padding:6rem 2rem;background:#0C0C0C;position:relative;overflow:hidden}
     #reviews::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(34,197,94,.04) 0%,transparent 100%);pointer-events:none}
     .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;max-width:1100px;margin:0 auto}
-
-    /* Glass liquid card */
-    .review-card{
-      position:relative;overflow:hidden;
-      background:rgba(255,255,255,.03);
-      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-      border:1px solid rgba(34,197,94,.12);
-      border-radius:24px;
-      padding:1.5rem;
-      transition:border-color .3s,transform .3s,box-shadow .3s;
-    }
+    .review-card{position:relative;overflow:hidden;background:rgba(255,255,255,.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(34,197,94,.12);border-radius:24px;padding:1.5rem;transition:border-color .3s,transform .3s,box-shadow .3s}
     .review-card:hover{border-color:rgba(34,197,94,.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(34,197,94,.1)}
-
-    /* Liquid blob behind each card */
-    .review-card::before{
-      content:'';position:absolute;
-      width:140px;height:140px;
-      background:radial-gradient(circle,rgba(34,197,94,.1) 0%,transparent 70%);
-      border-radius:50%;
-      animation:blob-move var(--dur,6s) ease-in-out infinite;
-      animation-delay:var(--delay,0s);
-      pointer-events:none;top:-30px;left:-30px;
-    }
-    @keyframes blob-move{
-      0%,100%{transform:translate(0,0) scale(1)}
-      33%{transform:translate(80px,60px) scale(1.4)}
-      66%{transform:translate(20px,120px) scale(.8)}
-    }
-    /* Liquid border morph */
+    .review-card::before{content:'';position:absolute;width:140px;height:140px;background:radial-gradient(circle,rgba(34,197,94,.1) 0%,transparent 70%);border-radius:50%;animation:blob-move var(--dur,6s) ease-in-out infinite;animation-delay:var(--delay,0s);pointer-events:none;top:-30px;left:-30px}
+    @keyframes blob-move{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,60px) scale(1.4)}66%{transform:translate(20px,120px) scale(.8)}}
     .review-card:nth-child(odd){animation:morph-a 8s ease-in-out infinite}
     .review-card:nth-child(even){animation:morph-b 9s ease-in-out infinite}
     @keyframes morph-a{0%,100%{border-radius:24px 16px 24px 16px}33%{border-radius:16px 28px 12px 24px}66%{border-radius:28px 12px 24px 16px}}
     @keyframes morph-b{0%,100%{border-radius:16px 24px 16px 24px}33%{border-radius:24px 12px 28px 16px}66%{border-radius:12px 24px 16px 28px}}
-
     .review-stars{color:var(--green);font-size:.9rem;letter-spacing:.05em;margin-bottom:.75rem}
     .review-text{font-size:.85rem;font-weight:400;color:rgba(232,240,245,.8);line-height:1.72;margin-bottom:1.1rem;position:relative;z-index:1}
     .review-author{display:flex;align-items:center;gap:.75rem;position:relative;z-index:1}
-    .author-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),#16a34a);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#0C0C0C;flex-shrink:0}
+    .author-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(34,197,94,.3);flex-shrink:0}
     .author-name{font-size:.82rem;font-weight:700;color:#fff}
     .author-loc{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:.05rem}
     .profit-chip{margin-left:auto;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:9999px;padding:.22rem .7rem;font-size:.62rem;font-weight:700;color:var(--green);white-space:nowrap}
 
-    /* ══════════════════════════════════
-       TOOL (with access gate)
-    ══════════════════════════════════ */
+    /* ── TOOL (access gate) ── */
     #tool{padding:2rem 2rem 9rem;max-width:860px;margin:0 auto}
     .access-banner{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:16px;padding:.9rem 1.25rem;margin-bottom:1.5rem;display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
     .access-banner.show{display:flex}
@@ -210,15 +196,11 @@
     .access-timer{font-size:.78rem;font-weight:400;color:var(--muted)}
     .btn-extend{background:var(--green);border:none;border-radius:9999px;color:#0C0C0C;font-family:'Kanit',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.45rem 1.1rem;font-size:.7rem;transition:opacity .2s}
     .btn-extend:hover{opacity:.85}
-
-    /* Tool lock overlay */
     .tool-locked{border:2px dashed rgba(255,255,255,.1);border-radius:28px;padding:4rem 2rem;text-align:center;background:rgba(255,255,255,.01);position:relative;overflow:hidden}
     .tool-locked::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(34,197,94,.05) 0%,transparent 70%);pointer-events:none}
     .lock-icon{font-size:3rem;margin-bottom:1.25rem;display:block}
     .lock-title{font-size:1.3rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#fff;margin-bottom:.6rem}
     .lock-sub{font-size:.85rem;font-weight:300;color:var(--muted);max-width:380px;margin:0 auto 2rem;line-height:1.7}
-
-    /* Tool unlocked */
     .upload-zone{border:2px dashed rgba(255,255,255,.15);border-radius:28px;padding:3.5rem 2rem;text-align:center;cursor:pointer;transition:border-color .25s,background .25s,transform .2s;background:rgba(255,255,255,.015);position:relative;overflow:hidden}
     .upload-zone:hover,.upload-zone.dragover{border-color:var(--green);background:rgba(34,197,94,.05);transform:scale(1.01)}
     .upload-zone::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(34,197,94,.06) 0%,transparent 70%);pointer-events:none}
@@ -230,22 +212,18 @@
     .tool-cta{display:flex;justify-content:center;margin-top:1.5rem}
     .disclaimer{display:flex;align-items:flex-start;gap:.75rem;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:14px;padding:1rem 1.25rem;margin-top:1.25rem;font-size:.78rem;font-weight:400;line-height:1.65;color:rgba(245,158,11,.9)}
     .disclaimer-icon{font-size:1rem;flex-shrink:0;margin-top:.05rem}
-
-    /* Result + chat cards */
     .result-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:28px;padding:2rem;margin-top:1.5rem;display:none;position:relative;overflow:hidden}
     .result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
     .card-header{display:flex;align-items:center;gap:.9rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
     .ai-name{font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff}
     .ai-sub{font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-top:.1rem}
     .ai-badge{margin-left:auto;background:var(--green-dim);border:1px solid rgba(34,197,94,.4);border-radius:9999px;padding:.28rem .9rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--green)}
-
     .md-body{font-size:.92rem;font-weight:400;color:var(--text);line-height:1.85}
     .md-body h1,.md-body h2,.md-body h3{color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin:1.2rem 0 .5rem}
     .md-body h1{font-size:1.15rem}.md-body h2{font-size:1rem}.md-body h3{font-size:.9rem;color:var(--green)}
     .md-body p{margin-bottom:.7rem}.md-body ul,.md-body ol{padding-left:1.4rem;margin-bottom:.8rem}.md-body li{margin-bottom:.3rem}
     .md-body strong{color:#fff;font-weight:700}.md-body hr{border:none;border-top:1px solid var(--border);margin:1rem 0}
     .sig-buy{color:#22c55e;font-weight:800}.sig-sell{color:#f85149;font-weight:800}.sig-hold{color:#f59e0b;font-weight:800}
-
     .chat-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:28px;overflow:hidden;margin-top:1.5rem;display:none;position:relative}
     .chat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
     .chat-top{display:flex;align-items:center;gap:.9rem;padding:1.2rem 1.75rem;border-bottom:1px solid var(--border)}
@@ -278,6 +256,23 @@
     .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(34,197,94,.25);border-top-color:var(--green);border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle;margin-right:6px}
     @keyframes spin{to{transform:rotate(360deg)}}
 
+    /* ── ADMIN PANEL ── */
+    #admin-panel{display:none;padding:3rem 2rem 6rem;max-width:1100px;margin:0 auto}
+    .admin-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+    .admin-stat{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.15);border-radius:20px;padding:1.5rem;text-align:center}
+    .admin-stat-val{font-size:2.2rem;font-weight:900;color:var(--green);line-height:1;margin-bottom:.3rem}
+    .admin-stat-lbl{font-size:.62rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:var(--muted)}
+    .payments-table-wrap{overflow-x:auto;border-radius:18px;border:1px solid var(--border)}
+    table.pm-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    table.pm-table thead tr{border-bottom:1px solid var(--border)}
+    table.pm-table th{padding:.9rem 1.1rem;text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:600;white-space:nowrap}
+    table.pm-table td{padding:.85rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text);vertical-align:middle}
+    table.pm-table tbody tr:last-child td{border-bottom:none}
+    table.pm-table tbody tr:hover{background:rgba(34,197,94,.03)}
+    .status-chip{border-radius:9999px;padding:.18rem .65rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em}
+    .status-chip.active{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+    .status-chip.expired{background:rgba(248,81,73,.08);color:var(--red);border:1px solid rgba(248,81,73,.2)}
+
     /* ── FEATURES ── */
     #services{background:#fff;border-radius:60px 60px 0 0;padding:6rem 2rem 5rem;margin-top:4rem}
     #services .section-eyebrow{color:rgba(12,12,12,.4)}
@@ -299,7 +294,7 @@
 
     .fade-up{opacity:0;transform:translateY(36px);transition:opacity .78s ease,transform .78s ease}
     .fade-up.visible{opacity:1;transform:translateY(0)}
-    @media(max-width:640px){nav{padding:.9rem 1.25rem}.nav-links{gap:1.25rem}.hero-title{font-size:clamp(2.4rem,15vw,5rem);white-space:normal}.hero-stats{gap:1.5rem}.stat-sep{display:none}#services{border-radius:40px 40px 0 0}.service-row{flex-direction:column;gap:.3rem}.reviews-grid{grid-template-columns:1fr}.qr-section{flex-direction:column}}
+    @media(max-width:640px){nav{padding:.9rem 1.25rem}.nav-links{gap:1.25rem}.hero-title{font-size:clamp(2.4rem,15vw,5rem);white-space:normal}.hero-stats{gap:1.5rem}.stat-sep{display:none}#services{border-radius:40px 40px 0 0}.service-row{flex-direction:column;gap:.3rem}.reviews-grid{grid-template-columns:1fr}.qr-section{flex-direction:column}.admin-stats-grid{grid-template-columns:1fr}.nav-user-email{max-width:110px}}
   </style>
 </head>
 <body>
@@ -313,8 +308,44 @@
     <li><a href="#tool">Tool</a></li>
     <li><a href="#services">Features</a></li>
   </ul>
-  <button class="btn-primary" onclick="openPayModal()">Get Access — $5</button>
+  <!-- Auth area -->
+  <div id="nav-auth-area" style="display:flex;align-items:center;gap:.75rem">
+    <div id="nav-loggedout" style="display:flex;gap:.75rem;align-items:center">
+      <button class="btn-ghost" style="padding:.6rem 1.5rem;font-size:.78rem" onclick="openAuthModal('signin')">Login</button>
+      <button class="btn-primary" onclick="handleGetAccess()">Get Access — $5</button>
+    </div>
+    <div id="nav-loggedin" style="display:none;align-items:center;gap:.75rem">
+      <span id="nav-admin-badge" class="admin-badge" style="display:none">👑 Admin</span>
+      <span class="nav-user-email" id="nav-user-email"></span>
+      <button class="btn-nav-sm" onclick="handleSignOut()">Logout</button>
+    </div>
+  </div>
 </nav>
+
+<!-- ══════════════════════════════════
+     AUTH MODAL
+══════════════════════════════════ -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-top">
+      <button class="modal-close" onclick="closeAuthModal()">✕</button>
+      <div class="modal-title">AlphaEdge AI — Access</div>
+      <div class="modal-sub">Sign in or create your free account</div>
+    </div>
+    <div class="modal-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+      <div class="auth-field"><label>Email Address</label><input type="email" id="auth-email" placeholder="your@email.com" /></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••" /></div>
+      <div class="auth-msg" id="auth-error"></div>
+      <div class="auth-msg" id="auth-success"></div>
+      <button class="btn-auth" id="auth-submit-btn" onclick="handleAuth()">Sign In</button>
+      <p style="text-align:center;margin-top:1rem;font-size:.7rem;color:var(--muted);line-height:1.6">Your account tracks your 24h access sessions.<br>Payments are verified by AI — no manual review.</p>
+    </div>
+  </div>
+</div>
 
 <!-- ── HERO ── -->
 <section id="hero">
@@ -324,7 +355,7 @@
   <h1 class="hero-title">AlphaEdge AI</h1>
   <p class="hero-tagline">Upload your chart. Get elite-level analysis in seconds.<br>The AI mentor with 20 years of trading intelligence — for just $5/day.</p>
   <div class="hero-cta">
-    <button class="btn-primary" onclick="openPayModal()">📊 &nbsp;Get Access — $5/Day</button>
+    <button class="btn-primary" onclick="handleGetAccess()">📊 &nbsp;Get Access — $5/Day</button>
     <button class="btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How It Works</button>
   </div>
   <div class="hero-stats">
@@ -344,15 +375,13 @@
   <div class="section-eyebrow fade-up">The Process</div>
   <h2 class="section-title fade-up" style="transition-delay:.1s">How It Works</h2>
   <div class="steps-grid">
-    <div class="step-card fade-up" style="transition-delay:.05s"><div class="step-num-bg">01</div><div class="step-icon-wrap">💳</div><div class="step-title">Pay $5 via Binance</div><p class="step-desc">Send $5 USDT (BEP-20) to our Binance wallet. Takes under 2 minutes. Works from any country.</p></div>
-    <div class="step-card fade-up" style="transition-delay:.15s"><div class="step-num-bg">02</div><div class="step-icon-wrap">📸</div><div class="step-title">Upload Proof</div><p class="step-desc">Screenshot your Binance payment confirmation and upload it. Access unlocks instantly — no waiting, no approval.</p></div>
-    <div class="step-card fade-up" style="transition-delay:.25s"><div class="step-num-bg">03</div><div class="step-icon-wrap">🧠</div><div class="step-title">AI Analyzes Your Chart</div><p class="step-desc">Upload any chart image. AlphaEdge reads every pattern, level, and signal — then gives you a clear BUY / SELL / HOLD with full reasoning.</p></div>
+    <div class="step-card fade-up" style="transition-delay:.05s"><div class="step-num-bg">01</div><div class="step-icon-wrap">👤</div><div class="step-title">Create Free Account</div><p class="step-desc">Sign up with your email and password. Your account tracks your sessions and payment history across devices.</p></div>
+    <div class="step-card fade-up" style="transition-delay:.15s"><div class="step-num-bg">02</div><div class="step-icon-wrap">💳</div><div class="step-title">Pay $5 via Binance</div><p class="step-desc">Send $5 USDT (BEP-20) to our Binance wallet. Upload your confirmation screenshot — our AI verifies it instantly.</p></div>
+    <div class="step-card fade-up" style="transition-delay:.25s"><div class="step-num-bg">03</div><div class="step-icon-wrap">🧠</div><div class="step-title">AI Analyzes Your Chart</div><p class="step-desc">Upload any chart image. AlphaEdge reads every pattern, level, and signal — then gives you a clear BUY / SELL / HOLD.</p></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     PRICING
-══════════════════════════════════ -->
+<!-- ── PRICING ── -->
 <div id="pricing">
   <div class="section-eyebrow fade-up">Simple Pricing</div>
   <h2 class="section-title fade-up" style="transition-delay:.1s">One Plan.<br>Full Access.</h2>
@@ -367,15 +396,13 @@
       <div class="pf-item"><div class="pf-icon">✓</div>Trend, S&R & candlestick analysis</div>
       <div class="pf-item"><div class="pf-icon">✓</div>Unlimited follow-up Q&A</div>
       <div class="pf-item"><div class="pf-icon">✓</div>Forex · Stocks · Crypto coverage</div>
-      <div class="pf-item"><div class="pf-icon">✓</div>Instant access after payment proof</div>
+      <div class="pf-item"><div class="pf-icon">✓</div>AI-verified instant access</div>
     </div>
-    <button class="btn-pay" onclick="openPayModal()">
+    <button class="btn-pay" onclick="handleGetAccess()">
       <span style="font-size:1.2rem">₿</span> Pay with Binance — $5 USDT
     </button>
-    <div class="binance-note">
-      <span class="bnb-badge">BEP-20</span> USDT on Binance Smart Chain
-    </div>
-    <div class="guarantee">⚡ Access unlocks the moment you upload your payment screenshot. No sign-up. No email. No waiting.</div>
+    <div class="binance-note"><span class="bnb-badge">BEP-20</span> USDT on Binance Smart Chain</div>
+    <div class="guarantee">⚡ Claude AI verifies your payment screenshot instantly. No manual review. No waiting.</div>
   </div>
 </div>
 
@@ -390,7 +417,6 @@
       <div class="modal-sub">$5 USDT · BEP-20 · 24 Hours Full Access</div>
     </div>
     <div class="modal-body">
-      <!-- Step indicator -->
       <div class="steps-indicator">
         <div class="si-step active" id="si1">1</div>
         <div class="si-line"></div>
@@ -412,7 +438,7 @@
           <div class="wallet-info">
             <div class="wallet-label">Wallet Address (tap to copy)</div>
             <div class="wallet-addr" id="wallet-addr" onclick="copyWallet()">0x38621289ac44502529758704689a5a1afa4e9fd0</div>
-            <div class="copy-note" id="copy-note">✓ Copied to clipboard!</div>
+            <div class="copy-note" id="copy-note">✓ Copied!</div>
             <div class="network-badge">🔸 BSC · BEP-20 Network</div>
           </div>
         </div>
@@ -428,24 +454,26 @@
 
       <!-- STEP 2: Upload proof -->
       <div id="modal-step2" style="display:none">
+        <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.75rem;color:var(--green);line-height:1.6">
+          🤖 <strong>Claude AI</strong> will verify your screenshot automatically — checks Binance, wallet address, amount, and status.
+        </div>
         <div class="proof-zone" id="proof-zone" onclick="document.getElementById('proof-input').click()">
           <div class="proof-icon">📸</div>
-          <div class="proof-title">Upload Payment Screenshot</div>
-          <div class="proof-sub">Tap to select your Binance confirmation screenshot</div>
+          <div class="proof-title">Upload Binance Confirmation</div>
+          <div class="proof-sub">Tap to select your payment screenshot</div>
         </div>
         <input type="file" id="proof-input" accept="image/*" style="display:none" />
         <img id="proof-thumb" class="proof-thumb" src="" alt="Payment proof" />
-        <button class="btn-unlock" id="btn-unlock" onclick="unlockAccess()">🔓 &nbsp;Unlock AlphaEdge AI — 24 Hours</button>
-        <div style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:.75rem;line-height:1.6">
-          Access is granted on trust. Fraudulent screenshots may result in permanent ban from the service.
-        </div>
+        <button class="btn-unlock" id="btn-unlock" style="display:none" onclick="validateAndUnlock()">🔍 &nbsp;Verify & Unlock Access</button>
+        <div class="unlock-error" id="unlock-error"></div>
+        <div class="unlock-success" id="unlock-success"></div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ══════════════════════════════════
-     REVIEWS
+     REVIEWS (real photos)
 ══════════════════════════════════ -->
 <section id="reviews">
   <div class="section-eyebrow fade-up">What Traders Say</div>
@@ -455,61 +483,61 @@
     <div class="review-card fade-up" style="--dur:7s;--delay:0s;transition-delay:.05s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Made $340 profit in 2 hours following the BUY signal on EUR/USD. This AI is absolutely insane. I've been trading for 3 years and never had accuracy like this."</div>
-      <div class="review-author"><div class="author-avatar">AK</div><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/71.jpg" alt="Ahmed K." /><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:8s;--delay:-1.5s;transition-delay:.1s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Called the exact resistance on Gold to the pip. Closed +180 pips on that single trade. Best $5 I've ever spent — made it back in 15 minutes flat."</div>
-      <div class="review-author"><div class="author-avatar">MT</div><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marcus T." /><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:6s;--delay:-3s;transition-delay:.15s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Complete beginner here. AlphaEdge explained every chart pattern like a real mentor would. Up $220 this week just following its guidance. Mind blown."</div>
-      <div class="review-author"><div class="author-avatar">PM</div><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya M." /><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:9s;--delay:-0.8s;transition-delay:.2s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"SELL signal on BTC/USDT was spot on. Hit my target price in under 30 minutes. I was skeptical at first but this thing is genuinely accurate."</div>
-      <div class="review-author"><div class="author-avatar">CR</div><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="Carlos R." /><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:7.5s;--delay:-2s;transition-delay:.25s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Made my $5 back in literally 15 minutes on one EUR/GBP trade. Then made another $180 the same day. This tool pays for itself in the first trade."</div>
-      <div class="review-author"><div class="author-avatar">SL</div><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/21.jpg" alt="Sofia L." /><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:8.5s;--delay:-4s;transition-delay:.3s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Called the NASDAQ breakout before it happened. I was in the trade before everyone else. Felt like having insider information — completely legal, just pure AI intelligence."</div>
-      <div class="review-author"><div class="author-avatar">JO</div><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/83.jpg" alt="James O." /><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:6.5s;--delay:-1s;transition-delay:.35s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Was losing money every week. Since using AlphaEdge I'm up $480 this month alone. It doesn't just give signals — it teaches you WHY. Life changing honestly."</div>
-      <div class="review-author"><div class="author-avatar">LH</div><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Layla H." /><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:7s;--delay:-3.5s;transition-delay:.4s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"The candlestick analysis is better than any $200 course I've bought. Worth 100x the price. I ask follow-up questions and it explains like a real trading coach."</div>
-      <div class="review-author"><div class="author-avatar">RS</div><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/12.jpg" alt="Ravi S." /><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:9.5s;--delay:-2.5s;transition-delay:.45s">
       <div class="review-stars">★★★★★</div>
       <div class="review-text">"Asked 20 follow-up questions after the analysis and it answered every single one perfectly. It remembers the chart context. Genuinely felt like talking to a trading veteran."</div>
-      <div class="review-author"><div class="author-avatar">EW</div><div><div class="author-name">Emma W.</div><div class="author-loc">🇦🇺 Australia · Day Trader</div></div><div class="profit-chip">+$140</div></div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/33.jpg" alt="Emma W." /><div><div class="author-name">Emma W.</div><div class="author-loc">🇦🇺 Australia · Day Trader</div></div><div class="profit-chip">+$140</div></div>
     </div>
 
     <div class="review-card fade-up" style="--dur:8s;--delay:-0.5s;transition-delay:.5s">
       <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. Not exaggerating. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
-      <div class="review-author"><div class="author-avatar">YA</div><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
+      <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
+      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/60.jpg" alt="Yusuf A." /><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
     </div>
 
   </div>
@@ -526,15 +554,15 @@
   <div class="access-banner" id="access-banner">
     <div class="access-info"><span class="live-dot"></span>Session Active</div>
     <div class="access-timer" id="access-timer">Calculating...</div>
-    <button class="btn-extend" onclick="openPayModal()">Renew</button>
+    <button class="btn-extend" onclick="handleGetAccess()">Renew</button>
   </div>
 
   <!-- LOCKED state -->
   <div class="tool-locked" id="tool-locked">
     <span class="lock-icon">🔒</span>
     <div class="lock-title">AlphaEdge AI — Locked</div>
-    <div class="lock-sub">Get 24-hour full access for just $5 USDT via Binance. Unlock instantly after uploading your payment proof.</div>
-    <button class="btn-pay" style="max-width:340px;margin:0 auto" onclick="openPayModal()">
+    <div class="lock-sub">Create a free account, pay $5 USDT via Binance, and unlock 24-hour full access. Claude AI verifies your payment instantly.</div>
+    <button class="btn-pay" style="max-width:340px;margin:0 auto" onclick="handleGetAccess()">
       <span style="font-size:1.2rem">₿</span> Get Access — $5 USDT
     </button>
   </div>
@@ -567,6 +595,29 @@
   </div>
 </div>
 
+<!-- ══════════════════════════════════
+     ADMIN PANEL (admin only)
+══════════════════════════════════ -->
+<div id="admin-panel">
+  <div class="section-eyebrow" style="text-align:center">👑 Admin Access</div>
+  <h2 class="section-title" style="font-size:clamp(2rem,5vw,4rem);margin-bottom:2rem">Payment History</h2>
+  <div class="admin-stats-grid">
+    <div class="admin-stat"><div class="admin-stat-val" id="admin-stat-total">—</div><div class="admin-stat-lbl">Total Payments</div></div>
+    <div class="admin-stat"><div class="admin-stat-val" id="admin-stat-revenue">—</div><div class="admin-stat-lbl">Total Revenue</div></div>
+    <div class="admin-stat"><div class="admin-stat-val" id="admin-stat-active">—</div><div class="admin-stat-lbl">Active Sessions</div></div>
+  </div>
+  <div class="payments-table-wrap">
+    <table class="pm-table">
+      <thead><tr>
+        <th>Email</th><th>Amount</th><th>Status</th><th>Paid At</th><th>Expires</th><th>Verdict</th>
+      </tr></thead>
+      <tbody id="payments-tbody">
+        <tr><td colspan="6" style="padding:2rem;text-align:center;color:var(--muted)">Loading payment history...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <!-- ── FEATURES ── -->
 <section id="services">
   <div class="section-eyebrow fade-up">What We Analyze</div>
@@ -588,62 +639,230 @@
 <script>
 if(typeof marked!=='undefined') marked.setOptions({breaks:true,gfm:true});
 
-/* ══ ACCESS CONTROL ══ */
-const SESSION_KEY = 'alphaedge_session';
-const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+/* ══════════════════════════════════════════════════════════════
+   SUPABASE INIT
+══════════════════════════════════════════════════════════════ */
+const SUPABASE_URL  = 'https://qbzbbrfooscngonzpzmz.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiemJicmZvb3Njbmdvbnpwem16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MjQ5ODEsImV4cCI6MjA5NTIwMDk4MX0.ZqGx1rrZkVPdy-OqzbnnUGRNk4CcHhHPaD6ncnu5JLA';
+const ADMIN_EMAIL   = 'mohammadjaved0409@gmail.com';
 
-function checkAccess() {
-  const raw = localStorage.getItem(SESSION_KEY);
-  if (!raw) return false;
-  const session = JSON.parse(raw);
-  return session.expiry > Date.now();
-}
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-function getTimeRemaining() {
-  const raw = localStorage.getItem(SESSION_KEY);
-  if (!raw) return null;
-  const session = JSON.parse(raw);
-  const ms = session.expiry - Date.now();
-  if (ms <= 0) return null;
-  const h = Math.floor(ms / 3600000);
-  const m = Math.floor((ms % 3600000) / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} remaining`;
-}
+let currentUser  = null;
+let sessionExpiry = null;  // ms timestamp
+let timerInterval = null;
 
-function grantAccess() {
-  localStorage.setItem(SESSION_KEY, JSON.stringify({ expiry: Date.now() + SESSION_DURATION }));
-  showTool();
-  closePayModal();
-  document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
-}
-
-function showTool() {
-  document.getElementById('tool-locked').style.display = 'none';
-  document.getElementById('tool-unlocked').style.display = 'block';
-  document.getElementById('access-banner').classList.add('show');
-  updateTimer();
-}
-
-function updateTimer() {
-  const t = getTimeRemaining();
-  if (t) {
-    document.getElementById('access-timer').textContent = t;
-    setTimeout(updateTimer, 1000);
+/* ══════════════════════════════════════════════════════════════
+   AUTH STATE
+══════════════════════════════════════════════════════════════ */
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session && session.user) {
+    currentUser = session.user;
+    updateNavAuth();
+    await checkUserAccess();
   } else {
-    // Session expired
-    document.getElementById('access-banner').classList.remove('show');
-    document.getElementById('tool-unlocked').style.display = 'none';
-    document.getElementById('tool-locked').style.display = 'block';
-    localStorage.removeItem(SESSION_KEY);
+    currentUser = null;
+    sessionExpiry = null;
+    clearInterval(timerInterval);
+    updateNavAuth();
+    showLockedTool();
+    hideAdminPanel();
+  }
+});
+
+async function checkUserAccess() {
+  if (!currentUser) return;
+
+  // Admin has unlimited access
+  if (currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+    sessionExpiry = null; // no expiry for admin
+    showUnlockedTool(null);
+    await loadAdminPanel();
+    return;
+  }
+
+  // Ask backend if user has active payment
+  try {
+    const res = await fetch('/api/check-access', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: currentUser.email })
+    });
+    const data = await res.json();
+    if (data.hasAccess) {
+      showUnlockedTool(data.expiresAt);
+    } else {
+      showLockedTool();
+    }
+  } catch (e) {
+    showLockedTool();
   }
 }
 
-// Check on load
-if (checkAccess()) showTool();
+function updateNavAuth() {
+  const isAdmin = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  document.getElementById('nav-loggedout').style.display = currentUser ? 'none' : 'flex';
+  const li = document.getElementById('nav-loggedin');
+  li.style.display = currentUser ? 'flex' : 'none';
+  if (currentUser) {
+    const em = currentUser.email;
+    document.getElementById('nav-user-email').textContent = em.length > 22 ? em.slice(0, 20) + '…' : em;
+    document.getElementById('nav-admin-badge').style.display = isAdmin ? 'inline-block' : 'none';
+  }
+}
 
-/* ══ PAYMENT MODAL ══ */
+/* ── Tool visibility ── */
+function showLockedTool() {
+  document.getElementById('tool-locked').style.display = 'block';
+  document.getElementById('tool-unlocked').style.display = 'none';
+  document.getElementById('access-banner').classList.remove('show');
+  clearInterval(timerInterval);
+}
+function showUnlockedTool(expiresAt) {
+  document.getElementById('tool-locked').style.display = 'none';
+  document.getElementById('tool-unlocked').style.display = 'block';
+  sessionExpiry = expiresAt;
+  if (expiresAt) {
+    document.getElementById('access-banner').classList.add('show');
+    startTimer();
+  } else {
+    // Admin — no timer, show "Unlimited"
+    document.getElementById('access-banner').classList.add('show');
+    document.getElementById('access-timer').textContent = 'Admin — Unlimited Access';
+  }
+}
+function hideAdminPanel() {
+  document.getElementById('admin-panel').style.display = 'none';
+}
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    if (!sessionExpiry) return;
+    if (Date.now() >= sessionExpiry) {
+      clearInterval(timerInterval);
+      showLockedTool();
+      return;
+    }
+    updateTimerDisplay();
+  }, 1000);
+}
+function updateTimerDisplay() {
+  if (!sessionExpiry) return;
+  const ms = sessionExpiry - Date.now();
+  if (ms <= 0) { showLockedTool(); return; }
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  document.getElementById('access-timer').textContent =
+    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} remaining`;
+}
+
+async function handleSignOut() {
+  await sb.auth.signOut();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AUTH MODAL
+══════════════════════════════════════════════════════════════ */
+let authTab = 'signin';
+let afterAuthAction = null; // 'payment' | 'tool'
+
+function openAuthModal(tab = 'signin') {
+  switchAuthTab(tab);
+  clearAuthMsgs();
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('auth-email').focus(), 100);
+}
+function closeAuthModal() {
+  document.getElementById('auth-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function switchAuthTab(tab) {
+  authTab = tab;
+  document.getElementById('tab-signin').className = 'auth-tab' + (tab === 'signin' ? ' active' : '');
+  document.getElementById('tab-signup').className = 'auth-tab' + (tab === 'signup' ? ' active' : '');
+  document.getElementById('auth-submit-btn').textContent = tab === 'signin' ? 'Sign In' : 'Create Account';
+  clearAuthMsgs();
+}
+function clearAuthMsgs() {
+  const e = document.getElementById('auth-error');
+  const s = document.getElementById('auth-success');
+  e.className = 'auth-msg'; e.textContent = '';
+  s.className = 'auth-msg'; s.textContent = '';
+}
+function showAuthError(msg)   { const e=document.getElementById('auth-error'); e.textContent=msg; e.className='auth-msg error'; }
+function showAuthSuccess(msg) { const s=document.getElementById('auth-success'); s.textContent=msg; s.className='auth-msg success'; }
+
+document.getElementById('auth-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAuthModal();
+});
+document.getElementById('auth-password').addEventListener('keydown', e => { if(e.key==='Enter') handleAuth(); });
+document.getElementById('auth-email').addEventListener('keydown', e => { if(e.key==='Enter') handleAuth(); });
+
+async function handleAuth() {
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  if (!email || !password) { showAuthError('Please fill in both fields.'); return; }
+
+  const btn = document.getElementById('auth-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  clearAuthMsgs();
+
+  try {
+    if (authTab === 'signin') {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      closeAuthModal();
+      if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
+    } else {
+      const { data, error } = await sb.auth.signUp({ email, password });
+      if (error) throw error;
+      if (data.session) {
+        // Auto-confirmed
+        closeAuthModal();
+        if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
+      } else {
+        showAuthSuccess('✅ Check your email to confirm your account, then sign in.');
+        switchAuthTab('signin');
+      }
+    }
+  } catch (err) {
+    showAuthError(err.message || 'Something went wrong. Please try again.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = authTab === 'signin' ? 'Sign In' : 'Create Account';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GET ACCESS FLOW
+══════════════════════════════════════════════════════════════ */
+function handleGetAccess() {
+  if (!currentUser) {
+    afterAuthAction = 'payment';
+    openAuthModal('signup');
+    return;
+  }
+  // Admin doesn't pay
+  if (currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+    document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  openPayModal();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PAYMENT MODAL
+══════════════════════════════════════════════════════════════ */
+let proofFile = null;
+
 function openPayModal() {
+  resetPayModal();
   document.getElementById('pay-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -651,18 +870,28 @@ function closePayModal() {
   document.getElementById('pay-modal').classList.remove('open');
   document.body.style.overflow = '';
 }
+function resetPayModal() {
+  document.getElementById('modal-step1').style.display = 'block';
+  document.getElementById('modal-step2').style.display = 'none';
+  document.getElementById('si1').className = 'si-step active';
+  document.getElementById('si2').className = 'si-step inactive';
+  document.getElementById('si3').className = 'si-step inactive';
+  document.getElementById('proof-thumb').style.display = 'none';
+  document.getElementById('btn-unlock').style.display = 'none';
+  document.getElementById('unlock-error').style.display = 'none';
+  document.getElementById('unlock-success').style.display = 'none';
+  proofFile = null;
+}
 document.getElementById('pay-modal').addEventListener('click', function(e) {
   if (e.target === this) closePayModal();
 });
-
 function copyWallet() {
   navigator.clipboard.writeText('0x38621289ac44502529758704689a5a1afa4e9fd0').then(() => {
-    const note = document.getElementById('copy-note');
-    note.classList.add('show');
-    setTimeout(() => note.classList.remove('show'), 2500);
+    const n = document.getElementById('copy-note');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 2500);
   });
 }
-
 function goStep2() {
   document.getElementById('modal-step1').style.display = 'none';
   document.getElementById('modal-step2').style.display = 'block';
@@ -670,40 +899,135 @@ function goStep2() {
   document.getElementById('si2').className = 'si-step active';
 }
 
-// Proof upload
 document.getElementById('proof-input').addEventListener('change', function() {
   if (!this.files[0]) return;
+  proofFile = this.files[0];
   const thumb = document.getElementById('proof-thumb');
-  const unlockBtn = document.getElementById('btn-unlock');
-  thumb.src = URL.createObjectURL(this.files[0]);
+  thumb.src = URL.createObjectURL(proofFile);
   thumb.style.display = 'block';
-  unlockBtn.style.display = 'flex';
+  document.getElementById('btn-unlock').style.display = 'flex';
   document.getElementById('si2').className = 'si-step done';
   document.getElementById('si3').className = 'si-step active';
+  document.getElementById('unlock-error').style.display = 'none';
 });
 
-function unlockAccess() {
-  grantAccess();
+async function validateAndUnlock() {
+  if (!proofFile) return;
+  if (!currentUser) { closePayModal(); openAuthModal('signin'); return; }
+
+  const btn = document.getElementById('btn-unlock');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Claude is verifying your payment...';
+  document.getElementById('unlock-error').style.display = 'none';
+  document.getElementById('unlock-success').style.display = 'none';
+
+  try {
+    const b64  = await toB64(proofFile);
+    const res  = await fetch('/api/validate-payment', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ image_data: b64, image_type: proofFile.type || 'image/png', email: currentUser.email })
+    });
+    const data = await res.json();
+
+    if (data.valid) {
+      // Show success
+      const s = document.getElementById('unlock-success');
+      s.textContent = '✅ Payment verified! Unlocking your 24-hour access...';
+      s.style.display = 'block';
+      btn.style.display = 'none';
+      setTimeout(() => {
+        closePayModal();
+        showUnlockedTool(data.expires_at);
+        document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
+      }, 1800);
+    } else {
+      const e = document.getElementById('unlock-error');
+      e.innerHTML = `❌ <strong>Payment not verified.</strong><br>${data.reason || 'Please upload a clear Binance confirmation screenshot.'}`;
+      e.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '🔍 &nbsp;Try Again';
+    }
+  } catch (err) {
+    const e = document.getElementById('unlock-error');
+    e.textContent = `❌ Network error: ${err.message}`;
+    e.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '🔍 &nbsp;Verify & Unlock Access';
+  }
 }
 
-/* ══ TOOL LOGIC ══ */
+/* ══════════════════════════════════════════════════════════════
+   ADMIN PANEL
+══════════════════════════════════════════════════════════════ */
+async function loadAdminPanel() {
+  document.getElementById('admin-panel').style.display = 'block';
+
+  try {
+    const res = await fetch('/api/admin/payments', {
+      headers: { 'X-Admin-Email': currentUser.email }
+    });
+    const payments = await res.json();
+
+    if (!Array.isArray(payments)) {
+      document.getElementById('payments-tbody').innerHTML =
+        `<tr><td colspan="6" style="padding:2rem;text-align:center;color:var(--muted)">No payments yet.</td></tr>`;
+      return;
+    }
+
+    const now = Date.now();
+    let active = 0;
+    payments.forEach(p => { if (p.expires_at && p.expires_at > now) active++; });
+
+    document.getElementById('admin-stat-total').textContent   = payments.length;
+    document.getElementById('admin-stat-revenue').textContent = `$${payments.length * 5}`;
+    document.getElementById('admin-stat-active').textContent  = active;
+
+    const tbody = document.getElementById('payments-tbody');
+    if (payments.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="padding:2rem;text-align:center;color:var(--muted)">No payments yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = payments.map(p => {
+      const isActive = p.expires_at && p.expires_at > now;
+      const paid  = p.created_at ? new Date(p.created_at).toLocaleString() : '—';
+      const exp   = p.expires_at  ? new Date(p.expires_at).toLocaleString()  : '—';
+      return `<tr>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.user_email || '—'}</td>
+        <td style="color:var(--green);font-weight:700">${p.amount || '$5 USDT'}</td>
+        <td><span class="status-chip ${isActive ? 'active' : 'expired'}">${isActive ? 'Active' : 'Expired'}</span></td>
+        <td style="font-size:.75rem;color:var(--muted)">${paid}</td>
+        <td style="font-size:.75rem;color:var(--muted)">${exp}</td>
+        <td style="font-size:.75rem;color:var(--muted);max-width:220px">${p.verdict_reason || '—'}</td>
+      </tr>`;
+    }).join('');
+
+  } catch (err) {
+    document.getElementById('payments-tbody').innerHTML =
+      `<tr><td colspan="6" style="padding:2rem;text-align:center;color:var(--red)">Error loading payments: ${err.message}</td></tr>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOOL LOGIC
+══════════════════════════════════════════════════════════════ */
 let imageFile = null, pendingNewImage = null, conversationHistory = [];
 
-const dropZone = document.getElementById('drop-zone');
-const fileInput = document.getElementById('file-input');
-const analyzeBtn = document.getElementById('analyze-btn');
-const analysisCard = document.getElementById('analysis-card');
-const analysisText = document.getElementById('analysis-text');
-const chatCard = document.getElementById('chat-card');
-const chatLog = document.getElementById('chat-log');
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-const attachBtn = document.getElementById('attach-btn');
+const dropZone      = document.getElementById('drop-zone');
+const fileInput     = document.getElementById('file-input');
+const analyzeBtn    = document.getElementById('analyze-btn');
+const analysisCard  = document.getElementById('analysis-card');
+const analysisText  = document.getElementById('analysis-text');
+const chatCard      = document.getElementById('chat-card');
+const chatLog       = document.getElementById('chat-log');
+const userInput     = document.getElementById('user-input');
+const sendBtn       = document.getElementById('send-btn');
+const attachBtn     = document.getElementById('attach-btn');
 const chatFileInput = document.getElementById('chat-file-input');
-const newChartBar = document.getElementById('new-chart-bar');
+const newChartBar   = document.getElementById('new-chart-bar');
 const newChartThumb = document.getElementById('new-chart-thumb');
-const btnNewTrade = document.getElementById('btn-new-trade');
-const btnContTrade = document.getElementById('btn-cont-trade');
+const btnNewTrade   = document.getElementById('btn-new-trade');
+const btnContTrade  = document.getElementById('btn-cont-trade');
 
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
@@ -726,37 +1050,41 @@ function loadMain(file) {
 }
 
 function renderMD(raw) {
-  let html = (typeof marked!=='undefined') ? marked.parse(raw) : raw.replace(/\n/g,'<br>');
+  let html = (typeof marked !== 'undefined') ? marked.parse(raw) : raw.replace(/\n/g,'<br>');
   return html
-    .replace(/\bBUY\b/g,'<span class="sig-buy">BUY</span>')
-    .replace(/\bSELL\b/g,'<span class="sig-sell">SELL</span>')
-    .replace(/\bHOLD\b/g,'<span class="sig-hold">HOLD</span>')
-    .replace(/\bAVOID\b/g,'<span class="sig-hold">AVOID</span>');
+    .replace(/\bBUY\b/g,   '<span class="sig-buy">BUY</span>')
+    .replace(/\bSELL\b/g,  '<span class="sig-sell">SELL</span>')
+    .replace(/\bHOLD\b/g,  '<span class="sig-hold">HOLD</span>')
+    .replace(/\bAVOID\b/g, '<span class="sig-hold">AVOID</span>');
 }
 
 analyzeBtn.addEventListener('click', async () => {
-  if(!imageFile) return;
+  if (!imageFile) return;
   analyzeBtn.disabled = true;
   analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing...';
   analysisCard.style.display = 'block';
   analysisText.innerHTML = '<span class="spinner"></span> Reading your chart...';
   const fd = new FormData(); fd.append('image', imageFile);
   try {
-    const res = await fetch('/api/analyze',{method:'POST',body:fd});
+    const res  = await fetch('/api/analyze', { method:'POST', body:fd });
     const data = await res.json();
-    if(data.error){ analysisText.innerHTML=`<span style="color:#f85149">Error: ${data.error}</span>`; }
-    else {
+    if (data.error) {
+      analysisText.innerHTML = `<span style="color:var(--red)">Error: ${data.error}</span>`;
+    } else {
       analysisText.innerHTML = renderMD(data.response);
       conversationHistory = [
-        {role:'user',content:[{type:'image',source:{type:'base64',media_type:imageFile.type,data:await toB64(imageFile)}},{type:'text',text:'Please analyze this chart and give me your trading recommendation.'}]},
-        {role:'assistant',content:data.response}
+        { role:'user', content:[{type:'image',source:{type:'base64',media_type:imageFile.type,data:await toB64(imageFile)}},{type:'text',text:'Please analyze this chart and give me your trading recommendation.'}] },
+        { role:'assistant', content:data.response }
       ];
       chatCard.style.display = 'block';
       addAiMsg(data.response);
-      chatCard.scrollIntoView({behavior:'smooth',block:'nearest'});
+      chatCard.scrollIntoView({ behavior:'smooth', block:'nearest' });
     }
-  } catch(e){ analysisText.innerHTML=`<span style="color:#f85149">Network error: ${e.message}</span>`; }
-  analyzeBtn.disabled = false; analyzeBtn.innerHTML = '🔄 &nbsp;Re-analyze';
+  } catch(e) {
+    analysisText.innerHTML = `<span style="color:var(--red)">Network error: ${e.message}</span>`;
+  }
+  analyzeBtn.disabled = false;
+  analyzeBtn.innerHTML = '🔄 &nbsp;Re-analyze';
 });
 
 sendBtn.addEventListener('click', sendMsg);
@@ -764,25 +1092,30 @@ userInput.addEventListener('keydown', e => { if(e.key==='Enter') sendMsg(); });
 
 async function sendMsg() {
   const q = userInput.value.trim();
-  if(!q || !conversationHistory.length) return;
+  if (!q || !conversationHistory.length) return;
   addUserMsg(q); userInput.value = ''; sendBtn.disabled = true;
   const el = addAiRaw('<span class="spinner"></span>');
   try {
-    const res = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({history:conversationHistory,question:q})});
+    const res  = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ history:conversationHistory, question:q }) });
     const data = await res.json();
-    if(data.error){ el.innerHTML=`<span style="color:#f85149">Error: ${data.error}</span>`; }
-    else { const w=document.createElement('div');w.className='md-body';w.innerHTML=renderMD(data.response);el.innerHTML='';el.appendChild(w);conversationHistory.push({role:'user',content:q});conversationHistory.push({role:'assistant',content:data.response}); }
-  } catch(e){ el.innerHTML=`<span style="color:#f85149">Network error: ${e.message}</span>`; }
+    if (data.error) {
+      el.innerHTML = `<span style="color:var(--red)">Error: ${data.error}</span>`;
+    } else {
+      const w = document.createElement('div'); w.className='md-body'; w.innerHTML=renderMD(data.response);
+      el.innerHTML=''; el.appendChild(w);
+      conversationHistory.push({role:'user',content:q});
+      conversationHistory.push({role:'assistant',content:data.response});
+    }
+  } catch(e) { el.innerHTML = `<span style="color:var(--red)">Network error: ${e.message}</span>`; }
   sendBtn.disabled = false; chatLog.scrollTop = chatLog.scrollHeight;
 }
 
 attachBtn.addEventListener('click', () => chatFileInput.click());
 chatFileInput.addEventListener('change', () => { if(chatFileInput.files[0]){ showNewChartChoice(chatFileInput.files[0]); chatFileInput.value=''; } });
-
 function showNewChartChoice(file){ pendingNewImage=file; newChartThumb.src=URL.createObjectURL(file); newChartBar.style.display='block'; chatLog.scrollTop=chatLog.scrollHeight; }
 
 btnNewTrade.addEventListener('click', () => {
-  if(!pendingNewImage) return;
+  if (!pendingNewImage) return;
   newChartBar.style.display='none';
   loadMain(pendingNewImage); pendingNewImage=null;
   document.getElementById('tool').scrollIntoView({behavior:'smooth'});
@@ -790,28 +1123,34 @@ btnNewTrade.addEventListener('click', () => {
 });
 
 btnContTrade.addEventListener('click', async () => {
-  if(!pendingNewImage) return;
-  const file = pendingNewImage; pendingNewImage=null; newChartBar.style.display='none';
+  if (!pendingNewImage) return;
+  const file=pendingNewImage; pendingNewImage=null; newChartBar.style.display='none';
   addImgMsg(file);
-  const b64=await toB64(file); const mt=file.type||'image/png';
+  const b64=await toB64(file), mt=file.type||'image/png';
   sendBtn.disabled=true; const el=addAiRaw('<span class="spinner"></span>');
   try {
-    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({history:conversationHistory,question:'Here is a new chart. Analyze it and relate it to our previous discussion.',image_data:b64,image_type:mt})});
-    const data=await res.json();
-    if(data.error){el.innerHTML=`<span style="color:#f85149">Error: ${data.error}</span>`;}
-    else{const w=document.createElement('div');w.className='md-body';w.innerHTML=renderMD(data.response);el.innerHTML='';el.appendChild(w);conversationHistory.push({role:'user',content:[{type:'image',source:{type:'base64',media_type:mt,data:b64}},{type:'text',text:'Here is a new chart. Analyze it and relate it to our previous discussion.'}]});conversationHistory.push({role:'assistant',content:data.response});}
-  }catch(e){el.innerHTML=`<span style="color:#f85149">Network error: ${e.message}</span>`;}
+    const res  = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ history:conversationHistory, question:'Here is a new chart. Analyze it and relate it to our previous discussion.', image_data:b64, image_type:mt }) });
+    const data = await res.json();
+    if (data.error) { el.innerHTML=`<span style="color:var(--red)">Error: ${data.error}</span>`; }
+    else {
+      const w=document.createElement('div'); w.className='md-body'; w.innerHTML=renderMD(data.response);
+      el.innerHTML=''; el.appendChild(w);
+      conversationHistory.push({role:'user',content:[{type:'image',source:{type:'base64',media_type:mt,data:b64}},{type:'text',text:'Here is a new chart. Analyze it and relate it to our previous discussion.'}]});
+      conversationHistory.push({role:'assistant',content:data.response});
+    }
+  } catch(e) { el.innerHTML=`<span style="color:var(--red)">Network error: ${e.message}</span>`; }
   sendBtn.disabled=false; chatLog.scrollTop=chatLog.scrollHeight;
 });
 
-function addUserMsg(t){const e=document.createElement('div');e.className='msg user';e.textContent=t;chatLog.appendChild(e);chatLog.scrollTop=chatLog.scrollHeight;}
-function addAiMsg(raw){const e=document.createElement('div');e.className='msg ai';const w=document.createElement('div');w.className='md-body';w.innerHTML=renderMD(raw);e.appendChild(w);chatLog.appendChild(e);chatLog.scrollTop=chatLog.scrollHeight;return e;}
-function addAiRaw(html){const e=document.createElement('div');e.className='msg ai';e.innerHTML=html;chatLog.appendChild(e);chatLog.scrollTop=chatLog.scrollHeight;return e;}
-function addImgMsg(file){const w=document.createElement('div');w.className='msg-img';const img=document.createElement('img');img.src=URL.createObjectURL(file);const l=document.createElement('div');l.className='img-label';l.textContent='📎 New chart uploaded';w.appendChild(img);w.appendChild(l);chatLog.appendChild(w);chatLog.scrollTop=chatLog.scrollHeight;}
-function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});}
+function addUserMsg(t){ const e=document.createElement('div'); e.className='msg user'; e.textContent=t; chatLog.appendChild(e); chatLog.scrollTop=chatLog.scrollHeight; }
+function addAiMsg(raw){ const e=document.createElement('div'); e.className='msg ai'; const w=document.createElement('div'); w.className='md-body'; w.innerHTML=renderMD(raw); e.appendChild(w); chatLog.appendChild(e); chatLog.scrollTop=chatLog.scrollHeight; return e; }
+function addAiRaw(html){ const e=document.createElement('div'); e.className='msg ai'; e.innerHTML=html; chatLog.appendChild(e); chatLog.scrollTop=chatLog.scrollHeight; return e; }
+function addImgMsg(file){ const w=document.createElement('div'); w.className='msg-img'; const img=document.createElement('img'); img.src=URL.createObjectURL(file); const l=document.createElement('div'); l.className='img-label'; l.textContent='📎 New chart uploaded'; w.appendChild(img); w.appendChild(l); chatLog.appendChild(w); chatLog.scrollTop=chatLog.scrollHeight; }
+function toB64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(file); }); }
 
-const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});},{threshold:.07});
-document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
+/* Scroll animations */
+const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold:.07 });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
 </script>
 </body>
 </html>

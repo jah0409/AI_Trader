@@ -2,8 +2,18 @@ from flask import Flask, request, jsonify
 import base64
 import anthropic
 import os
+import json
+import re
+import time
+import requests as http_req
 
 app = Flask(__name__)
+
+SUPABASE_URL    = os.environ.get("SUPABASE_URL",         "https://qbzbbrfooscngonzpzmz.supabase.co")
+SUPABASE_SVC    = os.environ.get("SUPABASE_SERVICE_KEY", "")
+WALLET_ADDRESS  = "0x38621289ac44502529758704689a5a1afa4e9fd0"
+ADMIN_EMAIL     = "mohammadjaved0409@gmail.com"
+SESSION_MS      = 24 * 60 * 60 * 1000   # 24 h in ms
 
 SYSTEM_PROMPT = (
     "You are an elite Forex and Stock trader with 20 years of experience. "
@@ -16,12 +26,34 @@ SYSTEM_PROMPT = (
 )
 
 
-def get_client():
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise ValueError("ANTHROPIC_API_KEY is not set in environment variables.")
-    return anthropic.Anthropic(api_key=api_key)
+def claude():
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        raise ValueError("ANTHROPIC_API_KEY not set.")
+    return anthropic.Anthropic(api_key=key)
 
+
+def sb_hdrs():
+    return {
+        "apikey":        SUPABASE_SVC,
+        "Authorization": f"Bearer {SUPABASE_SVC}",
+        "Content-Type":  "application/json",
+        "Prefer":        "return=representation",
+    }
+
+
+# ── helpers ──────────────────────────────────────────────────────────────────
+
+def _parse_json(raw: str) -> dict:
+    """Extract first JSON object from Claude's response."""
+    raw = raw.strip()
+    match = re.search(r'\{[^{}]+\}', raw, re.DOTALL)
+    if match:
+        return json.loads(match.group())
+    return {}
+
+
+# ── 1. Chart analysis ─────────────────────────────────────────────────────────
 
 @app.route("/api/analyze", methods=["POST"])
 def analyze():
@@ -30,92 +62,199 @@ def analyze():
         if not file:
             return jsonify({"error": "No image uploaded."}), 400
 
-        image_bytes = file.read()
-        base64_image = base64.b64encode(image_bytes).decode("utf-8")
-        media_type = file.content_type if file.content_type else "image/png"
+        img_b64   = base64.b64encode(file.read()).decode()
+        media_typ = file.content_type or "image/png"
 
-        client = get_client()
-        message = client.messages.create(
+        msg = claude().messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=1024,
             system=SYSTEM_PROMPT,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": media_type,
-                                "data": base64_image,
-                            },
-                        },
-                        {
-                            "type": "text",
-                            "text": "Please analyze this chart and give me your trading recommendation.",
-                        },
-                    ],
-                }
-            ],
+            messages=[{
+                "role": "user",
+                "content": [
+                    {"type": "image", "source": {"type": "base64", "media_type": media_typ, "data": img_b64}},
+                    {"type": "text",  "text":   "Please analyze this chart and give me your trading recommendation."},
+                ],
+            }],
         )
-
-        return jsonify({"response": message.content[0].text})
+        return jsonify({"response": msg.content[0].text})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+# ── 2. Follow-up chat ─────────────────────────────────────────────────────────
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
     try:
         data = request.get_json()
         if not data:
-            return jsonify({"error": "No JSON body received."}), 400
+            return jsonify({"error": "No JSON body."}), 400
 
-        history  = data.get("history", [])
-        question = data.get("question", "").strip()
-        # Optional: new chart uploaded during chat
-        image_data  = data.get("image_data")   # base64 string
-        image_type  = data.get("image_type", "image/png")
+        history    = data.get("history", [])
+        question   = data.get("question", "").strip()
+        image_data = data.get("image_data")
+        image_type = data.get("image_type", "image/png")
 
         if not question and not image_data:
-            return jsonify({"error": "No question or image provided."}), 400
+            return jsonify({"error": "No question or image."}), 400
 
-        # Build user message — multimodal if a new chart image is included
         if image_data:
             user_content = [
-                {
-                    "type": "image",
-                    "source": {
-                        "type": "base64",
-                        "media_type": image_type,
-                        "data": image_data,
-                    },
-                },
-                {
-                    "type": "text",
-                    "text": question if question else (
-                        "Here is a new chart I want to discuss. "
-                        "Please analyze it and reference our previous conversation if relevant."
-                    ),
-                },
+                {"type": "image", "source": {"type": "base64", "media_type": image_type, "data": image_data}},
+                {"type": "text",  "text": question or "Here is a new chart. Analyze it and reference our previous conversation."},
             ]
         else:
             user_content = question
 
         history.append({"role": "user", "content": user_content})
 
-        client = get_client()
-        message = client.messages.create(
+        msg = claude().messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=1024,
             system=SYSTEM_PROMPT,
             messages=history,
         )
+        return jsonify({"response": msg.content[0].text})
 
-        reply = message.content[0].text
-        return jsonify({"response": reply})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ── 3. Payment screenshot validation ─────────────────────────────────────────
+
+@app.route("/api/validate-payment", methods=["POST"])
+def validate_payment():
+    try:
+        data = request.get_json() or {}
+        img_data   = data.get("image_data", "")
+        img_type   = data.get("image_type", "image/png")
+        user_email = data.get("email", "").strip().lower()
+
+        if not img_data:
+            return jsonify({"valid": False, "reason": "No screenshot provided."}), 400
+
+        prompt = f"""You are a strict payment fraud-detection system for a trading platform.
+
+Carefully examine this screenshot and verify ALL of the following:
+1. Is this the Binance app or Binance website? (look for Binance branding/logo/UI)
+2. Is the transaction status COMPLETED or SUCCESSFUL? (not pending, not failed)
+3. Is the recipient wallet address exactly or partially matching: {WALLET_ADDRESS} ?
+4. Is the token USDT?
+5. Is the amount at least 5 USDT?
+
+If ANY of the five checks fails → valid = false.
+
+Respond ONLY with a raw JSON object (no markdown, no extra text):
+{{"valid": true, "reason": "Binance USDT transfer confirmed to correct wallet"}}
+or
+{{"valid": false, "reason": "exact reason it failed, e.g. wallet address does not match"}}"""
+
+        msg = claude().messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=300,
+            messages=[{
+                "role": "user",
+                "content": [
+                    {"type": "image", "source": {"type": "base64", "media_type": img_type, "data": img_data}},
+                    {"type": "text",  "text": prompt},
+                ],
+            }],
+        )
+
+        result = _parse_json(msg.content[0].text)
+        if not result:
+            result = {"valid": False, "reason": "Could not read the screenshot. Please upload a clear Binance confirmation."}
+
+        if result.get("valid"):
+            expires_at = int(time.time() * 1000) + SESSION_MS
+            result["expires_at"] = expires_at
+
+            # Record in Supabase
+            if SUPABASE_SVC and user_email:
+                try:
+                    http_req.post(
+                        f"{SUPABASE_URL}/rest/v1/payment_history",
+                        headers=sb_hdrs(),
+                        json={
+                            "user_email":         user_email,
+                            "screenshot_verdict": "approved",
+                            "verdict_reason":     result.get("reason", ""),
+                            "status":             "active",
+                            "amount":             "$5 USDT",
+                            "expires_at":         expires_at,
+                        },
+                        timeout=6,
+                    )
+                except Exception:
+                    pass  # don't block unlock if DB write fails
+
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"valid": False, "reason": f"Server error: {str(e)}"}), 500
+
+
+# ── 4. Check if user has active paid session ──────────────────────────────────
+
+@app.route("/api/check-access", methods=["POST"])
+def check_access():
+    try:
+        data  = request.get_json() or {}
+        email = data.get("email", "").strip().lower()
+        if not email:
+            return jsonify({"hasAccess": False}), 400
+
+        # Admin always has unlimited access
+        if email == ADMIN_EMAIL.lower():
+            return jsonify({"hasAccess": True, "isAdmin": True, "expiresAt": None})
+
+        if not SUPABASE_SVC:
+            return jsonify({"hasAccess": False})
+
+        now = int(time.time() * 1000)
+        resp = http_req.get(
+            f"{SUPABASE_URL}/rest/v1/payment_history",
+            headers=sb_hdrs(),
+            params={
+                "user_email": f"eq.{email}",
+                "status":     "eq.active",
+                "expires_at": f"gt.{now}",
+                "order":      "expires_at.desc",
+                "limit":      1,
+            },
+            timeout=6,
+        )
+        records = resp.json()
+        if isinstance(records, list) and records:
+            return jsonify({"hasAccess": True, "isAdmin": False, "expiresAt": records[0]["expires_at"]})
+
+        return jsonify({"hasAccess": False, "isAdmin": False})
+
+    except Exception as e:
+        return jsonify({"hasAccess": False, "error": str(e)}), 500
+
+
+# ── 5. Admin — full payment history ──────────────────────────────────────────
+
+@app.route("/api/admin/payments", methods=["GET"])
+def admin_payments():
+    try:
+        caller = request.headers.get("X-Admin-Email", "").strip().lower()
+        if caller != ADMIN_EMAIL.lower():
+            return jsonify({"error": "Unauthorized"}), 403
+
+        if not SUPABASE_SVC:
+            return jsonify({"error": "DB not configured"}), 500
+
+        resp = http_req.get(
+            f"{SUPABASE_URL}/rest/v1/payment_history",
+            headers=sb_hdrs(),
+            params={"order": "created_at.desc", "limit": 200},
+            timeout=8,
+        )
+        return jsonify(resp.json())
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
