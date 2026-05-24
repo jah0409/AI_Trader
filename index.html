@@ -3,64 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Trader Mentor — Elite Chart Analysis</title>
+  <title>AI Trader Mentor — JAH.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Markdown parser — fixes the ##, **, --- raw text issue -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html, body, #root {
+    html, body {
       background: #0C0C0C;
-      color: #D7E2EA;
+      color: #E8F0F5;
       font-family: 'Kanit', sans-serif;
       overflow-x: hidden;
       scroll-behavior: smooth;
     }
 
-    /* ── Gradient text ── */
+    :root {
+      --green:      #22c55e;
+      --green-dim:  rgba(34, 197, 94, 0.18);
+      --green-glow: rgba(34, 197, 94, 0.25);
+      --border:     rgba(232, 240, 245, 0.1);
+      --text:       #E8F0F5;
+      --muted:      rgba(232, 240, 245, 0.45);
+    }
+
+    /* ── Gradient heading text ── */
     .hero-heading {
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+      background: linear-gradient(180deg, #7a8290 0%, #E8F0F5 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* ── Primary (purple-pink) button ── */
+    /* ════════════════════════════
+       BUTTONS
+    ════════════════════════════ */
     .btn-primary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      background: linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%);
-      box-shadow: 0px 4px 4px rgba(181,1,167,0.25), inset 4px 4px 12px #7721B1;
-      outline: 2px solid white;
-      outline-offset: -3px;
+      background: #fff;
       border: none;
       border-radius: 9999px;
-      color: #fff;
+      color: #0C0C0C;
       font-family: 'Kanit', sans-serif;
-      font-weight: 500;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       cursor: pointer;
       padding: 0.8rem 2.2rem;
       font-size: 0.85rem;
-      transition: opacity 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 0 0 var(--green-glow);
     }
-    .btn-primary:hover  { opacity: 0.85; transform: translateY(-2px); }
+    .btn-primary:hover  {
+      background: var(--green);
+      color: #0C0C0C;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px var(--green-glow);
+    }
     .btn-primary:active { transform: translateY(0); }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
-    /* ── Ghost button ── */
     .btn-ghost {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid #D7E2EA;
+      border: 2px solid rgba(232,240,245,0.35);
       border-radius: 9999px;
       background: transparent;
-      color: #D7E2EA;
+      color: var(--text);
       font-family: 'Kanit', sans-serif;
       font-weight: 500;
       text-transform: uppercase;
@@ -68,13 +83,17 @@
       cursor: pointer;
       padding: 0.75rem 2rem;
       font-size: 0.85rem;
-      transition: background 0.2s, transform 0.2s;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
     }
-    .btn-ghost:hover { background: rgba(215,226,234,0.08); transform: translateY(-2px); }
+    .btn-ghost:hover {
+      border-color: var(--green);
+      background: var(--green-dim);
+      transform: translateY(-2px);
+    }
 
-    /* ════════════════════════════════════
+    /* ════════════════════════════
        NAV
-    ════════════════════════════════════ */
+    ════════════════════════════ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -82,22 +101,40 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.1rem 2.5rem;
-      background: rgba(12,12,12,0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(215,226,234,0.07);
+      padding: 1rem 2.5rem;
+      background: rgba(12,12,12,0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
     }
 
-    .nav-brand {
-      font-size: 1rem;
-      font-weight: 800;
+    /* JAH. Logo */
+    .jah-logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      cursor: default;
+      user-select: none;
+    }
+    .jah-wordmark {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #fff;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .jah-circle {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-left: 3px;
+      position: relative;
+      bottom: 2px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px var(--green);
     }
 
     .nav-links {
@@ -105,22 +142,21 @@
       gap: 2.5rem;
       list-style: none;
     }
-
     .nav-links a {
-      color: #D7E2EA;
+      color: var(--text);
       text-decoration: none;
       font-weight: 500;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.65;
-      transition: opacity 0.2s;
+      letter-spacing: 0.14em;
+      opacity: 0.55;
+      transition: opacity 0.2s, color 0.2s;
     }
-    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover { opacity: 1; color: var(--green); }
 
-    /* ════════════════════════════════════
+    /* ════════════════════════════
        HERO
-    ════════════════════════════════════ */
+    ════════════════════════════ */
     #hero {
       min-height: 100vh;
       display: flex;
@@ -133,92 +169,91 @@
       padding: 7rem 2rem 4rem;
     }
 
-    /* Grid lines */
     .hero-grid {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(215,226,234,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(215,226,234,0.035) 1px, transparent 1px);
-      background-size: 64px 64px;
-      mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 30%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 30%, transparent 100%);
+        linear-gradient(rgba(34,197,94,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 25%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 25%, transparent 100%);
     }
 
-    /* Glow orbs */
+    /* Green glow orbs */
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.25;
-      animation: orb-float 10s ease-in-out infinite;
+      filter: blur(100px);
+      opacity: 0.18;
+      animation: orb-float 12s ease-in-out infinite;
       pointer-events: none;
     }
-    .orb-1 { width: 500px; height: 500px; background: #7621B0; top: -180px; left: -160px; animation-delay: 0s; }
-    .orb-2 { width: 380px; height: 380px; background: #B600A8; bottom: -80px; right: -80px; animation-delay: -4s; }
-    .orb-3 { width: 240px; height: 240px; background: #BE4C00; top: 45%; right: 8%; animation-delay: -7s; }
+    .orb-1 { width: 560px; height: 560px; background: #22c55e; top: -200px; left: -200px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: #16a34a; bottom: -100px; right: -100px; animation-delay: -5s; }
+    .orb-3 { width: 260px; height: 260px; background: #4ade80; top: 40%; right: 6%; animation-delay: -9s; }
 
     @keyframes orb-float {
       0%,100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-40px) scale(1.07); }
+      50%      { transform: translateY(-45px) scale(1.08); }
     }
 
-    /* Live badge */
+    /* Made by JAH. badge */
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: rgba(215,226,234,0.05);
-      border: 1px solid rgba(215,226,234,0.14);
+      gap: 0.6rem;
+      background: rgba(34,197,94,0.07);
+      border: 1px solid rgba(34,197,94,0.25);
       border-radius: 9999px;
       padding: 0.45rem 1.3rem;
       font-size: 0.7rem;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: rgba(215,226,234,0.8);
+      letter-spacing: 0.2em;
+      color: var(--green);
       margin-bottom: 2.5rem;
-      animation: fade-up 0.8s ease both;
+      animation: fade-up-anim 0.8s ease both;
     }
 
     .live-dot {
       width: 7px; height: 7px;
       border-radius: 50%;
-      background: #3fb950;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
       animation: live-pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
     }
-
     @keyframes live-pulse {
-      0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.5); }
-      50%      { opacity: 0.6; box-shadow: 0 0 0 5px rgba(63,185,80,0); }
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.4; }
     }
 
     .hero-title {
-      font-size: clamp(3.5rem, 14vw, 12rem);
+      font-size: clamp(3rem, 13vw, 11rem);
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: -0.03em;
       line-height: 0.88;
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+      background: linear-gradient(180deg, #7a8290 0%, #fff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 1.75rem;
-      animation: fade-up 0.8s 0.15s ease both;
+      animation: fade-up-anim 0.8s 0.12s ease both;
       white-space: nowrap;
     }
 
     .hero-sub {
-      font-size: clamp(0.8rem, 1.8vw, 1.05rem);
+      font-size: clamp(0.8rem, 1.8vw, 1rem);
       font-weight: 300;
-      color: rgba(215,226,234,0.6);
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       max-width: 520px;
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 2.5rem;
-      animation: fade-up 0.8s 0.3s ease both;
+      animation: fade-up-anim 0.8s 0.28s ease both;
     }
 
     .hero-cta {
@@ -226,10 +261,9 @@
       gap: 1rem;
       flex-wrap: wrap;
       justify-content: center;
-      animation: fade-up 0.8s 0.45s ease both;
+      animation: fade-up-anim 0.8s 0.42s ease both;
     }
 
-    /* Stats bar */
     .hero-stats {
       display: flex;
       align-items: center;
@@ -237,77 +271,60 @@
       margin-top: 5rem;
       flex-wrap: wrap;
       justify-content: center;
-      animation: fade-up 0.8s 0.6s ease both;
+      animation: fade-up-anim 0.8s 0.56s ease both;
     }
-
     .stat-item { text-align: center; }
     .stat-value {
-      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
       font-weight: 900;
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--green);
       line-height: 1;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.2rem;
     }
     .stat-label {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: rgba(215,226,234,0.4);
+      letter-spacing: 0.2em;
+      color: var(--muted);
     }
     .stat-sep {
-      width: 1px;
-      height: 40px;
-      background: rgba(215,226,234,0.15);
+      width: 1px; height: 36px;
+      background: var(--border);
     }
 
-    /* Scroll cue */
     .scroll-cue {
       position: absolute;
-      bottom: 2rem;
-      left: 50%;
+      bottom: 2rem; left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      opacity: 0.35;
-      animation: scroll-bounce 2s ease-in-out infinite;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.35rem;
+      opacity: 0.3;
+      animation: scroll-bounce 2.5s ease-in-out infinite;
     }
-    .scroll-cue span {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-    }
-    .scroll-cue .arrow { font-size: 1rem; }
-
+    .scroll-cue span { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.2em; }
     @keyframes scroll-bounce {
       0%,100% { transform: translateX(-50%) translateY(0); }
-      50%      { transform: translateX(-50%) translateY(8px); }
+      50%      { transform: translateX(-50%) translateY(9px); }
     }
 
-    /* ════════════════════════════════════
-       STEPS
-    ════════════════════════════════════ */
-    #how-it-works {
-      padding: 8rem 2rem 6rem;
-      max-width: 1140px;
-      margin: 0 auto;
+    @keyframes fade-up-anim {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ════════════════════════════
+       SECTION COMMONS
+    ════════════════════════════ */
     .section-eyebrow {
       text-align: center;
-      font-size: 0.65rem;
-      font-weight: 500;
+      font-size: 0.62rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.25em;
-      color: rgba(215,226,234,0.35);
-      margin-bottom: 1rem;
+      letter-spacing: 0.28em;
+      color: var(--green);
+      margin-bottom: 0.9rem;
     }
-
     .section-title {
       font-size: clamp(2.2rem, 8vw, 7rem);
       font-weight: 900;
@@ -315,167 +332,140 @@
       letter-spacing: -0.02em;
       line-height: 0.9;
       text-align: center;
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+      background: linear-gradient(180deg, #7a8290 0%, #fff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 4.5rem;
     }
 
+    /* ════════════════════════════
+       HOW IT WORKS
+    ════════════════════════════ */
+    #how-it-works {
+      padding: 9rem 2rem 7rem;
+      max-width: 1140px;
+      margin: 0 auto;
+    }
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.25rem;
     }
-
     .step-card {
-      background: rgba(215,226,234,0.02);
-      border: 1px solid rgba(215,226,234,0.09);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
       border-radius: 28px;
       padding: 2.5rem 2rem;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     .step-card:hover {
-      border-color: rgba(182,0,168,0.35);
+      border-color: rgba(34,197,94,0.4);
       transform: translateY(-6px);
-      box-shadow: 0 20px 60px rgba(118,33,176,0.15);
+      box-shadow: 0 24px 64px rgba(34,197,94,0.1);
     }
     .step-card::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 70% 20%, rgba(118,33,176,0.08) 0%, transparent 70%);
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 10%, rgba(34,197,94,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .step-num-bg {
       position: absolute;
-      top: 0.75rem; right: 1.25rem;
-      font-size: 6rem;
-      font-weight: 900;
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 0.1;
+      top: 0.5rem; right: 1.25rem;
+      font-size: 6rem; font-weight: 900;
+      color: #fff;
+      opacity: 0.04;
       line-height: 1;
       pointer-events: none;
     }
-
     .step-icon-wrap {
       width: 52px; height: 52px;
       border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.6rem;
       margin-bottom: 1.75rem;
+      background: var(--green-dim);
     }
-    .icon-purple { background: rgba(118,33,176,0.25); }
-    .icon-pink   { background: rgba(182,0,168,0.25); }
-    .icon-orange { background: rgba(190,76,0,0.25); }
-
     .step-title {
-      font-size: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #D7E2EA;
-      margin-bottom: 0.75rem;
+      font-size: 1rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: #fff; margin-bottom: 0.75rem;
     }
-
     .step-desc {
-      font-size: 0.84rem;
-      font-weight: 300;
-      color: rgba(215,226,234,0.55);
-      line-height: 1.75;
+      font-size: 0.84rem; font-weight: 300;
+      color: var(--muted); line-height: 1.78;
     }
 
-    /* ════════════════════════════════════
-       TOOL SECTION
-    ════════════════════════════════════ */
+    /* ════════════════════════════
+       TOOL
+    ════════════════════════════ */
     #tool {
-      padding: 2rem 2rem 8rem;
+      padding: 2rem 2rem 9rem;
       max-width: 860px;
       margin: 0 auto;
     }
 
-    /* Upload zone */
     .upload-zone {
-      border: 2px dashed rgba(215,226,234,0.18);
+      border: 2px dashed rgba(255,255,255,0.15);
       border-radius: 28px;
       padding: 3.5rem 2rem;
       text-align: center;
       cursor: pointer;
-      transition: border-color 0.25s, background 0.25s, transform 0.25s;
-      background: rgba(215,226,234,0.015);
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      background: rgba(255,255,255,0.015);
       position: relative;
       overflow: hidden;
     }
     .upload-zone:hover, .upload-zone.dragover {
-      border-color: rgba(182,0,168,0.55);
-      background: rgba(118,33,176,0.06);
+      border-color: var(--green);
+      background: rgba(34,197,94,0.05);
       transform: scale(1.01);
     }
     .upload-zone::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(118,33,176,0.07) 0%, transparent 70%);
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(34,197,94,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .upload-icon-wrap {
       width: 72px; height: 72px;
       border-radius: 22px;
-      background: rgba(215,226,234,0.05);
-      border: 1px solid rgba(215,226,234,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
       font-size: 2rem;
       margin: 0 auto 1.5rem;
       transition: transform 0.25s;
     }
-    .upload-zone:hover .upload-icon-wrap { transform: scale(1.08) rotate(-4deg); }
-
+    .upload-zone:hover .upload-icon-wrap { transform: scale(1.1) rotate(-5deg); }
     .upload-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #D7E2EA;
-      margin-bottom: 0.5rem;
+      font-size: 1.1rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: #fff; margin-bottom: 0.5rem;
     }
     .upload-sub {
-      font-size: 0.75rem;
-      font-weight: 300;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: rgba(215,226,234,0.4);
+      font-size: 0.72rem; font-weight: 300;
+      text-transform: uppercase; letter-spacing: 0.18em;
+      color: var(--muted);
     }
-
     .preview-img {
       width: 100%;
-      border-radius: 20px;
-      border: 1px solid rgba(215,226,234,0.12);
+      border-radius: 18px;
+      border: 1px solid var(--border);
       margin-top: 1.5rem;
       display: none;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
 
-    .tool-cta {
-      display: flex;
-      justify-content: center;
-      margin-top: 1.5rem;
-    }
+    .tool-cta { display: flex; justify-content: center; margin-top: 1.5rem; }
 
-    /* Analysis card */
+    /* ── Result card ── */
     .result-card {
-      background: rgba(215,226,234,0.02);
-      border: 1px solid rgba(215,226,234,0.1);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
       border-radius: 28px;
       padding: 2rem;
       margin-top: 1.5rem;
@@ -486,77 +476,76 @@
     .result-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #7621B0, #B600A8, #BE4C00);
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
       border-radius: 28px 28px 0 0;
     }
 
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
+    .card-header {
+      display: flex; align-items: center; gap: 0.9rem;
       margin-bottom: 1.25rem;
       padding-bottom: 1.25rem;
-      border-bottom: 1px solid rgba(215,226,234,0.08);
+      border-bottom: 1px solid var(--border);
     }
-
     .ai-avatar {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+      border: 2px solid var(--green);
     }
-
-    .ai-meta-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #D7E2EA;
+    .ai-name {
+      font-size: 0.82rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #fff;
     }
-    .ai-meta-sub {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: rgba(215,226,234,0.4);
-      margin-top: 0.1rem;
+    .ai-sub {
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--muted); margin-top: 0.1rem;
     }
-
     .ai-badge {
       margin-left: auto;
-      background: rgba(118,33,176,0.2);
-      border: 1px solid rgba(118,33,176,0.45);
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.4);
       border-radius: 9999px;
-      padding: 0.3rem 0.9rem;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #c084fc;
+      padding: 0.28rem 0.9rem;
+      font-size: 0.62rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green);
     }
 
-    .result-body {
-      font-size: 0.92rem;
-      font-weight: 400;
-      color: #D7E2EA;
-      line-height: 1.85;
-      white-space: pre-wrap;
+    /* ── Rendered markdown styles ── */
+    .md-body { font-size: 0.92rem; font-weight: 400; color: var(--text); line-height: 1.85; }
+    .md-body h1, .md-body h2, .md-body h3 {
+      color: #fff; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.04em; margin: 1.2rem 0 0.5rem;
+    }
+    .md-body h1 { font-size: 1.15rem; }
+    .md-body h2 { font-size: 1rem; }
+    .md-body h3 { font-size: 0.9rem; color: var(--green); }
+    .md-body p  { margin-bottom: 0.7rem; }
+    .md-body ul, .md-body ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+    .md-body li { margin-bottom: 0.3rem; }
+    .md-body strong { color: #fff; font-weight: 700; }
+    .md-body em    { color: var(--green); font-style: normal; }
+    .md-body hr    { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+    .md-body code  {
+      background: rgba(255,255,255,0.07);
+      border-radius: 4px;
+      padding: 0.1em 0.4em;
+      font-size: 0.85em;
+      color: var(--green);
     }
 
     /* Signal colours */
-    .sig-buy  { color: #3fb950; font-weight: 700; }
-    .sig-sell { color: #f85149; font-weight: 700; }
-    .sig-hold { color: #d29922; font-weight: 700; }
+    .sig-buy  { color: #22c55e; font-weight: 800; }
+    .sig-sell { color: #f85149; font-weight: 800; }
+    .sig-hold { color: #f59e0b; font-weight: 800; }
 
-    /* Chat card */
+    /* ── Chat card ── */
     .chat-card {
-      background: rgba(215,226,234,0.02);
-      border: 1px solid rgba(215,226,234,0.1);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
       border-radius: 28px;
       overflow: hidden;
       margin-top: 1.5rem;
@@ -566,123 +555,105 @@
     .chat-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #B600A8, #7621B0, #18011F);
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
       border-radius: 28px 28px 0 0;
     }
-
     .chat-top {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      padding: 1.25rem 1.75rem;
-      border-bottom: 1px solid rgba(215,226,234,0.08);
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 1.2rem 1.75rem;
+      border-bottom: 1px solid var(--border);
     }
-    .online-badge {
+    .online-chip {
       margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #3fb950;
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--green);
     }
     .online-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: #3fb950;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
       animation: live-pulse 2s ease-in-out infinite;
     }
-
     .chat-log {
-      max-height: 400px;
+      max-height: 420px;
       overflow-y: auto;
       padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       gap: 1rem;
       scrollbar-width: thin;
-      scrollbar-color: rgba(215,226,234,0.15) transparent;
+      scrollbar-color: rgba(34,197,94,0.2) transparent;
     }
-
     .msg {
       padding: 1rem 1.25rem;
       border-radius: 20px;
-      font-size: 0.88rem;
-      font-weight: 400;
+      font-size: 0.88rem; font-weight: 400;
       line-height: 1.75;
-      max-width: 86%;
-      white-space: pre-wrap;
-      animation: msg-in 0.3s ease both;
+      max-width: 88%;
+      animation: msg-in 0.28s ease both;
     }
     @keyframes msg-in {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     .msg.user {
-      background: linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%);
-      color: #fff;
+      background: var(--green);
+      color: #0C0C0C;
+      font-weight: 600;
       align-self: flex-end;
       border-bottom-right-radius: 4px;
     }
     .msg.ai {
-      background: rgba(215,226,234,0.04);
-      border: 1px solid rgba(215,226,234,0.1);
-      color: #D7E2EA;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
       align-self: flex-start;
       border-bottom-left-radius: 4px;
     }
+    .msg.ai .md-body { font-size: 0.88rem; }
 
     .chat-input-bar {
-      display: flex;
-      gap: 0.75rem;
-      padding: 1.25rem 1.5rem;
-      border-top: 1px solid rgba(215,226,234,0.08);
+      display: flex; gap: 0.75rem;
+      padding: 1.2rem 1.5rem;
+      border-top: 1px solid var(--border);
     }
-
     .chat-input {
       flex: 1;
-      background: rgba(215,226,234,0.04);
-      border: 1px solid rgba(215,226,234,0.14);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
       border-radius: 9999px;
-      color: #D7E2EA;
+      color: var(--text);
       padding: 0.75rem 1.4rem;
       font-family: 'Kanit', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 400;
+      font-size: 0.88rem; font-weight: 400;
       outline: none;
       transition: border-color 0.2s;
     }
-    .chat-input:focus    { border-color: rgba(182,0,168,0.5); }
-    .chat-input::placeholder { color: rgba(215,226,234,0.3); }
+    .chat-input:focus    { border-color: var(--green); }
+    .chat-input::placeholder { color: var(--muted); }
 
     .send-btn {
-      width: 46px; height: 46px;
-      flex-shrink: 0;
+      width: 46px; height: 46px; flex-shrink: 0;
       border-radius: 50%;
-      background: linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%);
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.2s, transform 0.2s;
-      box-shadow: 0 4px 16px rgba(182,0,168,0.3);
+      background: var(--green);
+      border: none; cursor: pointer;
+      color: #0C0C0C;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px var(--green-glow);
+      font-weight: 700;
     }
-    .send-btn:hover    { opacity: 0.85; transform: scale(1.07); }
-    .send-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .send-btn:hover    { opacity: 0.85; transform: scale(1.08); }
+    .send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
     /* Spinner */
     .spinner {
       display: inline-block;
       width: 13px; height: 13px;
-      border: 2px solid rgba(215,226,234,0.25);
-      border-top-color: #D7E2EA;
+      border: 2px solid rgba(34,197,94,0.25);
+      border-top-color: var(--green);
       border-radius: 50%;
       animation: spin 0.65s linear infinite;
       vertical-align: middle;
@@ -690,126 +661,104 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ════════════════════════════════════
-       SERVICES — white panel
-    ════════════════════════════════════ */
+    /* ════════════════════════════
+       FEATURES — white panel
+    ════════════════════════════ */
     #services {
       background: #fff;
       border-radius: 60px 60px 0 0;
       padding: 6rem 2rem 5rem;
       margin-top: 4rem;
     }
-
-    #services .section-eyebrow { color: rgba(12,12,12,0.35); }
-
+    #services .section-eyebrow { color: rgba(12,12,12,0.4); }
     #services .section-title {
       color: #0C0C0C;
       background: none;
       -webkit-text-fill-color: #0C0C0C;
     }
 
-    .services-list {
-      max-width: 920px;
-      margin: 0 auto;
-    }
-
+    .services-list { max-width: 920px; margin: 0 auto; }
     .service-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 2rem;
+      display: flex; align-items: flex-start; gap: 2rem;
       padding: 2.25rem 0;
       border-top: 1px solid rgba(12,12,12,0.1);
-      transition: padding-left 0.2s;
+      transition: padding-left 0.22s;
     }
     .service-row:last-child { border-bottom: 1px solid rgba(12,12,12,0.1); }
-    .service-row:hover { padding-left: 0.5rem; }
-
+    .service-row:hover { padding-left: 0.75rem; }
     .service-num {
       font-size: clamp(2.5rem, 8vw, 7rem);
-      font-weight: 900;
-      color: #0C0C0C;
-      opacity: 0.1;
-      line-height: 1;
-      flex-shrink: 0;
+      font-weight: 900; color: #0C0C0C;
+      opacity: 0.08; line-height: 1; flex-shrink: 0;
       width: clamp(50px, 10vw, 110px);
     }
-
     .service-info { flex: 1; padding-top: 0.4rem; }
-
     .service-name {
       font-size: clamp(1rem, 2.5vw, 1.9rem);
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #0C0C0C;
-      letter-spacing: 0.03em;
-      margin-bottom: 0.5rem;
+      font-weight: 700; text-transform: uppercase;
+      color: #0C0C0C; letter-spacing: 0.03em; margin-bottom: 0.5rem;
     }
     .service-desc {
       font-size: clamp(0.78rem, 1.5vw, 1rem);
-      font-weight: 300;
-      color: rgba(12,12,12,0.5);
-      line-height: 1.75;
+      font-weight: 300; color: rgba(12,12,12,0.5); line-height: 1.75;
       max-width: 640px;
     }
 
-    /* ════════════════════════════════════
+    /* ════════════════════════════
        FOOTER
-    ════════════════════════════════════ */
+    ════════════════════════════ */
     footer {
       background: #0C0C0C;
       padding: 3.5rem 2rem 3rem;
       text-align: center;
-      border-top: 1px solid rgba(215,226,234,0.07);
+      border-top: 1px solid var(--border);
     }
-    .footer-brand {
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .footer-logo {
+      display: flex; align-items: baseline;
+      justify-content: center; gap: 0;
       margin-bottom: 0.75rem;
     }
+    .footer-wordmark {
+      font-size: 2rem; font-weight: 900;
+      color: #fff; text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+    .footer-dot {
+      display: inline-block;
+      width: 13px; height: 13px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-left: 4px;
+      position: relative; bottom: 3px;
+      box-shadow: 0 0 12px var(--green);
+    }
     .footer-sub {
-      font-size: 0.7rem;
-      font-weight: 300;
-      color: rgba(215,226,234,0.3);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
+      font-size: 0.65rem; font-weight: 300;
+      color: rgba(232,240,245,0.28);
+      text-transform: uppercase; letter-spacing: 0.2em;
     }
 
-    /* ════════════════════════════════════
+    /* ════════════════════════════
        SCROLL ANIMATIONS
-    ════════════════════════════════════ */
+    ════════════════════════════ */
     .fade-up {
       opacity: 0;
       transform: translateY(36px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+      transition: opacity 0.78s ease, transform 0.78s ease;
     }
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ════════════════════════════════════
+    /* ════════════════════════════
        RESPONSIVE
-    ════════════════════════════════════ */
+    ════════════════════════════ */
     @media (max-width: 640px) {
       nav { padding: 0.9rem 1.25rem; }
       .nav-links { gap: 1.25rem; }
-      .hero-title { font-size: clamp(2.8rem, 18vw, 6rem); white-space: normal; }
+      .hero-title { font-size: clamp(2.6rem, 18vw, 5.5rem); white-space: normal; }
       .hero-stats { gap: 1.5rem; }
       .stat-sep { display: none; }
       #services { border-radius: 40px 40px 0 0; }
-      .service-row { flex-direction: column; gap: 0.25rem; }
-      .service-num { font-size: 2.5rem; }
+      .service-row { flex-direction: column; gap: 0.3rem; }
     }
   </style>
 </head>
@@ -817,7 +766,10 @@
 
   <!-- ── NAV ── -->
   <nav>
-    <span class="nav-brand">AI Trader</span>
+    <div class="jah-logo">
+      <span class="jah-wordmark">JAH</span>
+      <span class="jah-circle"></span>
+    </div>
     <ul class="nav-links">
       <li><a href="#how-it-works">Process</a></li>
       <li><a href="#tool">Analyze</a></li>
@@ -837,7 +789,7 @@
 
     <div class="hero-badge">
       <span class="live-dot"></span>
-      Powered by Claude AI
+      Made by JAH.
     </div>
 
     <h1 class="hero-title">AI Trader<br>Mentor</h1>
@@ -846,7 +798,7 @@
 
     <div class="hero-cta">
       <button class="btn-primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'})">
-        📊 Analyze My Chart
+        📊 &nbsp;Analyze My Chart
       </button>
       <button class="btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">
         How It Works
@@ -877,32 +829,32 @@
 
     <div class="scroll-cue">
       <span>Scroll</span>
-      <span class="arrow">↓</span>
+      <span>↓</span>
     </div>
   </section>
 
   <!-- ── HOW IT WORKS ── -->
   <div id="how-it-works">
     <div class="section-eyebrow fade-up">The Process</div>
-    <h2 class="section-title fade-up" style="transition-delay:0.1s">How It Works</h2>
+    <h2 class="section-title fade-up" style="transition-delay:.1s">How It Works</h2>
     <div class="steps-grid">
-      <div class="step-card fade-up" style="transition-delay:0.05s">
+      <div class="step-card fade-up" style="transition-delay:.05s">
         <div class="step-num-bg">01</div>
-        <div class="step-icon-wrap icon-purple">📊</div>
+        <div class="step-icon-wrap">📊</div>
         <div class="step-title">Upload Your Chart</div>
-        <p class="step-desc">Take a screenshot of any trading chart — Forex, stocks, or crypto — and drop it directly onto the analyzer. PNG, JPG, and WEBP all work.</p>
+        <p class="step-desc">Screenshot any chart — Forex, stocks, or crypto — and drop it in. PNG, JPG, and WEBP all supported.</p>
       </div>
-      <div class="step-card fade-up" style="transition-delay:0.15s">
+      <div class="step-card fade-up" style="transition-delay:.15s">
         <div class="step-num-bg">02</div>
-        <div class="step-icon-wrap icon-pink">🧠</div>
+        <div class="step-icon-wrap">🧠</div>
         <div class="step-title">AI Analysis</div>
-        <p class="step-desc">Claude AI identifies trends, support & resistance levels, candlestick patterns, and delivers a clear BUY / SELL / HOLD recommendation with reasoning.</p>
+        <p class="step-desc">Claude AI reads trends, support &amp; resistance, candlestick patterns, and fires a clean BUY / SELL / HOLD call with full reasoning.</p>
       </div>
-      <div class="step-card fade-up" style="transition-delay:0.25s">
+      <div class="step-card fade-up" style="transition-delay:.25s">
         <div class="step-num-bg">03</div>
-        <div class="step-icon-wrap icon-orange">💬</div>
+        <div class="step-icon-wrap">💬</div>
         <div class="step-title">Ask Anything</div>
-        <p class="step-desc">Confused about the call? Ask follow-up questions. Your AI mentor remembers the full chart context and explains every detail in plain language.</p>
+        <p class="step-desc">Ask unlimited follow-up questions. The mentor remembers your chart and breaks down every detail like a seasoned pro.</p>
       </div>
     </div>
   </div>
@@ -910,34 +862,33 @@
   <!-- ── TOOL ── -->
   <div id="tool">
     <div class="section-eyebrow fade-up">Live Tool</div>
-    <h2 class="section-title fade-up" style="transition-delay:0.1s">Analyze Chart</h2>
+    <h2 class="section-title fade-up" style="transition-delay:.1s">Analyze Chart</h2>
 
-    <!-- Drop zone -->
     <div class="upload-zone fade-up" id="drop-zone" onclick="document.getElementById('file-input').click()">
       <div class="upload-icon-wrap">🖼️</div>
       <div class="upload-title">Drop Your Chart Here</div>
-      <div class="upload-sub">Click to browse · PNG · JPG · WEBP</div>
+      <div class="upload-sub">Click to browse &nbsp;·&nbsp; PNG &nbsp;·&nbsp; JPG &nbsp;·&nbsp; WEBP</div>
       <img id="preview" class="preview-img" src="" alt="Chart preview" />
     </div>
     <input type="file" id="file-input" accept="image/*" style="display:none" />
 
     <div class="tool-cta">
-      <button class="btn-primary" id="analyze-btn" disabled style="min-width:220px;font-size:0.9rem;padding:0.9rem 2.5rem;">
+      <button class="btn-primary" id="analyze-btn" disabled style="min-width:230px;font-size:0.9rem;padding:0.9rem 2.5rem;">
         🔍 &nbsp;Analyze Chart
       </button>
     </div>
 
     <!-- Analysis output -->
     <div class="result-card" id="analysis-card">
-      <div class="result-header">
+      <div class="card-header">
         <div class="ai-avatar">🤖</div>
         <div>
-          <div class="ai-meta-name">Elite Trader AI</div>
-          <div class="ai-meta-sub">Chart Analysis</div>
+          <div class="ai-name">Elite Trader AI</div>
+          <div class="ai-sub">Chart Analysis</div>
         </div>
         <span class="ai-badge">AI Analysis</span>
       </div>
-      <div class="result-body" id="analysis-text"></div>
+      <div class="md-body" id="analysis-text"></div>
     </div>
 
     <!-- Chat -->
@@ -945,60 +896,60 @@
       <div class="chat-top">
         <div class="ai-avatar">🤖</div>
         <div>
-          <div class="ai-meta-name">Elite Trader Mentor</div>
-          <div class="ai-meta-sub">Ask me anything about the chart</div>
+          <div class="ai-name">Elite Trader Mentor</div>
+          <div class="ai-sub">Ask me anything about the chart</div>
         </div>
-        <div class="online-badge">
-          <span class="online-dot"></span>
-          Online
+        <div class="online-chip">
+          <span class="online-dot"></span>Online
         </div>
       </div>
       <div class="chat-log" id="chat-log"></div>
       <div class="chat-input-bar">
-        <input class="chat-input" type="text" id="user-input" placeholder="e.g. Why did you say HOLD? Where is the resistance?" />
+        <input class="chat-input" type="text" id="user-input"
+          placeholder="e.g. Why HOLD? Where is the resistance?" />
         <button class="send-btn" id="send-btn" title="Send">➤</button>
       </div>
     </div>
   </div>
 
-  <!-- ── SERVICES / FEATURES ── -->
+  <!-- ── FEATURES ── -->
   <section id="services">
     <div class="section-eyebrow fade-up">What We Analyze</div>
-    <h2 class="section-title fade-up" style="transition-delay:0.1s">Features</h2>
+    <h2 class="section-title fade-up" style="transition-delay:.1s">Features</h2>
     <div class="services-list">
-      <div class="service-row fade-up" style="transition-delay:0.05s">
+      <div class="service-row fade-up" style="transition-delay:.05s">
         <div class="service-num">01</div>
         <div class="service-info">
           <div class="service-name">Trend Analysis</div>
           <p class="service-desc">Identify the overall market direction — bullish, bearish, or sideways — with multi-pattern recognition so you always know who's in control.</p>
         </div>
       </div>
-      <div class="service-row fade-up" style="transition-delay:0.12s">
+      <div class="service-row fade-up" style="transition-delay:.12s">
         <div class="service-num">02</div>
         <div class="service-info">
           <div class="service-name">Support &amp; Resistance</div>
-          <p class="service-desc">Pinpoint key price levels where buyers and sellers historically clash — essential for timing your entries, exits, and stop-losses with precision.</p>
+          <p class="service-desc">Pinpoint key price levels where buyers and sellers historically clash — essential for timing entries, exits, and stop-losses with precision.</p>
         </div>
       </div>
-      <div class="service-row fade-up" style="transition-delay:0.19s">
+      <div class="service-row fade-up" style="transition-delay:.19s">
         <div class="service-num">03</div>
         <div class="service-info">
           <div class="service-name">Candlestick Patterns</div>
-          <p class="service-desc">Detect reversal and continuation signals — engulfing, doji, hammer, shooting star, morning star, and dozens more read by the AI instantly.</p>
+          <p class="service-desc">Detect reversal and continuation signals — engulfing, doji, hammer, shooting star, morning star — read by the AI in seconds.</p>
         </div>
       </div>
-      <div class="service-row fade-up" style="transition-delay:0.26s">
+      <div class="service-row fade-up" style="transition-delay:.26s">
         <div class="service-num">04</div>
         <div class="service-info">
           <div class="service-name">BUY / SELL / HOLD Signal</div>
-          <p class="service-desc">Every analysis closes with a clear, professional recommendation backed by a transparent, step-by-step explanation of the reasoning — no guesswork.</p>
+          <p class="service-desc">Every analysis closes with a clear, professional recommendation backed by a transparent, step-by-step explanation — no guesswork.</p>
         </div>
       </div>
-      <div class="service-row fade-up" style="transition-delay:0.33s">
+      <div class="service-row fade-up" style="transition-delay:.33s">
         <div class="service-num">05</div>
         <div class="service-info">
           <div class="service-name">Interactive Q&amp;A</div>
-          <p class="service-desc">Ask unlimited follow-up questions about the chart. Your AI mentor retains the full analysis context and answers like a seasoned pro — not a chatbot.</p>
+          <p class="service-desc">Ask unlimited follow-up questions. Your AI mentor retains full chart context and answers like a seasoned pro — not a generic chatbot.</p>
         </div>
       </div>
     </div>
@@ -1006,26 +957,34 @@
 
   <!-- ── FOOTER ── -->
   <footer>
-    <div class="footer-brand">AI Trader Mentor</div>
-    <div class="footer-sub">Powered by Claude AI &nbsp;·&nbsp; Elite Chart Analysis &nbsp;·&nbsp; © 2026</div>
+    <div class="footer-logo">
+      <span class="footer-wordmark">JAH</span>
+      <span class="footer-dot"></span>
+    </div>
+    <div class="footer-sub">AI Trader Mentor &nbsp;·&nbsp; Elite Chart Analysis &nbsp;·&nbsp; © 2026</div>
   </footer>
 
   <script>
+    /* Configure marked for clean output */
+    if (typeof marked !== 'undefined') {
+      marked.setOptions({ breaks: true, gfm: true });
+    }
+
     /* ── State ── */
     let imageFile = null;
     let conversationHistory = [];
 
     /* ── Elements ── */
-    const dropZone    = document.getElementById('drop-zone');
-    const fileInput   = document.getElementById('file-input');
-    const preview     = document.getElementById('preview');
-    const analyzeBtn  = document.getElementById('analyze-btn');
+    const dropZone     = document.getElementById('drop-zone');
+    const fileInput    = document.getElementById('file-input');
+    const preview      = document.getElementById('preview');
+    const analyzeBtn   = document.getElementById('analyze-btn');
     const analysisCard = document.getElementById('analysis-card');
     const analysisText = document.getElementById('analysis-text');
-    const chatCard    = document.getElementById('chat-card');
-    const chatLog     = document.getElementById('chat-log');
-    const userInput   = document.getElementById('user-input');
-    const sendBtn     = document.getElementById('send-btn');
+    const chatCard     = document.getElementById('chat-card');
+    const chatLog      = document.getElementById('chat-log');
+    const userInput    = document.getElementById('user-input');
+    const sendBtn      = document.getElementById('send-btn');
 
     /* ── Drag & Drop ── */
     dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
@@ -1044,11 +1003,25 @@
       preview.src = URL.createObjectURL(file);
       preview.style.display = 'block';
       analyzeBtn.disabled = false;
-      analyzeBtn.textContent = '🔍  Analyze Chart';
+      analyzeBtn.innerHTML = '🔍 &nbsp;Analyze Chart';
       analysisCard.style.display = 'none';
       chatCard.style.display = 'none';
       chatLog.innerHTML = '';
       conversationHistory = [];
+    }
+
+    /* ── Render markdown + colorize signals ── */
+    function renderResponse(raw) {
+      let html = (typeof marked !== 'undefined')
+        ? marked.parse(raw)
+        : raw.replace(/\n/g, '<br>');
+      /* Colorize trading signals */
+      html = html
+        .replace(/\bBUY\b/g,  '<span class="sig-buy">BUY</span>')
+        .replace(/\bSELL\b/g, '<span class="sig-sell">SELL</span>')
+        .replace(/\bHOLD\b/g, '<span class="sig-hold">HOLD</span>')
+        .replace(/\bAVOID\b/g,'<span class="sig-hold">AVOID</span>');
+      return html;
     }
 
     /* ── Analyze ── */
@@ -1057,7 +1030,7 @@
       analyzeBtn.disabled = true;
       analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing...';
       analysisCard.style.display = 'block';
-      analysisText.innerHTML = '<span class="spinner"></span> Claude is reading your chart...';
+      analysisText.innerHTML = '<span class="spinner"></span> Reading your chart...';
 
       const fd = new FormData();
       fd.append('image', imageFile);
@@ -1069,7 +1042,7 @@
           analysisText.innerHTML = `<span style="color:#f85149">Error: ${data.error}</span>`;
         } else {
           const text = data.response;
-          analysisText.innerHTML = colorize(text);
+          analysisText.innerHTML = renderResponse(text);
           conversationHistory = [
             { role: 'user', content: [
               { type: 'image', source: { type: 'base64', media_type: imageFile.type, data: await toBase64(imageFile) } },
@@ -1079,7 +1052,7 @@
           ];
           chatCard.style.display = 'block';
           addMsg('ai', text);
-          chatCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          chatCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
       } catch (e) {
         analysisText.innerHTML = `<span style="color:#f85149">Network error: ${e.message}</span>`;
@@ -1111,7 +1084,7 @@
         if (data.error) {
           el.innerHTML = `<span style="color:#f85149">Error: ${data.error}</span>`;
         } else {
-          el.innerHTML = colorize(data.response);
+          el.innerHTML = renderResponse(data.response);
           conversationHistory.push({ role: 'user',      content: q });
           conversationHistory.push({ role: 'assistant', content: data.response });
         }
@@ -1123,20 +1096,20 @@
       chatLog.scrollTop = chatLog.scrollHeight;
     }
 
-    function addMsg(role, html) {
+    function addMsg(role, content) {
       const el = document.createElement('div');
       el.className = `msg ${role}`;
-      el.innerHTML = html;
+      if (role === 'ai' && typeof marked !== 'undefined' && !content.includes('<span class="spinner">')) {
+        const wrap = document.createElement('div');
+        wrap.className = 'md-body';
+        wrap.innerHTML = renderResponse(content);
+        el.appendChild(wrap);
+      } else {
+        el.innerHTML = (role === 'user') ? content : content;
+      }
       chatLog.appendChild(el);
       chatLog.scrollTop = chatLog.scrollHeight;
       return el;
-    }
-
-    function colorize(text) {
-      return text
-        .replace(/\bBUY\b/g,  '<span class="sig-buy">BUY</span>')
-        .replace(/\bSELL\b/g, '<span class="sig-sell">SELL</span>')
-        .replace(/\bHOLD\b/g, '<span class="sig-hold">HOLD</span>');
     }
 
     function toBase64(file) {
@@ -1151,8 +1124,7 @@
     /* ── Scroll animations ── */
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
-
+    }, { threshold: 0.07 });
     document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
   </script>
 </body>
