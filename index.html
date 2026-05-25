@@ -9,7 +9,8 @@
   <link rel="apple-touch-icon" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -754,6 +755,64 @@ will-change:transform;
       .dash-topbar{padding:1rem}
       .dash-topbar-inner{gap:.75rem}
       #dash-panel-analyzer,#dash-panel-payment,#dash-panel-history,#dash-panel-reviews{padding:1.25rem 1rem 4rem}
+    }
+
+    /* ══ PERFORMANCE: GPU COMPOSITING & SMOOTH RENDERING ══ */
+    html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+
+    /* Isolate hero from the rest of the document stacking context */
+    #hero{isolation:isolate;contain:layout style}
+
+    /* Push orbs to their own GPU layer so blur doesn't repaint the whole page */
+    .orb{
+      transform:translateZ(0);
+      backface-visibility:hidden;-webkit-backface-visibility:hidden;
+      contain:strict;
+    }
+
+    /* All continuously spinning/floating elements: compositor-only layers */
+    .hero-logo-3d,.logo-ring,.logo-orbit,.logo-glow,
+    .live-dot,.nav-live-dot,
+    .reviews-track,.ticker-track,
+    .activity-ticker .ticker-inner{
+      transform:translateZ(0);
+      backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    }
+
+    /* Keep ring spins on GPU */
+    .logo-ring{will-change:transform}
+    .logo-orbit{will-change:transform}
+    .logo-glow{will-change:opacity,transform}
+    .hero-logo-3d{will-change:transform}
+
+    /* Review card glow blob — own layer */
+    .review-card::before{will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+    /* Marquee — already has will-change, also force GPU */
+    .reviews-track{will-change:transform;transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+    /* Toasts slide in from right — own layer */
+    .toast{will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+    /* Modal overlay fade — own layer */
+    .modal-overlay{will-change:opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+    /* Contain offscreen sections so browser skips layout for them */
+    #how-it-works,#pricing,#services,#reviews,footer{contain:layout style}
+
+    /* Scrollable inner panels: native momentum scroll */
+    .modal,.mobile-menu,#dash-panel-analyzer,#dash-panel-history,#dash-panel-reviews{
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior:contain;
+    }
+
+    /* Respect reduced motion */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{
+        animation-duration:.01ms!important;
+        animation-iteration-count:1!important;
+        transition-duration:.01ms!important;
+      }
     }
   </style>
 </head>
