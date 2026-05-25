@@ -1,10 +1,13 @@
 {
   "builds": [
     { "src": "index.html",     "use": "@vercel/static" },
+    { "src": "image.png",      "use": "@vercel/static" },
+    { "src": "image-*.webp",   "use": "@vercel/static" },
     { "src": "api/analyze.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/analyze.py" },
-    { "src": "/(.*)",     "dest": "/index.html" }
+    { "src": "/api/(.*)",                                      "dest": "/api/analyze.py" },
+    { "src": "/(.*\\.(?:png|webp|jpg|jpeg|gif|svg|ico|woff2?))", "dest": "/$1" },
+    { "src": "/(.*)",                                          "dest": "/index.html" }
   ]
 }
