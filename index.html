@@ -16,7 +16,6 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;min-width:0}
     html{background:#07080F;overflow-x:hidden;scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav-h) + 12px);margin:0;padding:0}
     body{background:#07080F;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;width:100%;max-width:100vw;position:relative;margin:0;padding:0}
-    body::before{content:'';position:fixed;top:-10px;left:0;right:0;height:14px;background:#07080F;z-index:9999;pointer-events:none}
     img,svg,video{max-width:100%;display:block}
     button,a{-webkit-tap-highlight-color:transparent}
     :root{
@@ -47,6 +46,8 @@
       border:none;outline:none;
       border-bottom:1px solid rgba(96,165,250,.1);
       box-shadow:0 4px 28px rgba(0,0,0,.4);
+      top: 0;
+      transform: none !important;
   
 backface-visibility:hidden;
 -webkit-backface-visibility:hidden;
@@ -85,21 +86,29 @@ will-change:transform;
     .nav-toggle.open span::after{top:0;transform:rotate(-45deg)}
     /* Mobile menu */
     .mobile-menu{
-      position:fixed;top:calc(var(--nav-h) - 1px);left:0;right:0;display:none;
+      position:fixed;top:var(--nav-h);left:0;right:0;
       background:rgba(6,7,14,.98);
       backdrop-filter:blur(32px) saturate(180%);
       -webkit-backdrop-filter:blur(32px) saturate(180%);
       border-bottom:1px solid rgba(96,165,250,.12);
       padding:1.1rem 1.25rem 1.75rem;
-      transform:translateY(-110%);
-      transition:transform .32s cubic-bezier(.4,0,.2,1);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
       z-index:999;
       display:flex;flex-direction:column;gap:.3rem;
       max-height:calc(100dvh - var(--nav-h));
       overflow-y:auto;
       -webkit-overflow-scrolling:touch;
     }
-    .mobile-menu.open{transform:translateY(0)}
+    .mobile-menu.open{
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
     .mobile-menu a{color:rgba(232,240,245,.82);text-decoration:none;font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;padding:.82rem 1rem;border-radius:12px;transition:background .18s,color .18s;display:block}
     .mobile-menu a:hover,.mobile-menu a:active{background:rgba(96,165,250,.09);color:var(--blue-bright)}
     .mobile-menu-auth{display:flex;flex-direction:column;gap:.5rem;margin-top:.8rem;padding-top:.9rem;border-top:1px solid rgba(96,165,250,.1)}
