@@ -62,7 +62,7 @@ will-change:transform;
       gap:1.5rem;
       padding:0 2rem;
     }
-    .nav-logo{display:flex;align-items:center;gap:.6rem;cursor:default;user-select:none;flex-shrink:0;text-decoration:none}
+    .nav-logo{display:flex;align-items:center;gap:.6rem;cursor:pointer;user-select:none;flex-shrink:0;text-decoration:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .nav-logo-img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(96,165,250,.65));flex-shrink:0}
     .nav-wordmark{font-size:1.05rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.05em;line-height:1;white-space:nowrap}
     .nav-links{display:flex;align-items:center;gap:.2rem;list-style:none;padding:.28rem;background:rgba(255,255,255,.028);border:1px solid rgba(96,165,250,.1);border-radius:9999px;flex-shrink:0}
@@ -163,11 +163,11 @@ will-change:transform;
     }
 
     /* ── HERO ── */
-    #hero{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:calc(var(--nav-h) + 3.5rem) 2rem 4rem}
+    #hero{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:clip;padding:calc(var(--nav-h) + 3.5rem) 2rem 4rem}
     #hero::before{content:'';position:absolute;top:0;left:0;right:0;height:130px;background:linear-gradient(to bottom,#07080F 0%,transparent 100%);z-index:2;pointer-events:none}
     #hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:160px;background:linear-gradient(to top,#07080F 0%,transparent 100%);z-index:2;pointer-events:none}
     .hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(37,99,235,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.05) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 100%)}
-    .orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.16;animation:orb-float 12s ease-in-out infinite;pointer-events:none}
+    .orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.16;animation:orb-float 12s ease-in-out infinite;pointer-events:none;will-change:transform}
     .orb-1{width:620px;height:620px;background:#1e3a8a;top:-120px;left:-160px;animation-delay:0s}
     .orb-2{width:420px;height:420px;background:#2563eb;bottom:-70px;right:-70px;animation-delay:-5s}
     .orb-3{width:270px;height:270px;background:#3b82f6;top:44%;right:5%;animation-delay:-9s}
@@ -175,7 +175,7 @@ will-change:transform;
     .hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.28);border-radius:9999px;padding:.45rem 1.3rem;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--blue-bright);margin-bottom:2rem;animation:fua .8s ease both;position:relative;z-index:3}
     .live-dot{width:7px;height:7px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 8px var(--blue-bright);animation:lp 2s ease-in-out infinite;flex-shrink:0}
     @keyframes lp{0%,100%{opacity:1}50%{opacity:.35}}
-    .hero-logo-wrap{position:relative;z-index:3;margin-bottom:1.5rem;animation:fua .8s .06s ease both;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
+    .hero-logo-wrap{position:relative;z-index:3;margin-bottom:1.5rem;animation:fua .6s .04s ease both;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
     .hero-logo-3d{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:logo-float 6s ease-in-out infinite}
     .hero-logo{position:relative;z-index:3;width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 0 22px rgba(96,165,250,.7)) drop-shadow(0 0 60px rgba(37,99,235,.45))}
     .logo-glow{position:absolute;top:50%;left:50%;width:180px;height:180px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.35) 0%,transparent 65%);filter:blur(22px);animation:logo-glow-pulse 3.6s ease-in-out infinite;pointer-events:none;z-index:1}
@@ -193,7 +193,7 @@ will-change:transform;
     @keyframes ring-spin-rev{from{transform:rotate(360deg)}to{transform:rotate(0)}}
     .hero-title{font-size:clamp(2.6rem,12vw,10rem);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.88;background:linear-gradient(180deg,#8fa8cc 0%,#fff 55%,#c4d4ef 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.25rem;animation:fua .8s .14s ease both;position:relative;z-index:3}
     .hero-tagline{font-size:clamp(.75rem,1.6vw,.95rem);font-weight:300;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;max-width:560px;line-height:1.82;margin-bottom:2.5rem;animation:fua .8s .28s ease both;position:relative;z-index:3}
-    .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fua .8s .42s ease both;position:relative;z-index:3}
+    .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fua .5s .18s ease both;position:relative;z-index:10}
     .hero-stats{display:flex;align-items:center;gap:2.5rem;margin-top:4.5rem;flex-wrap:wrap;justify-content:center;animation:fua .8s .56s ease both;position:relative;z-index:3}
     .stat-item{text-align:center}
     .stat-value{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:var(--blue-bright);line-height:1;margin-bottom:.2rem}
@@ -529,6 +529,32 @@ will-change:transform;
       .nd-item{min-height:44px}
     }
 
+    /* ── MOBILE PERFORMANCE: kill heavy GPU work on phones ── */
+    @media(max-width:768px){
+      /* Orbs: remove blur filter entirely — the #1 GPU killer on mobile */
+      .orb{filter:none!important;opacity:.08;animation:none}
+      /* Logo glow: static, no blur animation */
+      .logo-glow{filter:none!important;animation:none;opacity:.4}
+      /* Hero logo: simplify drop-shadow */
+      .hero-logo{filter:drop-shadow(0 0 14px rgba(96,165,250,.5))!important}
+      /* Disable logo float animation — keeps rings but stops body movement */
+      .hero-logo-3d{animation:none}
+      /* Hide 2 outer rings to cut GPU load, keep innermost */
+      .logo-ring.r2,.logo-ring.r3{display:none}
+      /* Social proof cards: remove backdrop-filter */
+      .sp-card{backdrop-filter:none;-webkit-backdrop-filter:none}
+      /* Toast: remove backdrop-filter */
+      .toast{backdrop-filter:none;-webkit-backdrop-filter:none;background:#0b0d16}
+      /* Alpha panel: remove backdrop-filter */
+      .alpha-panel{backdrop-filter:none;-webkit-backdrop-filter:none}
+      /* Mobile menu: reduce backdrop-filter intensity */
+      .mobile-menu{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+      /* Step cards: remove hover transforms that may jank */
+      .step-card:hover,.service-row:hover,.review-card:hover{transform:none}
+      /* Reduce marquee count — pause one track on mobile */
+      .reviews-track.reverse{animation-play-state:paused;display:none}
+    }
+
     /* iPhone SE / very small phones */
     @media(max-width:380px){
       .nav-inner{padding:.5rem .75rem;gap:.5rem}
@@ -547,7 +573,7 @@ will-change:transform;
     @media(max-width:480px){.nav-live{display:none}}
 
     /* ── FOMO CHIPS ── */
-    .fomo-chips{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem;animation:fua .8s .52s ease both;position:relative;z-index:3}
+    .fomo-chips{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem;animation:fua .5s .26s ease both;position:relative;z-index:10}
     .fomo-chip{display:inline-flex;align-items:center;gap:.38rem;font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;border-radius:9999px;padding:.34rem .86rem;white-space:nowrap}
     .fomo-chip.hot{color:#f59e0b;border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.07)}
     .fomo-chip.live{color:#22c55e;border:1px solid rgba(34,197,94,.25);background:rgba(34,197,94,.06)}
@@ -727,10 +753,10 @@ will-change:transform;
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
-    <div class="nav-logo">
+    <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
       <img src="logo.png" alt="AlphaEdge" class="nav-logo-img">
       <span class="nav-wordmark">AlphaEdge</span>
-    </div>
+    </a>
     <ul class="nav-links" id="nav-links-list">
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#reviews">Reviews</a></li>
@@ -805,17 +831,6 @@ will-change:transform;
       <div class="auth-msg" id="auth-error"></div>
       <div class="auth-msg" id="auth-success"></div>
       <button class="btn-auth" id="auth-submit-btn" onclick="handleAuth()">Sign In</button>
-
-      <div style="text-align:center;margin:1rem 0;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:.5rem">
-        <span style="flex:1;height:1px;background:var(--border)"></span>
-        OR
-        <span style="flex:1;height:1px;background:var(--border)"></span>
-      </div>
-
-      <button class="btn-ghost" style="width:100%;margin-bottom:1.5rem" onclick="signInWithGoogle()">
-        <svg style="width:18px;height:18px;margin-right:.5rem" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Continue with Google
-      </button>
 
       <div class="auth-switch" id="auth-switch">
         <span id="auth-switch-text">New here?</span><a id="auth-switch-link" onclick="switchAuthTab(authTab === 'signin' ? 'signup' : 'signin')">Create an account</a>
