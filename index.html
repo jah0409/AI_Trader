@@ -14,8 +14,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;min-width:0}
-    html{background:#07080F!important;overflow-x:hidden;scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav-h) + 12px);margin:0;padding:0}
-    body{background:#07080F!important;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;width:100%;max-width:100vw;position:relative;margin:0;padding:0}
+    html{background:#07080F;overflow-x:hidden;scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav-h) + 12px);margin:0;padding:0}
+    body{background:#07080F;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;width:100%;max-width:100vw;position:relative;margin:0;padding:0}
+    body::before{content:'';position:fixed;top:0;left:0;right:0;height:1px;background:#07080F;z-index:9999;pointer-events:none}
     img,svg,video{max-width:100%;display:block}
     button,a{-webkit-tap-highlight-color:transparent}
     :root{
@@ -43,12 +44,10 @@
       z-index:1000;
       height:var(--nav-h);
       background:#07080f;
-      box-shadow:0 8px 40px rgba(0,0,0,.5),inset 0 -1px 0 rgba(96,165,250,.1);
       border:none;outline:none;
-      transform:translateZ(0);
-      -webkit-transform:translateZ(0);
+      border-bottom:1px solid rgba(96,165,250,.1);
+      box-shadow:0 4px 28px rgba(0,0,0,.4);
     }
-    nav::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(96,165,250,.12) 20%,rgba(37,99,235,.22) 50%,rgba(96,165,250,.12) 80%,transparent 100%);pointer-events:none}
     .nav-inner{
       max-width:1320px;margin:0 auto;
       width:100%;height:100%;
@@ -111,11 +110,11 @@
     .modal-close:hover{background:rgba(248,81,73,.2);color:#f85149}
     .modal-title{font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.25rem}
     .modal-sub{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-    .modal-body{padding:1.75rem 2rem}
-    .auth-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem}
+    .modal-body{padding:2rem 2rem 2.5rem}
+    .auth-tabs{display:flex;gap:.5rem;margin-bottom:1.75rem}
     .auth-tab{background:transparent;border:1px solid var(--border);border-radius:9999px;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.45rem 1.25rem;transition:all .2s;flex:1}
     .auth-tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
-    .auth-field{margin-bottom:1rem}
+    .auth-field{margin-bottom:1.25rem}
     .auth-field label{display:block;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:.45rem}
     .auth-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:.8rem 1rem;font-family:'Kanit',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
     .auth-field input:focus{border-color:var(--blue)}
@@ -126,14 +125,9 @@
     .btn-auth{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--blue);border:none;border-radius:9999px;color:#fff;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--blue-glow)}
     .btn-auth:hover{opacity:.88;transform:translateY(-2px)}
     .btn-auth:disabled{opacity:.4;cursor:not-allowed;transform:none}
-    .auth-switch{text-align:center;margin-top:1.1rem;font-size:.74rem;color:var(--muted);font-weight:400;letter-spacing:.04em}
+    .auth-switch{text-align:center;margin-top:1.5rem;font-size:.74rem;color:var(--muted);font-weight:400;letter-spacing:.04em}
     .auth-switch a{color:var(--blue-bright);font-weight:700;text-decoration:none;cursor:pointer;margin-left:.35rem;border-bottom:1px solid transparent;transition:border-color .2s,opacity .2s}
     .auth-switch a:hover{opacity:.85;border-bottom-color:var(--blue-bright)}
-    .auth-divider{position:relative;text-align:center;margin:1.1rem 0;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--muted)}
-    .auth-divider::before,.auth-divider::after{content:'';position:absolute;top:50%;width:calc(50% - 1.8rem);height:1px;background:var(--border)}
-    .auth-divider::before{left:0}.auth-divider::after{right:0}
-    .btn-google{display:flex;align-items:center;justify-content:center;gap:.65rem;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:9999px;color:#fff;font-family:'Kanit',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;padding:.85rem 2rem;transition:background .2s,border-color .2s,transform .2s;margin-bottom:.25rem}
-    .btn-google:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);transform:translateY(-1px)}
 
     /* ── TOAST NOTIFICATIONS ── */
     .toast-container{position:fixed;top:80px;right:20px;z-index:500;display:flex;flex-direction:column;gap:.6rem;pointer-events:none;max-width:calc(100% - 40px)}
@@ -154,7 +148,7 @@
     }
 
     /* ── HERO ── */
-    #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:8rem 2rem 5rem}
+    #hero{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:calc(var(--nav-h) + 3.5rem) 2rem 4rem}
     #hero::before{content:'';position:absolute;top:0;left:0;right:0;height:130px;background:linear-gradient(to bottom,#07080F 0%,transparent 100%);z-index:2;pointer-events:none}
     #hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:160px;background:linear-gradient(to top,#07080F 0%,transparent 100%);z-index:2;pointer-events:none}
     .hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(37,99,235,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.05) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 25%,transparent 100%)}
@@ -422,7 +416,7 @@
     @media(max-width:960px){
       .nav-links,.nav-auth,.nav-live{display:none!important}
       .nav-toggle{display:flex}
-      #hero{padding:7rem 1.5rem 4rem}
+      #hero{padding:calc(var(--nav-h) + 2rem) 1.5rem 3.5rem}
       #how-it-works{padding:6rem 1.5rem 4rem}
       #pricing{padding:4rem 1.5rem 5rem}
       #services{padding:5rem 1.5rem 4.5rem}
@@ -441,7 +435,7 @@
       .nav-logo-img{width:34px;height:34px}
       .nav-wordmark{display:none}
       .mobile-menu a{font-size:.78rem;padding:.8rem .9rem}
-      #hero{padding:6rem 1.1rem 3.5rem}
+      #hero{padding:calc(var(--nav-h-sm) + 1.5rem) 1rem 3rem}
       .hero-badge{font-size:.62rem;letter-spacing:.16em;padding:.4rem 1rem;margin-bottom:1.5rem}
       .hero-logo-wrap{width:200px;height:200px;margin-bottom:1.25rem}
       .hero-logo{width:110px;height:110px}
@@ -711,6 +705,7 @@
       <li><a href="#services">Features</a></li>
     </ul>
     <div class="nav-live" id="nav-live"><span class="nav-live-dot"></span><span id="live-count">247</span>&nbsp;live</div>
+    <div class="nav-spacer" aria-hidden="true"></div>
     <div class="nav-auth" id="nav-auth-area">
       <div id="nav-loggedout" style="display:flex;gap:.5rem;align-items:center">
         <button class="btn-ghost" style="padding:.55rem 1.25rem;font-size:.75rem" onclick="openAuthModal('signin')">Login</button>
@@ -761,11 +756,11 @@
 
 <!-- ── AUTH MODAL ── -->
 <div class="modal-overlay" id="auth-modal">
-  <div class="modal" style="max-width:420px">
+  <div class="modal" style="max-width:400px">
     <div class="modal-top">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
       <div class="modal-title">AlphaEdge — Access</div>
-      <div class="modal-sub">Sign in or create your free account</div>
+      <div class="modal-sub">Sign in or create your account</div>
     </div>
     <div class="modal-body">
       <div class="auth-tabs">
@@ -777,11 +772,6 @@
       <div class="auth-msg" id="auth-error"></div>
       <div class="auth-msg" id="auth-success"></div>
       <button class="btn-auth" id="auth-submit-btn" onclick="handleAuth()">Sign In</button>
-      <div class="auth-divider"><span>or</span></div>
-      <button class="btn-google" onclick="signInWithGoogle()">
-        <svg viewBox="0 0 24 24" width="18" height="18" style="flex-shrink:0"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66 2.84-.81-.62-.19-.14z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
       <div class="auth-switch" id="auth-switch">
         <span id="auth-switch-text">New here?</span><a id="auth-switch-link" onclick="switchAuthTab(authTab === 'signin' ? 'signup' : 'signin')">Create an account</a>
       </div>
