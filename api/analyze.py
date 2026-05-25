@@ -11,9 +11,24 @@ app = Flask(__name__)
 
 SUPABASE_URL    = os.environ.get("SUPABASE_URL",         "https://qbzbbrfooscngonzpzmz.supabase.co")
 SUPABASE_SVC    = os.environ.get("SUPABASE_SERVICE_KEY", "")
-WALLET_ADDRESS  = "0x38621289ac44502529758704689a5a1afa4e9fd0"
+WALLET_BEP20    = "0x38621289ac44502529758704689a5a1afa4e9fd0"
+WALLET_TRC20    = "TC8aiK8V1wteKL9yN8BgPw6s2Pnb26MKGU"
+WALLET_ADDRESS  = WALLET_BEP20  # kept for backward compatibility
 ADMIN_EMAIL     = "mohammadjaved0409@gmail.com"
 SESSION_MS      = 24 * 60 * 60 * 1000   # 24 h in ms
+
+NETWORKS = {
+    "bep20": {
+        "label":   "BEP-20 (Binance Smart Chain)",
+        "address": WALLET_BEP20,
+        "hint":    "EVM-style address starting with 0x, BSC explorer (bscscan)",
+    },
+    "trc20": {
+        "label":   "TRC-20 (Tron)",
+        "address": WALLET_TRC20,
+        "hint":    "Tron address starting with T, Tron explorer (tronscan)",
+    },
+}
 
 SYSTEM_PROMPT = (
     "You are an elite Forex and Stock trader with 20 years of experience. "
@@ -131,25 +146,40 @@ def validate_payment():
         img_data   = data.get("image_data", "")
         img_type   = data.get("image_type", "image/png")
         user_email = data.get("email", "").strip().lower()
+        network    = (data.get("network") or "bep20").strip().lower()
 
         if not img_data:
             return jsonify({"valid": False, "reason": "No screenshot provided."}), 400
 
+        net_cfg = NETWORKS.get(network, NETWORKS["bep20"])
+        expected_address = net_cfg["address"]
+        net_label        = net_cfg["label"]
+        net_hint         = net_cfg["hint"]
+
+        # Accept the *other* network as a "wrong chain" failure rather than silent
+        other_addresses = [v["address"] for k, v in NETWORKS.items() if k != network]
+
         prompt = f"""You are a strict payment fraud-detection system for a trading platform.
 
-Carefully examine this screenshot and verify ALL of the following:
-1. Is this the Binance app or Binance website? (look for Binance branding/logo/UI)
-2. Is the transaction status COMPLETED or SUCCESSFUL? (not pending, not failed)
-3. Is the recipient wallet address exactly or partially matching: {WALLET_ADDRESS} ?
-4. Is the token USDT?
-5. Is the amount at least 5 USDT?
+The user claims they sent USDT on the {net_label} network. The expected recipient wallet for this network is:
+{expected_address}
+({net_hint})
 
-If ANY of the five checks fails → valid = false.
+Carefully examine the screenshot and verify ALL of the following:
+1. Is this a real cryptocurrency wallet/exchange transaction screen (Binance, Trust Wallet, MetaMask, TronLink, OKX, Bybit, Bitget, Coinbase, etc.)?
+2. Is the transaction status COMPLETED, SUCCESSFUL, or CONFIRMED? (not pending, not failed, not rejected)
+3. Is the recipient wallet address exactly or partially matching: {expected_address} ?
+   (If instead it matches one of these other-chain addresses, the user sent on the WRONG network and you must reject: {', '.join(other_addresses)})
+4. Is the token USDT (Tether)?
+5. Is the amount at least 5 USDT?
+6. Is the network on the screenshot {net_label}? (If the screenshot clearly shows a different chain, reject.)
+
+If ANY check fails → valid = false. Be especially strict about the wallet address — partial match is OK but it must clearly be the same address.
 
 Respond ONLY with a raw JSON object (no markdown, no extra text):
-{{"valid": true, "reason": "Binance USDT transfer confirmed to correct wallet"}}
+{{"valid": true, "reason": "USDT transfer on {net_label} confirmed to correct wallet"}}
 or
-{{"valid": false, "reason": "exact reason it failed, e.g. wallet address does not match"}}"""
+{{"valid": false, "reason": "exact reason it failed"}}"""
 
         msg = claude().messages.create(
             model="claude-haiku-4-5-20251001",
@@ -165,7 +195,7 @@ or
 
         result = _parse_json(msg.content[0].text)
         if not result:
-            result = {"valid": False, "reason": "Could not read the screenshot. Please upload a clear Binance confirmation."}
+            result = {"valid": False, "reason": "Could not read the screenshot. Please upload a clear transaction confirmation."}
 
         if result.get("valid"):
             expires_at = int(time.time() * 1000) + SESSION_MS
@@ -182,7 +212,7 @@ or
                             "screenshot_verdict": "approved",
                             "verdict_reason":     result.get("reason", ""),
                             "status":             "active",
-                            "amount":             "$5 USDT",
+                            "amount":             f"$5 USDT · {net_label}",
                             "expires_at":         expires_at,
                         },
                         timeout=6,

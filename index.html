@@ -91,6 +91,27 @@
     .btn-auth{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--blue);border:none;border-radius:9999px;color:#fff;font-family:'Kanit',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;padding:.95rem 2rem;font-size:.9rem;transition:opacity .2s,transform .2s;box-shadow:0 8px 28px var(--blue-glow)}
     .btn-auth:hover{opacity:.88;transform:translateY(-2px)}
     .btn-auth:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .auth-switch{text-align:center;margin-top:1.1rem;font-size:.74rem;color:var(--muted);font-weight:400;letter-spacing:.04em}
+    .auth-switch a{color:var(--blue-bright);font-weight:700;text-decoration:none;cursor:pointer;margin-left:.35rem;border-bottom:1px solid transparent;transition:border-color .2s,opacity .2s}
+    .auth-switch a:hover{opacity:.85;border-bottom-color:var(--blue-bright)}
+
+    /* ── TOAST NOTIFICATIONS ── */
+    .toast-container{position:fixed;top:80px;right:20px;z-index:500;display:flex;flex-direction:column;gap:.6rem;pointer-events:none;max-width:calc(100% - 40px)}
+    .toast{display:flex;align-items:center;gap:.85rem;background:rgba(11,13,22,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(96,165,250,.28);border-radius:14px;padding:.9rem 1.2rem;min-width:280px;max-width:360px;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(96,165,250,.05);pointer-events:auto;transform:translateX(120%);opacity:0;transition:transform .45s cubic-bezier(.4,0,.2,1),opacity .25s}
+    .toast.show{transform:translateX(0);opacity:1}
+    .toast.success{border-color:rgba(34,197,94,.42)}
+    .toast.error{border-color:rgba(248,81,73,.42)}
+    .toast-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;font-weight:800}
+    .toast.success .toast-icon{background:rgba(34,197,94,.15);color:#22c55e;box-shadow:0 0 18px rgba(34,197,94,.35)}
+    .toast.error .toast-icon{background:rgba(248,81,73,.15);color:var(--red);box-shadow:0 0 18px rgba(248,81,73,.3)}
+    .toast.info .toast-icon{background:var(--blue-dim);color:var(--blue-bright);box-shadow:0 0 18px var(--blue-glow)}
+    .toast-content{flex:1;min-width:0}
+    .toast-title{font-size:.78rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.08em;line-height:1.2}
+    .toast-msg{font-size:.7rem;color:var(--muted);margin-top:.25rem;line-height:1.45;font-weight:400}
+    @media(max-width:640px){
+      .toast-container{top:70px;left:1rem;right:1rem;max-width:none}
+      .toast{min-width:0;width:100%;max-width:100%}
+    }
 
     /* ── HERO ── */
     #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:8rem 2rem 5rem}
@@ -105,12 +126,23 @@
     .hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.28);border-radius:9999px;padding:.45rem 1.3rem;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--blue-bright);margin-bottom:2rem;animation:fua .8s ease both;position:relative;z-index:3}
     .live-dot{width:7px;height:7px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 8px var(--blue-bright);animation:lp 2s ease-in-out infinite;flex-shrink:0}
     @keyframes lp{0%,100%{opacity:1}50%{opacity:.35}}
-    .hero-logo-wrap{position:relative;z-index:3;margin-bottom:1.25rem;animation:fua .8s .06s ease both}
-    .hero-logo{width:100px;height:100px;object-fit:contain;animation:logo-pulse 4s ease-in-out infinite}
-    @keyframes logo-pulse{
-      0%,100%{filter:drop-shadow(0 0 18px rgba(37,99,235,.75)) drop-shadow(0 0 50px rgba(37,99,235,.35))}
-      50%{filter:drop-shadow(0 0 30px rgba(96,165,250,.95)) drop-shadow(0 0 80px rgba(37,99,235,.55))}
-    }
+    .hero-logo-wrap{position:relative;z-index:3;margin-bottom:1.5rem;animation:fua .8s .06s ease both;perspective:1200px;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
+    .hero-logo-3d{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;animation:logo-float 6s ease-in-out infinite}
+    .hero-logo{position:relative;z-index:3;width:120px;height:120px;object-fit:contain;animation:logo-spin 16s linear infinite;filter:drop-shadow(0 0 22px rgba(96,165,250,.7)) drop-shadow(0 0 60px rgba(37,99,235,.45))}
+    .logo-glow{position:absolute;top:50%;left:50%;width:180px;height:180px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.35) 0%,transparent 65%);filter:blur(22px);animation:logo-glow-pulse 3.6s ease-in-out infinite;pointer-events:none;z-index:1}
+    .logo-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid rgba(96,165,250,.25);pointer-events:none;z-index:2}
+    .logo-ring.r1{width:160px;height:160px;margin:-80px 0 0 -80px;border-style:dashed;animation:ring-spin 9s linear infinite}
+    .logo-ring.r2{width:200px;height:200px;margin:-100px 0 0 -100px;border-color:rgba(96,165,250,.16);animation:ring-spin-rev 14s linear infinite}
+    .logo-ring.r3{width:240px;height:240px;margin:-120px 0 0 -120px;border-color:rgba(96,165,250,.08);border-top-color:rgba(96,165,250,.55);animation:ring-spin 7s linear infinite}
+    .logo-orbit{position:absolute;top:50%;left:50%;width:200px;height:200px;margin:-100px 0 0 -100px;animation:ring-spin 11s linear infinite;pointer-events:none;z-index:2}
+    .logo-orbit::before,.logo-orbit::after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 14px var(--blue-bright),0 0 28px rgba(96,165,250,.55)}
+    .logo-orbit::before{top:-4px;left:50%;margin-left:-4px}
+    .logo-orbit::after{bottom:-4px;left:50%;margin-left:-4px;width:5px;height:5px;opacity:.7}
+    @keyframes logo-spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+    @keyframes logo-float{0%,100%{transform:translateY(0) rotateZ(-1.5deg)}50%{transform:translateY(-10px) rotateZ(1.5deg)}}
+    @keyframes logo-glow-pulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}}
+    @keyframes ring-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    @keyframes ring-spin-rev{from{transform:rotate(360deg)}to{transform:rotate(0)}}
     .hero-title{font-size:clamp(2.6rem,12vw,10rem);font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.88;background:linear-gradient(180deg,#8fa8cc 0%,#fff 55%,#c4d4ef 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.25rem;animation:fua .8s .14s ease both;position:relative;z-index:3}
     .hero-tagline{font-size:clamp(.75rem,1.6vw,.95rem);font-weight:300;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;max-width:560px;line-height:1.82;margin-bottom:2.5rem;animation:fua .8s .28s ease both;position:relative;z-index:3}
     .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fua .8s .42s ease both;position:relative;z-index:3}
@@ -182,6 +214,19 @@
     .copy-note{font-size:.6rem;color:var(--blue-bright);margin-top:.35rem;text-transform:uppercase;letter-spacing:.14em;opacity:0;transition:opacity .3s}
     .copy-note.show{opacity:1}
     .network-badge{display:inline-flex;align-items:center;gap:.35rem;background:var(--bnb-dim);border:1px solid rgba(243,186,47,.3);border-radius:9999px;padding:.25rem .7rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--bnb);margin-top:.5rem}
+    .network-badge.trc{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#fca5a5}
+
+    /* ── NETWORK SELECTOR & WARNING ── */
+    .net-tabs{display:flex;gap:.4rem;margin-bottom:1.1rem;padding:.3rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px}
+    .net-tab{flex:1;background:transparent;border:none;border-radius:10px;color:var(--muted);font-family:'Kanit',sans-serif;cursor:pointer;padding:.65rem .5rem;transition:background .2s,color .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;gap:.15rem;line-height:1.2}
+    .net-tab-name{font-size:.78rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.06em}
+    .net-tab-sub{font-size:.56rem;letter-spacing:.16em;font-weight:600;color:var(--muted);text-transform:uppercase}
+    .net-tab.active{background:rgba(37,99,235,.18);box-shadow:inset 0 0 0 1px rgba(37,99,235,.45)}
+    .net-tab.active .net-tab-name{color:var(--blue-bright)}
+    .net-tab.active .net-tab-sub{color:rgba(96,165,250,.75)}
+    .chain-warning{display:flex;align-items:flex-start;gap:.7rem;background:rgba(248,81,73,.07);border:1px solid rgba(248,81,73,.32);border-radius:14px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.73rem;line-height:1.55;color:rgba(248,81,73,.95);font-weight:400}
+    .chain-warning strong{color:#ff6b63;font-weight:700}
+    .chain-warning-icon{font-size:1.15rem;flex-shrink:0;margin-top:.05rem}
     .instructions{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1.25rem}
     .instructions li{font-size:.78rem;font-weight:300;color:rgba(232,240,245,.7);line-height:1.7;list-style-type:none;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
     .instructions li:last-child{border-bottom:none}
@@ -358,7 +403,13 @@
       .mobile-menu a{font-size:.78rem;padding:.8rem .9rem}
       #hero{padding:6rem 1.1rem 3.5rem}
       .hero-badge{font-size:.62rem;letter-spacing:.16em;padding:.4rem 1rem;margin-bottom:1.5rem}
-      .hero-logo{width:74px;height:74px}
+      .hero-logo-wrap{width:200px;height:200px;margin-bottom:1.25rem}
+      .hero-logo{width:90px;height:90px}
+      .logo-glow{width:140px;height:140px}
+      .logo-ring.r1{width:130px;height:130px;margin:-65px 0 0 -65px}
+      .logo-ring.r2{width:170px;height:170px;margin:-85px 0 0 -85px}
+      .logo-ring.r3{width:200px;height:200px;margin:-100px 0 0 -100px}
+      .logo-orbit{width:170px;height:170px;margin:-85px 0 0 -85px}
       .hero-title{font-size:clamp(2.4rem,14vw,4.5rem);white-space:normal;line-height:.92}
       .hero-tagline{font-size:.78rem;letter-spacing:.08em;margin-bottom:2rem;line-height:1.7}
       .hero-tagline br{display:none}
@@ -426,6 +477,9 @@
 </head>
 <body>
 
+<!-- ── TOAST NOTIFICATIONS ── -->
+<div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
@@ -489,7 +543,10 @@
       <div class="auth-msg" id="auth-error"></div>
       <div class="auth-msg" id="auth-success"></div>
       <button class="btn-auth" id="auth-submit-btn" onclick="handleAuth()">Sign In</button>
-      <p style="text-align:center;margin-top:1rem;font-size:.7rem;color:var(--muted);line-height:1.6">Your account tracks your 24h access sessions.<br>Payments are verified instantly — no manual review.</p>
+      <div class="auth-switch" id="auth-switch">
+        <span id="auth-switch-text">New here?</span><a id="auth-switch-link" onclick="switchAuthTab(authTab === 'signin' ? 'signup' : 'signin')">Create an account</a>
+      </div>
+      <p style="text-align:center;margin-top:.9rem;font-size:.7rem;color:var(--muted);line-height:1.6">Your account tracks your 24h access sessions.<br>Payments are verified instantly — no manual review.</p>
     </div>
   </div>
 </div>
@@ -500,7 +557,14 @@
   <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
   <div class="hero-badge"><span class="live-dot"></span>Professional Chart Analysis Platform</div>
   <div class="hero-logo-wrap">
-    <img src="image.png" alt="AlphaEdge" class="hero-logo">
+    <div class="hero-logo-3d">
+      <div class="logo-glow" aria-hidden="true"></div>
+      <div class="logo-ring r3" aria-hidden="true"></div>
+      <div class="logo-ring r2" aria-hidden="true"></div>
+      <div class="logo-ring r1" aria-hidden="true"></div>
+      <div class="logo-orbit" aria-hidden="true"></div>
+      <img src="image.png" alt="AlphaEdge" class="hero-logo">
+    </div>
   </div>
   <h1 class="hero-title">AlphaEdge</h1>
   <p class="hero-tagline">Upload your chart. Get elite-level analysis in seconds.<br>The trading mentor with 20 years of market intelligence — for just $5/day.</p>
@@ -526,7 +590,7 @@
   <div class="trust-item"><span class="trust-icon">⚡</span>Instant Verification</div>
   <div class="trust-item"><span class="trust-icon">🌍</span>Global Traders</div>
   <div class="trust-item"><span class="trust-icon">💎</span>Elite-Grade Analysis</div>
-  <div class="trust-item"><span class="trust-icon">₿</span>Binance Payments</div>
+  <div class="trust-item"><span class="trust-icon">💠</span>USDT Payments</div>
 </div>
 
 <!-- ── HOW IT WORKS ── -->
@@ -543,8 +607,8 @@
     <div class="step-card fade-up" style="transition-delay:.15s">
       <div class="step-num-bg">02</div>
       <div class="step-icon-wrap">💳</div>
-      <div class="step-title">Pay $5 via Binance</div>
-      <p class="step-desc">Send $5 USDT (BEP-20) to our Binance wallet. Upload your confirmation screenshot — verified in seconds, automatically.</p>
+      <div class="step-title">Pay $5 in USDT</div>
+      <p class="step-desc">Send $5 USDT from any wallet — choose BEP-20 (BSC) or TRC-20 (Tron). Upload your confirmation screenshot — verified in seconds.</p>
     </div>
     <div class="step-card fade-up" style="transition-delay:.25s">
       <div class="step-num-bg">03</div>
@@ -573,9 +637,9 @@
       <div class="pf-item"><div class="pf-icon">✓</div>Instant access, no waiting</div>
     </div>
     <button class="btn-pay" onclick="handleGetAccess()">
-      <span style="font-size:1.2rem">₿</span> Pay with Binance — $5 USDT
+      <span style="font-size:1.2rem">💠</span> Pay with USDT — $5 / Day
     </button>
-    <div class="binance-note"><span class="bnb-badge">BEP-20</span> USDT on Binance Smart Chain</div>
+    <div class="binance-note"><span class="bnb-badge">BEP-20</span> or <span class="bnb-badge" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#fca5a5">TRC-20</span> · Any USDT-compatible wallet</div>
     <div class="guarantee">⚡ Our system verifies your payment screenshot instantly. No manual review. No waiting. Access unlocks in seconds.</div>
   </div>
 </div>
@@ -586,7 +650,7 @@
     <div class="modal-top">
       <button class="modal-close" onclick="closePayModal()">✕</button>
       <div class="modal-title">Get AlphaEdge Access</div>
-      <div class="modal-sub">$5 USDT · BEP-20 · 24 Hours Full Access</div>
+      <div class="modal-sub">$5 USDT · Any Wallet · 24 Hours Full Access</div>
     </div>
     <div class="modal-body">
       <div class="steps-indicator">
@@ -603,22 +667,43 @@
           <div class="amount-label">Amount to Send</div>
           <div class="amount-value">5.00 <span class="amount-currency">USDT</span></div>
         </div>
+
+        <div class="net-tabs" role="tablist" aria-label="Choose network">
+          <button class="net-tab active" id="net-tab-bep20" onclick="switchNetwork('bep20')" role="tab" aria-selected="true">
+            <span class="net-tab-name">BEP-20</span>
+            <span class="net-tab-sub">BSC · Binance Smart Chain</span>
+          </button>
+          <button class="net-tab" id="net-tab-trc20" onclick="switchNetwork('trc20')" role="tab" aria-selected="false">
+            <span class="net-tab-name">TRC-20</span>
+            <span class="net-tab-sub">Tron Network</span>
+          </button>
+        </div>
+
+        <div class="chain-warning">
+          <span class="chain-warning-icon">⚠️</span>
+          <div>
+            <strong>Important — match the network exactly.</strong><br>
+            Send <strong>USDT</strong> on the <strong id="warn-net-name">BEP-20 (BSC)</strong> network only.
+            Sending on a different chain (or sending a different token) will result in <strong>permanent loss of funds</strong>. No refunds are possible.
+          </div>
+        </div>
+
         <div class="qr-section">
           <div class="qr-img">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x38621289ac44502529758704689a5a1afa4e9fd0&color=000000&bgcolor=ffffff" alt="Wallet QR" />
+            <img id="wallet-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x38621289ac44502529758704689a5a1afa4e9fd0&color=000000&bgcolor=ffffff" alt="Wallet QR" />
           </div>
           <div class="wallet-info">
             <div class="wallet-label">Wallet Address (tap to copy)</div>
             <div class="wallet-addr" id="wallet-addr" onclick="copyWallet()">0x38621289ac44502529758704689a5a1afa4e9fd0</div>
             <div class="copy-note" id="copy-note">✓ Copied!</div>
-            <div class="network-badge">🔸 BSC · BEP-20 Network</div>
+            <div class="network-badge" id="network-badge">🔸 BSC · BEP-20 Network</div>
           </div>
         </div>
-        <div class="instructions">
-          <li>Open Binance app → Wallets → Send</li>
-          <li>Choose USDT and select <strong>BEP-20 (BSC)</strong> network</li>
-          <li>Paste the wallet address above</li>
-          <li>Enter amount: <strong>5 USDT</strong> and confirm</li>
+        <div class="instructions" id="payment-instructions">
+          <li>Open your wallet (Trust Wallet, MetaMask, Binance, etc.)</li>
+          <li>Select USDT and choose the <strong id="instr-net">BEP-20 (BSC)</strong> network</li>
+          <li>Paste the wallet address above — double-check it matches</li>
+          <li>Enter amount: <strong>5 USDT</strong> and confirm the transaction</li>
           <li>Take a screenshot of the confirmation screen</li>
         </div>
         <button class="btn-paid" onclick="goStep2()">✅ &nbsp;I've Sent the Payment →</button>
@@ -627,11 +712,11 @@
       <!-- STEP 2: Upload proof -->
       <div id="modal-step2" style="display:none">
         <div style="background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.2);border-radius:14px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.75rem;color:var(--blue-bright);line-height:1.6">
-          🔍 <strong>AlphaEdge</strong> will verify your screenshot automatically — checks Binance confirmation, wallet address, amount, and status.
+          🔍 <strong>AlphaEdge</strong> will verify your screenshot automatically — checks the transaction status, wallet address, network, and amount.
         </div>
         <div class="proof-zone" id="proof-zone" onclick="document.getElementById('proof-input').click()">
           <div class="proof-icon">📸</div>
-          <div class="proof-title">Upload Binance Confirmation</div>
+          <div class="proof-title">Upload Transaction Confirmation</div>
           <div class="proof-sub">Tap to select your payment screenshot</div>
         </div>
         <input type="file" id="proof-input" accept="image/*" style="display:none" />
@@ -776,7 +861,7 @@
   <div class="tool-locked" id="tool-locked">
     <span class="lock-icon">🔒</span>
     <div class="lock-title">AlphaEdge — Locked</div>
-    <div class="lock-sub">Create a free account, pay $5 USDT via Binance, and unlock 24-hour full access. Our system verifies your payment instantly.</div>
+    <div class="lock-sub">Create a free account, pay $5 USDT from any wallet (BEP-20 or TRC-20), and unlock 24-hour full access. Our system verifies your payment instantly.</div>
     <button class="btn-pay" style="max-width:340px;margin:0 auto" onclick="handleGetAccess()">
       <span style="font-size:1.2rem">₿</span> Get Access — $5 USDT
     </button>
@@ -919,6 +1004,11 @@ sb.auth.onAuthStateChange(async (event, session) => {
     currentUser = session.user;
     updateNavAuth();
     await checkUserAccess();
+    const pending = sessionStorage.getItem('pendingSignupToast');
+    if (pending) {
+      sessionStorage.removeItem('pendingSignupToast');
+      showToast('success', 'Account created', `Welcome to AlphaEdge, ${pending}`);
+    }
   } else {
     currentUser = null;
     sessionExpiry = null;
@@ -1073,7 +1163,35 @@ function switchAuthTab(tab) {
   document.getElementById('tab-signin').className = 'auth-tab' + (tab === 'signin' ? ' active' : '');
   document.getElementById('tab-signup').className = 'auth-tab' + (tab === 'signup' ? ' active' : '');
   document.getElementById('auth-submit-btn').textContent = tab === 'signin' ? 'Sign In' : 'Create Account';
+  const swText = document.getElementById('auth-switch-text');
+  const swLink = document.getElementById('auth-switch-link');
+  if (swText && swLink) {
+    if (tab === 'signin') {
+      swText.textContent = 'New here?';
+      swLink.textContent = 'Create an account';
+    } else {
+      swText.textContent = 'Already a user?';
+      swLink.textContent = 'Sign in';
+    }
+  }
   clearAuthMsgs();
+}
+
+/* ── Toast notifications ── */
+function showToast(type, title, msg, duration) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || 'info');
+  const icon = type === 'success' ? '✓' : type === 'error' ? '!' : 'i';
+  t.innerHTML = `<div class="toast-icon">${icon}</div><div class="toast-content"><div class="toast-title">${title}</div>${msg ? `<div class="toast-msg">${msg}</div>` : ''}</div>`;
+  container.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  const hold = duration || 4200;
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 500);
+  }, hold);
 }
 function clearAuthMsgs() {
   const e = document.getElementById('auth-error');
@@ -1105,23 +1223,27 @@ async function handleAuth() {
       const { error } = await sb.auth.signInWithPassword({ email, password });
       if (error) throw error;
       closeAuthModal();
+      showToast('success', 'Signed in successfully', `Welcome back, ${email}`);
       if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
     } else {
       const { data, error } = await sb.auth.signUp({ email, password });
-      // Bypass confirmation requirement on frontend (Assuming Supabase has confirmation disabled or we just reload)
-      if(!error) { window.location.reload(); }
       if (error) throw error;
-      if (data.session) {
+      sessionStorage.setItem('pendingSignupToast', email);
+      if (data && data.session) {
         // Auto-confirmed
         closeAuthModal();
+        showToast('success', 'Account created', `Welcome to AlphaEdge, ${email}`);
+        sessionStorage.removeItem('pendingSignupToast');
         if (afterAuthAction === 'payment') { afterAuthAction = null; openPayModal(); }
       } else {
-        showAuthSuccess('✅ Check your email to confirm your account, then sign in.');
-        switchAuthTab('signin');
+        // Email confirmation flow — reload picks up session if confirmation is off
+        showToast('success', 'Account created', 'Check your email to confirm — or sign in now.');
+        window.location.reload();
       }
     }
   } catch (err) {
     showAuthError(err.message || 'Something went wrong. Please try again.');
+    showToast('error', authTab === 'signin' ? 'Sign-in failed' : 'Sign-up failed', err.message || 'Please try again.');
   }
 
   btn.disabled = false;
@@ -1174,11 +1296,51 @@ function resetPayModal() {
 document.getElementById('pay-modal').addEventListener('click', function(e) {
   if (e.target === this) closePayModal();
 });
+/* ── Payment networks ── */
+const PAYMENT_NETWORKS = {
+  bep20: {
+    name: 'BEP-20 (BSC)',
+    badgeText: '🔸 BSC · BEP-20 Network',
+    badgeClass: 'network-badge',
+    address: '0x38621289ac44502529758704689a5a1afa4e9fd0',
+    qr: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x38621289ac44502529758704689a5a1afa4e9fd0&color=000000&bgcolor=ffffff'
+  },
+  trc20: {
+    name: 'TRC-20 (Tron)',
+    badgeText: '🔻 Tron · TRC-20 Network',
+    badgeClass: 'network-badge trc',
+    address: 'TC8aiK8V1wteKL9yN8BgPw6s2Pnb26MKGU',
+    qr: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TC8aiK8V1wteKL9yN8BgPw6s2Pnb26MKGU&color=000000&bgcolor=ffffff'
+  }
+};
+let activeNetwork = 'bep20';
+
+function switchNetwork(net) {
+  if (!PAYMENT_NETWORKS[net]) return;
+  activeNetwork = net;
+  const cfg = PAYMENT_NETWORKS[net];
+  document.getElementById('net-tab-bep20').classList.toggle('active', net === 'bep20');
+  document.getElementById('net-tab-bep20').setAttribute('aria-selected', net === 'bep20');
+  document.getElementById('net-tab-trc20').classList.toggle('active', net === 'trc20');
+  document.getElementById('net-tab-trc20').setAttribute('aria-selected', net === 'trc20');
+  document.getElementById('wallet-addr').textContent = cfg.address;
+  document.getElementById('wallet-qr').src = cfg.qr;
+  const badge = document.getElementById('network-badge');
+  badge.className = cfg.badgeClass;
+  badge.textContent = cfg.badgeText;
+  document.getElementById('warn-net-name').textContent = cfg.name;
+  document.getElementById('instr-net').textContent = cfg.name;
+  const note = document.getElementById('copy-note');
+  if (note) note.classList.remove('show');
+}
+
 function copyWallet() {
-  navigator.clipboard.writeText('0x38621289ac44502529758704689a5a1afa4e9fd0').then(() => {
+  const addr = PAYMENT_NETWORKS[activeNetwork].address;
+  navigator.clipboard.writeText(addr).then(() => {
     const n = document.getElementById('copy-note');
     n.classList.add('show');
     setTimeout(() => n.classList.remove('show'), 2500);
+    showToast('success', 'Address copied', `${PAYMENT_NETWORKS[activeNetwork].name} wallet address`);
   });
 }
 function goStep2() {
@@ -1215,16 +1377,16 @@ async function validateAndUnlock() {
     const res  = await fetch('/api/validate-payment', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ image_data: b64, image_type: proofFile.type || 'image/png', email: currentUser.email })
+      body:    JSON.stringify({ image_data: b64, image_type: proofFile.type || 'image/png', email: currentUser.email, network: activeNetwork })
     });
     const data = await res.json();
 
     if (data.valid) {
-      // Show success
       const s = document.getElementById('unlock-success');
       s.textContent = '✅ Payment verified! Unlocking your 24-hour access...';
       s.style.display = 'block';
       btn.style.display = 'none';
+      showToast('success', 'Payment verified', 'Your 24-hour access is unlocking now.');
       setTimeout(() => {
         closePayModal();
         showUnlockedTool(data.expires_at);
@@ -1232,7 +1394,7 @@ async function validateAndUnlock() {
       }, 1800);
     } else {
       const e = document.getElementById('unlock-error');
-      e.innerHTML = `❌ <strong>Payment not verified.</strong><br>${data.reason || 'Please upload a clear Binance confirmation screenshot.'}`;
+      e.innerHTML = `❌ <strong>Payment not verified.</strong><br>${data.reason || 'Please upload a clear transaction confirmation screenshot.'}`;
       e.style.display = 'block';
       btn.disabled = false;
       btn.innerHTML = '🔍 &nbsp;Try Again';
