@@ -85,7 +85,7 @@ will-change:transform;
     .nav-toggle.open span::after{top:0;transform:rotate(-45deg)}
     /* Mobile menu */
     .mobile-menu{
-      position:fixed;top:var(--nav-h);left:0;right:0;
+      position:fixed;top:calc(var(--nav-h) - 1px);left:0;right:0;display:none;
       background:rgba(6,7,14,.98);
       backdrop-filter:blur(32px) saturate(180%);
       -webkit-backdrop-filter:blur(32px) saturate(180%);
