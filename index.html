@@ -988,11 +988,11 @@ if(typeof marked!=='undefined') marked.setOptions({breaks:true,gfm:true});
 ══════════════════════════════════════════════════════════════ */
 const SUPABASE_URL  = 'https://qbzbbrfooscngonzpzmz.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFiemJicmZvb3Njbmdvbnpwem16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MjQ5ODEsImV4cCI6MjA5NTIwMDk4MX0.ZqGx1rrZkVPdy-OqzbnnUGRNk4CcHhHPaD6ncnu5JLA';
-const ADMIN_EMAIL   = 'mohammadjaved0409@gmail.com';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 let currentUser  = null;
+let isAdminUser  = false;
 let sessionExpiry = null;  // ms timestamp
 let timerInterval = null;
 
@@ -1011,6 +1011,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
     }
   } else {
     currentUser = null;
+    isAdminUser = false;
     sessionExpiry = null;
     clearInterval(timerInterval);
     updateNavAuth();
@@ -1022,15 +1023,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
 async function checkUserAccess() {
   if (!currentUser) return;
 
-  // Admin has unlimited access
-  if (currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-    sessionExpiry = null; // no expiry for admin
-    showUnlockedTool(null);
-    await loadAdminPanel();
-    return;
-  }
-
-  // Ask backend if user has active payment
+  // Ask backend if user has active payment or is admin
   try {
     const res = await fetch('/api/check-access', {
       method: 'POST',
@@ -1038,18 +1031,31 @@ async function checkUserAccess() {
       body: JSON.stringify({ email: currentUser.email })
     });
     const data = await res.json();
+
+    isAdminUser = data.isAdmin === true;
+    updateNavAuth(); // Refresh UI state based on new admin status
+
+    if (isAdminUser) {
+      sessionExpiry = null; // no expiry for admin
+      showUnlockedTool(null);
+      await loadAdminPanel();
+      return;
+    }
+
     if (data.hasAccess) {
       showUnlockedTool(data.expiresAt);
     } else {
       showLockedTool();
     }
   } catch (e) {
+    isAdminUser = false;
+    updateNavAuth();
     showLockedTool();
   }
 }
 
 function updateNavAuth() {
-  const isAdmin = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  const isAdmin = isAdminUser;
   document.getElementById('nav-loggedout').style.display = currentUser ? 'none' : 'flex';
   const li = document.getElementById('nav-loggedin');
   li.style.display = currentUser ? 'flex' : 'none';
@@ -1260,7 +1266,7 @@ function handleGetAccess() {
     return;
   }
   // Admin doesn't pay
-  if (currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+  if (isAdminUser) {
     document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
     return;
   }
