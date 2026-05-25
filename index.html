@@ -34,18 +34,36 @@
     .btn-pay:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
     /* ── NAV ── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;background:rgba(7,8,15,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(37,99,235,.13)}
-    .nav-logo{display:flex;align-items:center;gap:.65rem;cursor:default;user-select:none}
-    .nav-logo-img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(37,99,235,.65))}
-    .nav-wordmark{font-size:1.18rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.03em;line-height:1}
-    .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{color:var(--text);text-decoration:none;font-weight:500;font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;opacity:.45;transition:opacity .2s,color .2s}
-    .nav-links a:hover{opacity:1;color:var(--blue-bright)}
-    #nav-loggedin{display:none;align-items:center;gap:.75rem}
-    .nav-user-email{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .admin-badge{background:linear-gradient(135deg,var(--blue),#1d4ed8);border-radius:9999px;padding:.2rem .7rem;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#fff}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,15,.72);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(96,165,250,.12);box-shadow:0 1px 0 rgba(96,165,250,.05),0 8px 32px rgba(0,0,0,.35)}
+    .nav-inner{max-width:1280px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:1.25rem;padding:.7rem 1.5rem;min-height:64px}
+    .nav-logo{display:flex;align-items:center;gap:.55rem;cursor:default;user-select:none;flex-shrink:0}
+    .nav-logo-img{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(96,165,250,.55))}
+    .nav-wordmark{font-size:1.05rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.04em;line-height:1}
+    .nav-links{display:flex;align-items:center;gap:.25rem;list-style:none;padding:.3rem;background:rgba(255,255,255,.025);border:1px solid rgba(96,165,250,.09);border-radius:9999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    .nav-links a{position:relative;display:inline-flex;align-items:center;color:var(--text);text-decoration:none;font-weight:500;font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;opacity:.62;padding:.5rem .95rem;border-radius:9999px;transition:opacity .25s,color .25s,background .25s}
+    .nav-links a:hover{opacity:1;color:var(--blue-bright);background:rgba(96,165,250,.08)}
+    .nav-links a::after{content:'';position:absolute;left:50%;bottom:.3rem;width:0;height:1px;background:var(--blue-bright);transition:width .25s ease,left .25s ease;border-radius:1px}
+    .nav-links a:hover::after{width:55%;left:22.5%}
+    .nav-auth{display:flex;align-items:center;gap:.55rem;flex-shrink:0}
+    #nav-loggedin{display:none;align-items:center;gap:.6rem}
+    .nav-user-email{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .admin-badge{background:linear-gradient(135deg,var(--blue),#1d4ed8);border-radius:9999px;padding:.2rem .7rem;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#fff;white-space:nowrap}
     .btn-nav-sm{background:transparent;border:1px solid var(--border);border-radius:9999px;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.38rem .9rem;transition:border-color .2s,color .2s}
     .btn-nav-sm:hover{border-color:var(--red);color:var(--red)}
+    .nav-toggle{display:none;background:transparent;border:1px solid rgba(96,165,250,.18);border-radius:10px;width:40px;height:40px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;padding:0;position:relative}
+    .nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{display:block;width:18px;height:1.5px;background:#fff;border-radius:1px;transition:transform .25s ease,opacity .25s ease,top .25s ease}
+    .nav-toggle span{position:relative}
+    .nav-toggle span::before,.nav-toggle span::after{content:'';position:absolute;left:0}
+    .nav-toggle span::before{top:-6px}.nav-toggle span::after{top:6px}
+    .nav-toggle.open span{background:transparent}
+    .nav-toggle.open span::before{top:0;transform:rotate(45deg)}
+    .nav-toggle.open span::after{top:0;transform:rotate(-45deg)}
+    .mobile-menu{position:fixed;top:64px;left:0;right:0;background:rgba(7,8,15,.97);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(96,165,250,.15);padding:1rem 1.25rem 1.5rem;transform:translateY(-110%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:199;display:flex;flex-direction:column;gap:.35rem;max-height:calc(100vh - 64px);overflow-y:auto}
+    .mobile-menu.open{transform:translateY(0)}
+    .mobile-menu a{color:var(--text);text-decoration:none;font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;padding:.85rem 1rem;border-radius:12px;transition:background .2s,color .2s}
+    .mobile-menu a:hover,.mobile-menu a:active{background:rgba(96,165,250,.08);color:var(--blue-bright)}
+    .mobile-menu-auth{display:flex;flex-direction:column;gap:.55rem;margin-top:.85rem;padding-top:1rem;border-top:1px solid rgba(96,165,250,.1)}
+    .mobile-menu-auth .nav-user-email{max-width:100%;text-align:center;padding:.35rem 0}
 
     /* ── AUTH MODAL ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
@@ -181,10 +199,18 @@
     .unlock-success{display:none;font-size:.78rem;padding:.65rem 1rem;border-radius:10px;margin-top:.75rem;color:var(--blue-bright);background:var(--blue-dim);border:1px solid rgba(37,99,235,.3);line-height:1.5}
 
     /* ── REVIEWS ── */
-    #reviews{padding:6rem 2rem;background:#07080F;position:relative;overflow:hidden}
+    #reviews{padding:6rem 0;background:#07080F;position:relative;overflow:hidden}
     #reviews::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(37,99,235,.04) 0%,transparent 100%);pointer-events:none}
-    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;max-width:1100px;margin:0 auto}
+    #reviews .section-eyebrow,#reviews .section-title{padding:0 2rem}
+    .reviews-marquee{position:relative;width:100%;overflow:hidden;display:flex;flex-direction:column;gap:1rem;padding:.5rem 0;margin-top:1rem;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
+    .reviews-track{display:flex;gap:1rem;width:max-content;flex-shrink:0;animation:marquee-left 60s linear infinite;will-change:transform}
+    .reviews-track.reverse{animation:marquee-right 70s linear infinite}
+    .reviews-marquee:hover .reviews-track{animation-play-state:paused}
+    @keyframes marquee-left{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+    @keyframes marquee-right{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+    @media(prefers-reduced-motion:reduce){.reviews-track{animation-duration:160s}}
     .review-card{position:relative;overflow:hidden;background:rgba(255,255,255,.028);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(37,99,235,.1);border-radius:24px;padding:1.5rem;transition:border-color .3s,transform .3s,box-shadow .3s}
+    .reviews-marquee .review-card{flex:0 0 320px;width:320px;min-width:320px}
     .review-card:hover{border-color:rgba(37,99,235,.32);transform:translateY(-4px);box-shadow:0 20px 60px rgba(37,99,235,.1)}
     .review-card::before{content:'';position:absolute;width:140px;height:140px;background:radial-gradient(circle,rgba(37,99,235,.1) 0%,transparent 70%);border-radius:50%;animation:blob-move var(--dur,6s) ease-in-out infinite;animation-delay:var(--delay,0s);pointer-events:none;top:-30px;left:-30px}
     @keyframes blob-move{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,60px) scale(1.4)}66%{transform:translate(20px,120px) scale(.8)}}
@@ -306,21 +332,28 @@
 
     .fade-up{opacity:0;transform:translateY(36px);transition:opacity .78s ease,transform .78s ease}
     .fade-up.visible{opacity:1;transform:translateY(0)}
+    @media(max-width:960px){
+      .nav-links,.nav-auth{display:none!important}
+      .nav-toggle{display:flex}
+    }
     @media(max-width:640px){
-      nav{padding:.9rem 1.25rem}
-      .nav-links{gap:1.25rem}
-      .nav-wordmark{display:none}
+      .nav-inner{padding:.6rem 1rem;min-height:58px}
+      .mobile-menu{top:58px}
+      .nav-wordmark{font-size:.95rem}
       .hero-logo{width:78px;height:78px}
       .hero-title{font-size:clamp(2.4rem,15vw,5rem);white-space:normal}
       .hero-stats{gap:1.5rem}
       .stat-sep{display:none}
       #services{border-radius:0}
       .service-row{flex-direction:column;gap:.3rem}
-      .reviews-grid{grid-template-columns:1fr}
+      .reviews-marquee .review-card{flex:0 0 280px;width:280px;min-width:280px}
       .qr-section{flex-direction:column}
       .admin-stats-grid{grid-template-columns:1fr}
       .nav-user-email{max-width:110px}
       .trust-bar{gap:1.2rem;padding:1rem 1.25rem}
+    }
+    @media(max-width:380px){
+      .nav-wordmark{display:none}
     }
   </style>
 </head>
@@ -328,25 +361,45 @@
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="nav-logo">
-    <img src="image.png" alt="AlphaEdge" class="nav-logo-img">
-    <span class="nav-wordmark">AlphaEdge</span>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-    <li><a href="#tool">Tool</a></li>
-    <li><a href="#services">Features</a></li>
-  </ul>
-  <div id="nav-auth-area" style="display:flex;align-items:center;gap:.75rem">
-    <div id="nav-loggedout" style="display:flex;gap:.75rem;align-items:center">
-      <button class="btn-ghost" style="padding:.6rem 1.5rem;font-size:.78rem" onclick="openAuthModal('signin')">Login</button>
-      <button class="btn-primary" onclick="handleGetAccess()">Get Access — $5</button>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="image.png" alt="AlphaEdge" class="nav-logo-img">
+      <span class="nav-wordmark">AlphaEdge</span>
     </div>
-    <div id="nav-loggedin" style="display:none;align-items:center;gap:.75rem">
-      <span id="nav-admin-badge" class="admin-badge" style="display:none">👑 Admin</span>
-      <span class="nav-user-email" id="nav-user-email"></span>
-      <button class="btn-nav-sm" onclick="handleSignOut()">Logout</button>
+    <ul class="nav-links">
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#tool">Tool</a></li>
+      <li><a href="#services">Features</a></li>
+    </ul>
+    <div class="nav-auth" id="nav-auth-area">
+      <div id="nav-loggedout" style="display:flex;gap:.5rem;align-items:center">
+        <button class="btn-ghost" style="padding:.55rem 1.25rem;font-size:.75rem" onclick="openAuthModal('signin')">Login</button>
+        <button class="btn-primary" style="padding:.65rem 1.4rem;font-size:.78rem" onclick="handleGetAccess()">Get Access — $5</button>
+      </div>
+      <div id="nav-loggedin">
+        <span id="nav-admin-badge" class="admin-badge" style="display:none">👑 Admin</span>
+        <span class="nav-user-email" id="nav-user-email"></span>
+        <button class="btn-nav-sm" onclick="handleSignOut()">Logout</button>
+      </div>
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileMenu()">
+      <span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+    <a href="#reviews" onclick="closeMobileMenu()">Reviews</a>
+    <a href="#tool" onclick="closeMobileMenu()">Tool</a>
+    <a href="#services" onclick="closeMobileMenu()">Features</a>
+    <div class="mobile-menu-auth" id="mobile-auth-loggedout">
+      <button class="btn-ghost" style="padding:.75rem 1.5rem;font-size:.78rem;width:100%" onclick="closeMobileMenu();openAuthModal('signin')">Login</button>
+      <button class="btn-primary" style="padding:.85rem 1.5rem;font-size:.82rem;width:100%" onclick="closeMobileMenu();handleGetAccess()">Get Access — $5</button>
+    </div>
+    <div class="mobile-menu-auth" id="mobile-auth-loggedin" style="display:none">
+      <span id="mobile-admin-badge" class="admin-badge" style="display:none;align-self:center">👑 Admin</span>
+      <span class="nav-user-email" id="mobile-user-email"></span>
+      <button class="btn-nav-sm" style="width:100%;padding:.75rem 1rem;font-size:.78rem" onclick="closeMobileMenu();handleSignOut()">Logout</button>
     </div>
   </div>
 </nav>
@@ -528,66 +581,114 @@
 <section id="reviews">
   <div class="section-eyebrow fade-up">What Traders Say</div>
   <h2 class="section-title fade-up" style="transition-delay:.1s">Real Results.<br>Real Traders.</h2>
-  <div class="reviews-grid">
+  <div class="reviews-marquee" aria-label="Trader testimonials">
 
-    <div class="review-card fade-up" style="--dur:7s;--delay:0s;transition-delay:.05s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Made $340 profit in 2 hours following the BUY signal on EUR/USD. This is absolutely insane. I've been trading for 3 years and never had accuracy like this."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/71.jpg" alt="Ahmed K." /><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
+    <div class="reviews-track" aria-hidden="false">
+      <div class="review-card" style="--dur:7s;--delay:0s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Made $340 profit in 2 hours following the BUY signal on EUR/USD. This is absolutely insane. I've been trading for 3 years and never had accuracy like this."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/71.jpg" alt="Ahmed K." /><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
+      </div>
+      <div class="review-card" style="--dur:8s;--delay:-1.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Called the exact resistance on Gold to the pip. Closed +180 pips on that single trade. Best $5 I've ever spent — made it back in 15 minutes flat."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marcus T." /><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
+      </div>
+      <div class="review-card" style="--dur:6s;--delay:-3s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Complete beginner here. AlphaEdge explained every chart pattern like a real mentor. Up $220 this week just following its guidance. Mind blown."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya M." /><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
+      </div>
+      <div class="review-card" style="--dur:9s;--delay:-0.8s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"SELL signal on BTC/USDT was spot on. Hit my target price in under 30 minutes. I was skeptical at first but this thing is genuinely accurate."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="Carlos R." /><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
+      </div>
+      <div class="review-card" style="--dur:7.5s;--delay:-2s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Made my $5 back in literally 15 minutes on one EUR/GBP trade. Then made another $180 the same day. This tool pays for itself in the first trade."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/21.jpg" alt="Sofia L." /><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
+      </div>
+      <!-- duplicate set for seamless loop -->
+      <div class="review-card" aria-hidden="true" style="--dur:7s;--delay:0s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Made $340 profit in 2 hours following the BUY signal on EUR/USD. This is absolutely insane. I've been trading for 3 years and never had accuracy like this."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/71.jpg" alt="" /><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:8s;--delay:-1.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Called the exact resistance on Gold to the pip. Closed +180 pips on that single trade. Best $5 I've ever spent — made it back in 15 minutes flat."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="" /><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:6s;--delay:-3s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Complete beginner here. AlphaEdge explained every chart pattern like a real mentor. Up $220 this week just following its guidance. Mind blown."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="" /><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:9s;--delay:-0.8s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"SELL signal on BTC/USDT was spot on. Hit my target price in under 30 minutes. I was skeptical at first but this thing is genuinely accurate."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="" /><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:7.5s;--delay:-2s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Made my $5 back in literally 15 minutes on one EUR/GBP trade. Then made another $180 the same day. This tool pays for itself in the first trade."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/21.jpg" alt="" /><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
+      </div>
     </div>
 
-    <div class="review-card fade-up" style="--dur:8s;--delay:-1.5s;transition-delay:.1s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Called the exact resistance on Gold to the pip. Closed +180 pips on that single trade. Best $5 I've ever spent — made it back in 15 minutes flat."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marcus T." /><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:6s;--delay:-3s;transition-delay:.15s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Complete beginner here. AlphaEdge explained every chart pattern like a real mentor. Up $220 this week just following its guidance. Mind blown."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya M." /><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:9s;--delay:-0.8s;transition-delay:.2s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"SELL signal on BTC/USDT was spot on. Hit my target price in under 30 minutes. I was skeptical at first but this thing is genuinely accurate."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="Carlos R." /><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:7.5s;--delay:-2s;transition-delay:.25s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Made my $5 back in literally 15 minutes on one EUR/GBP trade. Then made another $180 the same day. This tool pays for itself in the first trade."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/21.jpg" alt="Sofia L." /><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:8.5s;--delay:-4s;transition-delay:.3s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Called the NASDAQ breakout before it happened. I was in the trade before everyone else. Felt like having insider information — completely legal, just pure intelligence."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/83.jpg" alt="James O." /><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:6.5s;--delay:-1s;transition-delay:.35s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Was losing money every week. Since using AlphaEdge I'm up $480 this month alone. It doesn't just give signals — it teaches you WHY. Life changing honestly."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Layla H." /><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:7s;--delay:-3.5s;transition-delay:.4s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"The candlestick analysis is better than any $200 course I've bought. Worth 100x the price. I ask follow-up questions and it explains like a real trading coach."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/12.jpg" alt="Ravi S." /><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:9.5s;--delay:-2.5s;transition-delay:.45s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Asked 20 follow-up questions after the analysis and it answered every single one perfectly. It remembers the chart context. Felt like talking to a genuine trading veteran."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/33.jpg" alt="Emma W." /><div><div class="author-name">Emma W.</div><div class="author-loc">🇦🇺 Australia · Day Trader</div></div><div class="profit-chip">+$140</div></div>
-    </div>
-
-    <div class="review-card fade-up" style="--dur:8s;--delay:-0.5s;transition-delay:.5s">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
-      <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/60.jpg" alt="Yusuf A." /><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
+    <div class="reviews-track reverse" aria-hidden="false">
+      <div class="review-card" style="--dur:8.5s;--delay:-4s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Called the NASDAQ breakout before it happened. I was in the trade before everyone else. Felt like having insider information — completely legal, just pure intelligence."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/83.jpg" alt="James O." /><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
+      </div>
+      <div class="review-card" style="--dur:6.5s;--delay:-1s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Was losing money every week. Since using AlphaEdge I'm up $480 this month alone. It doesn't just give signals — it teaches you WHY. Life changing honestly."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Layla H." /><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
+      </div>
+      <div class="review-card" style="--dur:7s;--delay:-3.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"The candlestick analysis is better than any $200 course I've bought. Worth 100x the price. I ask follow-up questions and it explains like a real trading coach."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/12.jpg" alt="Ravi S." /><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
+      </div>
+      <div class="review-card" style="--dur:9.5s;--delay:-2.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Asked 20 follow-up questions after the analysis and it answered every single one perfectly. It remembers the chart context. Felt like talking to a genuine trading veteran."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/33.jpg" alt="Emma W." /><div><div class="author-name">Emma W.</div><div class="author-loc">🇦🇺 Australia · Day Trader</div></div><div class="profit-chip">+$140</div></div>
+      </div>
+      <div class="review-card" style="--dur:8s;--delay:-0.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/60.jpg" alt="Yusuf A." /><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
+      </div>
+      <!-- duplicate set for seamless loop -->
+      <div class="review-card" aria-hidden="true" style="--dur:8.5s;--delay:-4s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Called the NASDAQ breakout before it happened. I was in the trade before everyone else. Felt like having insider information — completely legal, just pure intelligence."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/83.jpg" alt="" /><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:6.5s;--delay:-1s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Was losing money every week. Since using AlphaEdge I'm up $480 this month alone. It doesn't just give signals — it teaches you WHY. Life changing honestly."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="" /><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:7s;--delay:-3.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"The candlestick analysis is better than any $200 course I've bought. Worth 100x the price. I ask follow-up questions and it explains like a real trading coach."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/12.jpg" alt="" /><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:9.5s;--delay:-2.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Asked 20 follow-up questions after the analysis and it answered every single one perfectly. It remembers the chart context. Felt like talking to a genuine trading veteran."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/33.jpg" alt="" /><div><div class="author-name">Emma W.</div><div class="author-loc">🇦🇺 Australia · Day Trader</div></div><div class="profit-chip">+$140</div></div>
+      </div>
+      <div class="review-card" aria-hidden="true" style="--dur:8s;--delay:-0.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/60.jpg" alt="" /><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
+      </div>
     </div>
 
   </div>
@@ -795,11 +896,39 @@ function updateNavAuth() {
   document.getElementById('nav-loggedout').style.display = currentUser ? 'none' : 'flex';
   const li = document.getElementById('nav-loggedin');
   li.style.display = currentUser ? 'flex' : 'none';
+  const mOut = document.getElementById('mobile-auth-loggedout');
+  const mIn = document.getElementById('mobile-auth-loggedin');
+  if (mOut) mOut.style.display = currentUser ? 'none' : 'flex';
+  if (mIn) mIn.style.display = currentUser ? 'flex' : 'none';
   if (currentUser) {
     const em = currentUser.email;
-    document.getElementById('nav-user-email').textContent = em.length > 22 ? em.slice(0, 20) + '…' : em;
+    const short = em.length > 22 ? em.slice(0, 20) + '…' : em;
+    document.getElementById('nav-user-email').textContent = short;
     document.getElementById('nav-admin-badge').style.display = isAdmin ? 'inline-block' : 'none';
+    const mEmail = document.getElementById('mobile-user-email');
+    const mBadge = document.getElementById('mobile-admin-badge');
+    if (mEmail) mEmail.textContent = short;
+    if (mBadge) mBadge.style.display = isAdmin ? 'inline-block' : 'none';
   }
+}
+
+function toggleMobileMenu() {
+  const btn = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const isOpen = menu.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+function closeMobileMenu() {
+  const btn = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.remove('open');
+  btn.classList.remove('open');
+  btn.setAttribute('aria-expanded', 'false');
+  menu.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
 }
 
 /* ── Tool visibility ── */
