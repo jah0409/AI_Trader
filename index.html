@@ -36,7 +36,8 @@
     .btn-pay:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
     /* ── NAV ── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,15,.72);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(96,165,250,.12);box-shadow:0 1px 0 rgba(96,165,250,.05),0 8px 32px rgba(0,0,0,.35);transform:translateZ(0);-webkit-transform:translateZ(0);will-change:transform}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,15,.78);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:none;box-shadow:0 8px 40px rgba(0,0,0,.45);transform:translateZ(0);-webkit-transform:translateZ(0);will-change:transform}
+    nav::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(96,165,250,.18) 25%,rgba(37,99,235,.28) 50%,rgba(96,165,250,.18) 75%,transparent 100%);pointer-events:none}
     .nav-inner{max-width:1280px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:1.25rem;padding:.7rem 1.5rem;min-height:64px}
     .nav-logo{display:flex;align-items:center;gap:.55rem;cursor:default;user-select:none;flex-shrink:0}
     .nav-logo-img{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(96,165,250,.55))}
@@ -513,6 +514,82 @@
     .sp-x{position:absolute;top:.5rem;right:.55rem;background:transparent;border:none;color:rgba(232,240,245,.22);cursor:pointer;font-size:.72rem;line-height:1;padding:.2rem;transition:color .2s}
     .sp-x:hover{color:rgba(232,240,245,.7)}
     @media(max-width:640px){.sp-wrap{bottom:14px;left:10px;max-width:calc(100vw - 20px)}}
+
+    /* ── NAV USER PILL (logged-in) ── */
+    .nav-user-pill{display:flex;align-items:center;gap:.48rem;background:rgba(255,255,255,.05);border:1px solid rgba(96,165,250,.16);border-radius:9999px;padding:.28rem .28rem .28rem .6rem;cursor:pointer;position:relative;transition:border-color .2s,background .2s;user-select:none}
+    .nav-user-pill:hover{border-color:rgba(96,165,250,.38);background:rgba(255,255,255,.07)}
+    .nav-u-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;color:#fff;flex-shrink:0;text-transform:uppercase;letter-spacing:.02em}
+    .nav-u-info{display:flex;flex-direction:column;gap:.05rem;min-width:0}
+    .nav-u-name{font-size:.66rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.06em;line-height:1;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .nav-u-status{font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;line-height:1}
+    .nav-u-status.active{color:#22c55e}
+    .nav-u-status.expired{color:var(--red)}
+    .nav-u-status.admin{color:var(--bnb)}
+    .nav-u-caret{font-size:.6rem;color:var(--muted);transition:transform .22s;padding:.15rem .35rem;flex-shrink:0}
+    .nav-u-caret.open{transform:rotate(180deg)}
+    /* Dropdown */
+    .nav-dropdown{position:absolute;top:calc(100% + .7rem);right:0;background:#0c0e1c;border:1px solid rgba(37,99,235,.22);border-radius:18px;padding:.45rem;min-width:210px;box-shadow:0 24px 64px rgba(0,0,0,.75),0 0 0 1px rgba(37,99,235,.05);z-index:400;opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;transition:opacity .2s,transform .2s}
+    .nav-dropdown.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+    .nd-header{padding:.6rem .85rem .55rem;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:.35rem}
+    .nd-email{font-size:.66rem;color:var(--muted);word-break:break-all;line-height:1.45}
+    .nd-item{display:flex;align-items:center;gap:.6rem;padding:.62rem .82rem;border-radius:11px;font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text);cursor:pointer;transition:background .18s,color .18s;text-decoration:none;border:none;background:transparent;width:100%;font-family:'Kanit',sans-serif}
+    .nd-item:hover{background:rgba(37,99,235,.1);color:var(--blue-bright)}
+    .nd-item.danger:hover{background:rgba(248,81,73,.08);color:var(--red)}
+    .nd-icon{font-size:.88rem;width:20px;text-align:center;flex-shrink:0}
+
+    /* ── ALPHA CHATBOT ── */
+    .alpha-fab{position:fixed;bottom:26px;right:22px;z-index:440;display:flex;flex-direction:column;align-items:flex-end;gap:.55rem}
+    .alpha-btn{cursor:pointer;display:flex;align-items:center;gap:.55rem;background:linear-gradient(135deg,#2563eb,#1d4ed8);border:none;border-radius:9999px;padding:.72rem 1.3rem .72rem .88rem;box-shadow:0 8px 32px rgba(37,99,235,.55),0 0 0 1px rgba(96,165,250,.15);transition:transform .2s,box-shadow .2s;color:#fff;font-family:'Kanit',sans-serif;font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;position:relative}
+    .alpha-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 40px rgba(37,99,235,.7)}
+    .alpha-btn-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+    .alpha-unread{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:#f85149;display:none;align-items:center;justify-content:center;font-size:.52rem;font-weight:900;color:#fff;border:2px solid #07080F;animation:lp 2s ease-in-out infinite}
+    /* Chat panel */
+    .alpha-panel{width:330px;max-width:calc(100vw - 44px);background:#0b0d18;border:1px solid rgba(37,99,235,.25);border-radius:22px;box-shadow:0 32px 80px rgba(0,0,0,.8),0 0 0 1px rgba(37,99,235,.07);overflow:hidden;transform:scale(.92) translateY(20px);opacity:0;pointer-events:none;transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .25s;transform-origin:bottom right}
+    .alpha-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
+    .alpha-hdr{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(37,99,235,.06));padding:.95rem 1.1rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid rgba(37,99,235,.14)}
+    .alpha-hdr-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;box-shadow:0 0 18px rgba(37,99,235,.5)}
+    .alpha-hdr-info{flex:1}
+    .alpha-hdr-name{font-size:.88rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+    .alpha-hdr-status{font-size:.6rem;color:#22c55e;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-top:.1rem}
+    .alpha-hdr-close{background:rgba(255,255,255,.06);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--muted);font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0}
+    .alpha-hdr-close:hover{background:rgba(248,81,73,.18);color:#f85149}
+    .alpha-log{height:270px;overflow-y:auto;padding:.9rem 1rem;display:flex;flex-direction:column;gap:.6rem;scrollbar-width:thin;scrollbar-color:rgba(37,99,235,.2) transparent}
+    .alpha-msg{padding:.68rem .9rem;border-radius:14px;font-size:.8rem;line-height:1.65;max-width:90%;animation:mi .22s ease both}
+    .alpha-msg.bot{background:rgba(255,255,255,.04);border:1px solid rgba(37,99,235,.15);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
+    .alpha-msg.usr{background:var(--blue);color:#fff;font-weight:600;align-self:flex-end;border-bottom-right-radius:4px}
+    .alpha-msg.bot strong{color:#fff}
+    .alpha-quick{display:flex;flex-wrap:wrap;gap:.38rem;padding:.6rem 1rem;border-top:1px solid rgba(37,99,235,.1)}
+    .alpha-q-btn{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.22);border-radius:9999px;color:var(--blue-bright);font-family:'Kanit',sans-serif;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.3rem .78rem;transition:background .18s;white-space:nowrap}
+    .alpha-q-btn:hover{background:rgba(37,99,235,.22)}
+    .alpha-input-row{display:flex;gap:.45rem;padding:.7rem 1rem;border-top:1px solid rgba(37,99,235,.1)}
+    .alpha-input{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(37,99,235,.14);border-radius:9999px;color:var(--text);padding:.58rem 1rem;font-family:'Kanit',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s}
+    .alpha-input:focus{border-color:var(--blue)}.alpha-input::placeholder{color:var(--muted)}
+    .alpha-send{width:36px;height:36px;flex-shrink:0;border-radius:50%;background:var(--blue);border:none;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:opacity .2s,transform .2s;box-shadow:0 4px 14px var(--blue-glow)}
+    .alpha-send:hover{opacity:.85;transform:scale(1.08)}
+    .alpha-typing{display:flex;gap:.35rem;padding:.5rem .75rem;background:rgba(255,255,255,.04);border:1px solid rgba(37,99,235,.14);border-radius:14px;border-bottom-left-radius:4px;align-self:flex-start}
+    .alpha-typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:typ 1.2s ease-in-out infinite}
+    .alpha-typing span:nth-child(2){animation-delay:.2s}.alpha-typing span:nth-child(3){animation-delay:.4s}
+    @keyframes typ{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-4px);opacity:1}}
+    @media(max-width:640px){.alpha-fab{bottom:18px;right:14px}.alpha-panel{width:calc(100vw - 28px)}}
+
+    /* ── 24/7 SUPPORT SECTION ── */
+    .support-section{padding:5rem 2rem;background:rgba(37,99,235,.02);border-top:1px solid rgba(37,99,235,.1)}
+    .support-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:3.5rem;align-items:start}
+    .support-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:var(--blue-dim);border:1px solid rgba(37,99,235,.28);border-radius:9999px;padding:.35rem 1rem;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--blue-bright);margin-bottom:1rem}
+    .support-heading{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;color:#fff;line-height:1;margin-bottom:.85rem}
+    .support-subtext{font-size:.85rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem}
+    .support-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--blue);border:none;border-radius:9999px;color:#fff;font-family:'Kanit',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.65rem 1.5rem;font-size:.78rem;transition:opacity .2s,transform .2s;box-shadow:0 6px 22px var(--blue-glow)}
+    .support-cta:hover{opacity:.88;transform:translateY(-2px)}
+    .support-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
+    .support-card{background:rgba(255,255,255,.025);border:1px solid rgba(37,99,235,.12);border-radius:20px;padding:1.35rem;display:flex;gap:.9rem;align-items:flex-start;transition:border-color .3s,transform .3s}
+    .support-card:hover{border-color:rgba(37,99,235,.35);transform:translateY(-4px)}
+    .sc-icon{font-size:1.5rem;flex-shrink:0;margin-top:.1rem}
+    .sc-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;margin-bottom:.22rem}
+    .sc-status{font-size:.68rem;font-weight:600;color:var(--blue-bright);margin-bottom:.3rem}
+    .sc-status.on{color:#22c55e}
+    .sc-desc{font-size:.7rem;color:var(--muted);line-height:1.55}
+    @media(max-width:860px){.support-inner{grid-template-columns:1fr;gap:2rem}}
+    @media(max-width:640px){.support-cards{grid-template-columns:1fr}.support-section{padding:3.5rem 1.25rem}}
   </style>
 </head>
 <body>
@@ -540,10 +617,25 @@
         <button class="btn-ghost" style="padding:.55rem 1.25rem;font-size:.75rem" onclick="openAuthModal('signin')">Login</button>
         <button class="btn-primary" style="padding:.65rem 1.4rem;font-size:.78rem" onclick="handleGetAccess()">Get Access — $5</button>
       </div>
-      <div id="nav-loggedin">
-        <span id="nav-admin-badge" class="admin-badge" style="display:none">👑 Admin</span>
-        <span class="nav-user-email" id="nav-user-email"></span>
-        <button class="btn-nav-sm" onclick="handleSignOut()">Logout</button>
+      <div id="nav-loggedin" class="nav-user-pill" onclick="toggleUserDropdown()">
+        <div class="nav-u-avatar" id="nav-u-avatar">?</div>
+        <div class="nav-u-info">
+          <span class="nav-u-name" id="nav-u-name">User</span>
+          <span class="nav-u-status" id="nav-u-status">○ No Access</span>
+        </div>
+        <span class="nav-u-caret" id="nav-u-caret">▾</span>
+        <!-- legacy IDs kept for JS compat -->
+        <span id="nav-user-email" style="display:none"></span>
+        <span id="nav-admin-badge" style="display:none"></span>
+        <div class="nav-dropdown" id="nav-dropdown" onclick="event.stopPropagation()">
+          <div class="nd-header">
+            <div class="nd-email" id="nd-email-full">—</div>
+            <div id="nd-admin-badge-wrap" style="display:none;margin-top:.4rem"><span class="admin-badge">👑 Admin</span></div>
+          </div>
+          <button class="nd-item" onclick="closeDd();document.getElementById('tool').scrollIntoView({behavior:'smooth'})"><span class="nd-icon">📊</span>My Tool</button>
+          <button class="nd-item" onclick="closeDd();openAlpha()"><span class="nd-icon">💬</span>Get Help</button>
+          <button class="nd-item danger" onclick="handleSignOut()"><span class="nd-icon">🚪</span>Sign Out</button>
+        </div>
       </div>
     </div>
     <div class="nav-live" id="nav-live"><span class="nav-live-dot"></span><span id="live-count">247</span>&nbsp;live</div>
@@ -1022,6 +1114,52 @@
   </div>
 </section>
 
+<!-- ── 24/7 SUPPORT SECTION ── -->
+<section class="support-section fade-up">
+  <div class="support-inner">
+    <div>
+      <div class="support-eyebrow">🛡️ Elite Support</div>
+      <h2 class="support-heading">24/7 Support.<br>Always Here.</h2>
+      <p class="support-subtext">A real expert — or ALPHA — responds to every message within minutes. No bots, no queues, no wait times. Whatever issue you have, we solve it fast.</p>
+      <button class="support-cta" onclick="openAlpha()">💬 &nbsp;Chat with ALPHA Now</button>
+    </div>
+    <div class="support-cards">
+      <div class="support-card">
+        <div class="sc-icon">💬</div>
+        <div>
+          <div class="sc-title">Live Chat</div>
+          <div class="sc-status on">🟢 Online Now</div>
+          <div class="sc-desc">Click the ALPHA button (bottom-right) for instant help — day or night.</div>
+        </div>
+      </div>
+      <div class="support-card">
+        <div class="sc-icon">📧</div>
+        <div>
+          <div class="sc-title">Email Support</div>
+          <div class="sc-status">support@alphaedge.cc</div>
+          <div class="sc-desc">Payment issues, access problems, account questions — resolved in minutes.</div>
+        </div>
+      </div>
+      <div class="support-card">
+        <div class="sc-icon">⚡</div>
+        <div>
+          <div class="sc-title">Instant Resolution</div>
+          <div class="sc-status">&lt; 2 min avg. response</div>
+          <div class="sc-desc">We don't do slow. Every issue is prioritised and fixed fast.</div>
+        </div>
+      </div>
+      <div class="support-card">
+        <div class="sc-icon">🌍</div>
+        <div>
+          <div class="sc-title">All Time Zones</div>
+          <div class="sc-status">365 days / year</div>
+          <div class="sc-desc">Traders in 50+ countries trust AlphaEdge to always be there.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-logo">
     <img src="logo.png" alt="AlphaEdge" class="footer-logo-img">
@@ -1035,6 +1173,36 @@
     <a href="#services">Features</a>
   </div>
 </footer>
+
+<!-- ── ALPHA CHATBOT ── -->
+<div class="alpha-fab" id="alpha-fab">
+  <div class="alpha-panel" id="alpha-panel">
+    <div class="alpha-hdr">
+      <div class="alpha-hdr-av">⚡</div>
+      <div class="alpha-hdr-info">
+        <div class="alpha-hdr-name">Alpha</div>
+        <div class="alpha-hdr-status">🟢 Online — responds instantly</div>
+      </div>
+      <button class="alpha-hdr-close" onclick="closeAlpha()">✕</button>
+    </div>
+    <div class="alpha-log" id="alpha-log"></div>
+    <div class="alpha-quick" id="alpha-quick">
+      <button class="alpha-q-btn" onclick="alphaAsk('How do I pay?')">How to pay?</button>
+      <button class="alpha-q-btn" onclick="alphaAsk('How does the analysis work?')">How it works?</button>
+      <button class="alpha-q-btn" onclick="alphaAsk('How long is access?')">Access duration?</button>
+      <button class="alpha-q-btn" onclick="alphaAsk('I have an issue')">I have an issue</button>
+    </div>
+    <div class="alpha-input-row">
+      <input class="alpha-input" id="alpha-input" type="text" placeholder="Ask ALPHA anything…" onkeydown="if(event.key==='Enter')alphaSend()">
+      <button class="alpha-send" onclick="alphaSend()">➤</button>
+    </div>
+  </div>
+  <button class="alpha-btn" onclick="toggleAlpha()">
+    <div class="alpha-btn-icon">💬</div>
+    <span>ALPHA</span>
+    <div class="alpha-unread" id="alpha-unread">1</div>
+  </button>
+</div>
 
 <script>
 if(typeof marked!=='undefined') marked.setOptions({breaks:true,gfm:true});
@@ -1111,24 +1279,65 @@ async function checkUserAccess() {
 }
 
 function updateNavAuth() {
-  const isAdmin = isAdminUser;
   document.getElementById('nav-loggedout').style.display = currentUser ? 'none' : 'flex';
   const li = document.getElementById('nav-loggedin');
   li.style.display = currentUser ? 'flex' : 'none';
   const mOut = document.getElementById('mobile-auth-loggedout');
-  const mIn = document.getElementById('mobile-auth-loggedin');
+  const mIn  = document.getElementById('mobile-auth-loggedin');
   if (mOut) mOut.style.display = currentUser ? 'none' : 'flex';
-  if (mIn) mIn.style.display = currentUser ? 'flex' : 'none';
+  if (mIn)  mIn.style.display  = currentUser ? 'flex'  : 'none';
   if (currentUser) {
-    const em = currentUser.email;
-    const short = em.length > 22 ? em.slice(0, 20) + '…' : em;
-    document.getElementById('nav-user-email').textContent = short;
-    document.getElementById('nav-admin-badge').style.display = isAdmin ? 'inline-block' : 'none';
+    const em  = currentUser.email;
+    const ini = em[0].toUpperCase();
+    const nm  = em.split('@')[0].slice(0, 16);
+    const avatar   = document.getElementById('nav-u-avatar');
+    const nameEl   = document.getElementById('nav-u-name');
+    const statusEl = document.getElementById('nav-u-status');
+    const ddEmail  = document.getElementById('nd-email-full');
+    const ddAdmin  = document.getElementById('nd-admin-badge-wrap');
+    if (avatar)   avatar.textContent  = ini;
+    if (nameEl)   nameEl.textContent  = nm;
+    if (ddEmail)  ddEmail.textContent = em;
+    if (ddAdmin)  ddAdmin.style.display = isAdminUser ? 'block' : 'none';
+    if (statusEl) {
+      if (isAdminUser) {
+        statusEl.textContent = '👑 Admin';
+        statusEl.className   = 'nav-u-status admin';
+      } else if (sessionExpiry && sessionExpiry > Date.now()) {
+        statusEl.textContent = '● Active';
+        statusEl.className   = 'nav-u-status active';
+      } else if (sessionExpiry) {
+        statusEl.textContent = '● Expired';
+        statusEl.className   = 'nav-u-status expired';
+      } else {
+        statusEl.textContent = '○ Get Access';
+        statusEl.className   = 'nav-u-status expired';
+      }
+    }
     const mEmail = document.getElementById('mobile-user-email');
     const mBadge = document.getElementById('mobile-admin-badge');
-    if (mEmail) mEmail.textContent = short;
-    if (mBadge) mBadge.style.display = isAdmin ? 'inline-block' : 'none';
+    if (mEmail) mEmail.textContent = em.length > 22 ? em.slice(0, 20) + '…' : em;
+    if (mBadge) mBadge.style.display = isAdminUser ? 'inline-block' : 'none';
   }
+}
+function toggleUserDropdown() {
+  const dd    = document.getElementById('nav-dropdown');
+  const caret = document.getElementById('nav-u-caret');
+  if (!dd) return;
+  const opening = !dd.classList.contains('open');
+  dd.classList.toggle('open', opening);
+  if (caret) caret.classList.toggle('open', opening);
+  if (opening) setTimeout(() => document.addEventListener('click', closeDdOutside, { once: true }), 10);
+}
+function closeDd() {
+  const dd    = document.getElementById('nav-dropdown');
+  const caret = document.getElementById('nav-u-caret');
+  if (dd)    dd.classList.remove('open');
+  if (caret) caret.classList.remove('open');
+}
+function closeDdOutside(e) {
+  const pill = document.getElementById('nav-loggedin');
+  if (pill && !pill.contains(e.target)) closeDd();
 }
 
 function toggleMobileMenu() {
@@ -1156,11 +1365,13 @@ function showLockedTool() {
   document.getElementById('tool-unlocked').style.display = 'none';
   document.getElementById('access-banner').classList.remove('show');
   clearInterval(timerInterval);
+  updateNavAuth();
 }
 function showUnlockedTool(expiresAt) {
   document.getElementById('tool-locked').style.display = 'none';
   document.getElementById('tool-unlocked').style.display = 'block';
   sessionExpiry = expiresAt;
+  updateNavAuth();
   if (expiresAt) {
     document.getElementById('access-banner').classList.add('show');
     startTimer();
@@ -1664,6 +1875,91 @@ function toB64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); 
 /* Scroll animations */
 const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold:.07 });
 document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+/* ══════════════════════════════════════════════════════════════
+   ALPHA CHATBOT
+══════════════════════════════════════════════════════════════ */
+(function alphaChatbot(){
+  const KB=[
+    {p:['hi','hello','hey','sup','yo','start','help me','hiya'],r:`Hey! 👋 I'm **ALPHA**, your AlphaEdge assistant. I'm here 24/7.\n\nI can help with:\n• How to get access\n• Payment guide\n• Using the analysis tool\n• Account issues\n\nWhat do you need?`},
+    {p:['pay','payment','usdt','how to pay','send','wallet','transfer','cost','price','$5','much'],r:`Getting access is simple:\n\n1️⃣ Click **Get Access — $5/Day**\n2️⃣ Choose **BEP-20 (BSC)** or **TRC-20 (Tron)**\n3️⃣ Send exactly **5 USDT** to the wallet shown\n4️⃣ Screenshot your transaction confirmation\n5️⃣ Upload it — access unlocks **instantly**\n\nAny questions? I'm here 24/7.`},
+    {p:['how long','duration','24','expire','time','hours','last','renew'],r:`Your access lasts **24 full hours** from the moment your payment is verified.\n\nDuring those 24h:\n✅ Unlimited chart uploads\n✅ Unlimited follow-up Q&A\n✅ All markets — Forex, Crypto, Stocks\n\nRenew anytime for another **$5**.`},
+    {p:['analyze','chart','upload','how it work','analysis','tool','use','signal'],r:`Once you have access, scroll to the **Tool** section:\n\n1️⃣ Upload your chart (PNG or JPG — any timeframe)\n2️⃣ AlphaEdge reads every pattern, level & signal\n3️⃣ You get a clear **BUY / SELL / HOLD** with full analysis\n4️⃣ Ask unlimited follow-up questions in the chat\n\nWorks on every market and every timeframe.`},
+    {p:['network','bep20','bsc','trc20','tron','binance','chain','wrong network'],r:`We support two networks for USDT:\n\n🔸 **BEP-20 (BSC)** — Binance Smart Chain\n🔻 **TRC-20 (Tron)** — Tron Network\n\n⚠️ **Always match the network exactly.** Sending on the wrong chain results in **permanent loss of funds**. Double-check before confirming!`},
+    {p:['account','login','sign up','register','email','password','forgot'],r:`Creating an account is **free** and takes 30 seconds:\n\n1️⃣ Click **Login** in the nav → **Sign Up**\n2️⃣ Enter your email + password\n3️⃣ Done — account ready instantly\n\nForgot password? Use the login form to reset via email.`},
+    {p:['refund','money back','not working','problem','issue','wrong','error','broke','help'],r:`I'm sorry you're having trouble! 🛡️\n\nOur team resolves issues in under **2 minutes**. Tell me exactly what happened and I'll escalate it immediately.\n\nYou can also email us directly:\n📧 **support@alphaedge.cc**\n\nWe'll sort it fast.`},
+    {p:['accurate','accuracy','win','profit','results','signal','reliable','works'],r:`AlphaEdge is built on **20+ years** of professional market intelligence. Our traders consistently report:\n\n📈 +$340 on EUR/USD\n📈 +$847 on Gold\n📈 +180 pips per session\n\nResults depend on your execution — we give you the edge others don't have.`},
+    {p:['market','forex','crypto','bitcoin','gold','stock','nasdaq','indices','pair','commodity'],r:`AlphaEdge covers **every major market**:\n\n💱 **Forex** — EUR/USD, GBP/USD, USD/JPY…\n₿ **Crypto** — BTC, ETH, any pair\n📊 **Stocks & Indices** — NASDAQ, S&P500…\n🥇 **Commodities** — Gold, Oil, Silver…\n\nJust upload any chart and we analyze it.`},
+    {p:['support','contact','talk','human','team','email'],r:`**24/7 Support** is always here for you:\n\n💬 **Live Chat** — ALPHA (instant, that's me)\n📧 **Email** — support@alphaedge.cc\n⚡ **Response time** — under 2 minutes\n🌍 **Coverage** — all time zones, 365 days/year\n\nWhat can I help you with?`},
+  ];
+
+  function match(msg){
+    const m=msg.toLowerCase();
+    for(const k of KB) if(k.p.some(p=>m.includes(p))) return k.r;
+    return`I'm not sure about that — could you rephrase? Or try one of the quick questions below.\n\nFor urgent help: 📧 **support@alphaedge.cc** — under 2 min response, 24/7. 🛡️`;
+  }
+  function render(t){
+    return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  }
+
+  let open=false, greeted=false;
+
+  window.toggleAlpha=function(){ open?closeAlpha():openAlpha(); };
+  window.openAlpha=function(){
+    open=true;
+    document.getElementById('alpha-panel').classList.add('open');
+    document.getElementById('alpha-unread').style.display='none';
+    if(!greeted){ greeted=true; setTimeout(()=>botMsg(match('hi')),350); }
+    setTimeout(()=>{ const inp=document.getElementById('alpha-input'); if(inp)inp.focus(); },380);
+  };
+  window.closeAlpha=function(){
+    open=false;
+    document.getElementById('alpha-panel').classList.remove('open');
+  };
+
+  function botMsg(txt){
+    const log=document.getElementById('alpha-log');
+    const el=document.createElement('div'); el.className='alpha-msg bot'; el.innerHTML=render(txt);
+    log.appendChild(el); log.scrollTop=log.scrollHeight;
+    const q=document.getElementById('alpha-quick');
+    if(q&&log.children.length>1) q.style.display='none';
+  }
+  function usrMsg(txt){
+    const log=document.getElementById('alpha-log');
+    const el=document.createElement('div'); el.className='alpha-msg usr'; el.textContent=txt;
+    log.appendChild(el); log.scrollTop=log.scrollHeight;
+  }
+  function typingIndicator(){
+    const log=document.getElementById('alpha-log');
+    const el=document.createElement('div'); el.className='alpha-typing'; el.id='alpha-typ';
+    el.innerHTML='<span></span><span></span><span></span>';
+    log.appendChild(el); log.scrollTop=log.scrollHeight;
+    return el;
+  }
+
+  window.alphaAsk=function(q){
+    if(!open) openAlpha();
+    const inp=document.getElementById('alpha-input');
+    if(inp) inp.value=q;
+    setTimeout(alphaSend,100);
+  };
+  window.alphaSend=function(){
+    const inp=document.getElementById('alpha-input');
+    if(!inp) return;
+    const txt=inp.value.trim(); if(!txt) return;
+    inp.value=''; usrMsg(txt);
+    const t=typingIndicator();
+    setTimeout(()=>{ t.remove(); botMsg(match(txt)); },650+Math.random()*450);
+  };
+
+  // Proactive nudge after 30s
+  setTimeout(()=>{
+    if(!open&&!greeted){
+      const u=document.getElementById('alpha-unread');
+      if(u){ u.style.display='flex'; }
+    }
+  },30000);
+})();
 
 /* ══════════════════════════════════════════════════════════════
    SOCIAL PROOF & FOMO ENGINE
