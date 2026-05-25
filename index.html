@@ -590,6 +590,67 @@
     .sc-desc{font-size:.7rem;color:var(--muted);line-height:1.55}
     @media(max-width:860px){.support-inner{grid-template-columns:1fr;gap:2rem}}
     @media(max-width:640px){.support-cards{grid-template-columns:1fr}.support-section{padding:3.5rem 1.25rem}}
+
+    /* ── APP DASHBOARD ── */
+    #app-dashboard{display:none;background:#07080F;min-height:calc(100vh - 64px);padding-top:64px}
+    .dash-topbar{background:linear-gradient(135deg,rgba(37,99,235,.07),rgba(37,99,235,.02));border-bottom:1px solid rgba(37,99,235,.14);padding:1.25rem 2rem}
+    .dash-topbar-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap}
+    .dash-avatar-lg{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 0 18px rgba(37,99,235,.4);text-transform:uppercase;letter-spacing:.02em}
+    .dash-user-info{flex:1}
+    .dash-greeting{font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#fff;line-height:1}
+    .dash-greeting span{color:var(--blue-bright)}
+    .dash-sub-status{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;margin-top:.22rem}
+    .dash-sub-status.active{color:#22c55e}.dash-sub-status.expired{color:var(--red)}.dash-sub-status.admin{color:var(--bnb)}.dash-sub-status.none{color:var(--muted)}
+    .dash-tab-bar{display:flex;gap:.3rem;padding:.28rem;background:rgba(255,255,255,.028);border:1px solid rgba(37,99,235,.1);border-radius:9999px;flex-wrap:wrap}
+    .dash-tab-btn{background:transparent;border:none;border-radius:9999px;color:var(--muted);font-family:'Kanit',sans-serif;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.11em;cursor:pointer;padding:.46rem .95rem;transition:background .2s,color .2s;white-space:nowrap}
+    .dash-tab-btn.active{background:var(--blue);color:#fff;box-shadow:0 4px 14px var(--blue-glow)}
+    .dash-tab-btn:hover:not(.active){background:rgba(37,99,235,.12);color:var(--blue-bright)}
+    .dash-panel{display:none}
+    .dash-panel.active{display:block}
+    /* Analyzer panel */
+    #dash-panel-analyzer{max-width:860px;margin:0 auto;padding:2rem 2rem 5rem}
+    #dash-panel-analyzer>.section-eyebrow,#dash-panel-analyzer>.section-title{display:none}
+    .dash-panel-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;color:#fff;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem}
+    /* Payment panel */
+    #dash-panel-payment{max-width:640px;margin:0 auto;padding:2rem 2rem 5rem}
+    /* History panel */
+    #dash-panel-history{max-width:1000px;margin:0 auto;padding:2rem 2rem 5rem}
+    .hist-card{background:rgba(255,255,255,.025);border:1px solid rgba(37,99,235,.12);border-radius:22px;overflow:hidden}
+    .hist-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;border-bottom:1px solid rgba(37,99,235,.1)}
+    .hist-card-title{font-size:.88rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#fff}
+    .hist-refresh-btn{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.22);border-radius:9999px;color:var(--blue-bright);font-family:'Kanit',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:.32rem .85rem;transition:background .18s}
+    .hist-refresh-btn:hover{background:rgba(37,99,235,.22)}
+    .hist-table-wrap{overflow-x:auto}
+    table.hist-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    table.hist-table th{padding:.85rem 1.1rem;text-align:left;font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:600;white-space:nowrap;border-bottom:1px solid rgba(37,99,235,.1)}
+    table.hist-table td{padding:.82rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text);vertical-align:middle}
+    table.hist-table tbody tr:last-child td{border-bottom:none}
+    table.hist-table tbody tr:hover{background:rgba(37,99,235,.03)}
+    /* Reviews panel */
+    #dash-panel-reviews{max-width:1100px;margin:0 auto;padding:2rem 2rem 5rem}
+    .dash-reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem;margin-top:1.5rem}
+    /* Access-active card in payment panel */
+    .dash-access-active{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.22);border-radius:20px;padding:1.5rem;text-align:center;margin-bottom:1.5rem}
+
+    /* App mode — hide landing sections */
+    body.app-mode #hero,body.app-mode .trust-bar,body.app-mode .activity-ticker,
+    body.app-mode #how-it-works,body.app-mode #pricing,body.app-mode #services,
+    body.app-mode .support-section,body.app-mode #reviews{display:none!important}
+    body.app-mode #app-dashboard{display:block}
+    body.app-mode #tool{display:none}
+    body.app-mode #admin-panel{display:none}
+    body.app-mode footer{padding:1.5rem 2rem;border-top:1px solid rgba(37,99,235,.08)}
+    /* App-mode nav */
+    body.app-mode .nav-links-landing{display:none!important}
+    body.app-mode .nav-links-app{display:flex!important}
+    @media(max-width:960px){body.app-mode .nav-links-app{display:none!important}}
+    @media(max-width:640px){
+      .dash-tab-bar{width:100%}
+      .dash-tab-btn{flex:1;padding:.42rem .5rem;font-size:.62rem;text-align:center}
+      .dash-topbar{padding:1rem}
+      .dash-topbar-inner{gap:.75rem}
+      #dash-panel-analyzer,#dash-panel-payment,#dash-panel-history,#dash-panel-reviews{padding:1.25rem 1rem 4rem}
+    }
   </style>
 </head>
 <body>
@@ -606,12 +667,19 @@
       <img src="logo.png" alt="AlphaEdge" class="nav-logo-img">
       <span class="nav-wordmark">AlphaEdge</span>
     </div>
-    <ul class="nav-links">
+    <ul class="nav-links nav-links-landing">
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#reviews">Reviews</a></li>
       <li><a href="#tool">Tool</a></li>
       <li><a href="#services">Features</a></li>
     </ul>
+    <ul class="nav-links nav-links-app" style="display:none">
+      <li><a href="#" data-tab="analyzer" onclick="switchDashTab('analyzer');return false">📊 Analyzer</a></li>
+      <li><a href="#" data-tab="payment" onclick="switchDashTab('payment');return false">💳 Get Access</a></li>
+      <li><a href="#" data-tab="history" onclick="switchDashTab('history');return false">📋 History</a></li>
+      <li><a href="#" data-tab="reviews" onclick="switchDashTab('reviews');return false">⭐ Reviews</a></li>
+    </ul>
+    <div class="nav-live" id="nav-live"><span class="nav-live-dot"></span><span id="live-count">247</span>&nbsp;live</div>
     <div class="nav-auth" id="nav-auth-area">
       <div id="nav-loggedout" style="display:flex;gap:.5rem;align-items:center">
         <button class="btn-ghost" style="padding:.55rem 1.25rem;font-size:.75rem" onclick="openAuthModal('signin')">Login</button>
@@ -632,13 +700,12 @@
             <div class="nd-email" id="nd-email-full">—</div>
             <div id="nd-admin-badge-wrap" style="display:none;margin-top:.4rem"><span class="admin-badge">👑 Admin</span></div>
           </div>
-          <button class="nd-item" onclick="closeDd();document.getElementById('tool').scrollIntoView({behavior:'smooth'})"><span class="nd-icon">📊</span>My Tool</button>
+          <button class="nd-item" onclick="closeDd();document.body.classList.contains('app-mode')?switchDashTab('analyzer'):document.getElementById('tool').scrollIntoView({behavior:'smooth'})"><span class="nd-icon">📊</span>My Tool</button>
           <button class="nd-item" onclick="closeDd();openAlpha()"><span class="nd-icon">💬</span>Get Help</button>
           <button class="nd-item danger" onclick="handleSignOut()"><span class="nd-icon">🚪</span>Sign Out</button>
         </div>
       </div>
     </div>
-    <div class="nav-live" id="nav-live"><span class="nav-live-dot"></span><span id="live-count">247</span>&nbsp;live</div>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileMenu()">
       <span></span>
     </button>
@@ -682,6 +749,160 @@
         <span id="auth-switch-text">New here?</span><a id="auth-switch-link" onclick="switchAuthTab(authTab === 'signin' ? 'signup' : 'signin')">Create an account</a>
       </div>
       <p style="text-align:center;margin-top:.9rem;font-size:.7rem;color:var(--muted);line-height:1.6">Your account tracks your 24h access sessions.<br>Payments are verified instantly — no manual review.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── APP DASHBOARD ── -->
+<div id="app-dashboard">
+  <!-- Top welcome bar + tab bar -->
+  <div class="dash-topbar">
+    <div class="dash-topbar-inner">
+      <div class="dash-avatar-lg" id="dash-avatar-lg">?</div>
+      <div class="dash-user-info">
+        <div class="dash-greeting">Welcome back, <span id="dash-user-name">User</span></div>
+        <div class="dash-sub-status none" id="dash-sub-status">○ No Access</div>
+      </div>
+      <div class="dash-tab-bar">
+        <button class="dash-tab-btn active" id="dash-tab-analyzer" onclick="switchDashTab('analyzer')">📊 Analyzer</button>
+        <button class="dash-tab-btn" id="dash-tab-payment" onclick="switchDashTab('payment')">💳 Get Access</button>
+        <button class="dash-tab-btn" id="dash-tab-history" onclick="switchDashTab('history')">📋 History</button>
+        <button class="dash-tab-btn" id="dash-tab-reviews" onclick="switchDashTab('reviews')">⭐ Reviews</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ANALYZER PANEL ── -->
+  <div id="dash-panel-analyzer" class="dash-panel active">
+    <div style="max-width:860px;margin:0 auto;padding:2rem 2rem 5rem">
+      <!-- access-banner, tool-locked, tool-unlocked moved here by JS -->
+    </div>
+  </div>
+
+  <!-- ── GET ACCESS PANEL ── -->
+  <div id="dash-panel-payment" class="dash-panel">
+    <div class="section-eyebrow" style="text-align:left;padding:2rem 0 0">Payment</div>
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:900;text-transform:uppercase;color:#fff;margin-bottom:.35rem;letter-spacing:-.01em">Get Access</h2>
+    <p style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:2rem">$5 USDT &nbsp;·&nbsp; 24 Hours Full Access</p>
+
+    <div id="dash-access-active" class="dash-access-active" style="display:none">
+      <div style="font-size:1.5rem;margin-bottom:.6rem">✅</div>
+      <div style="font-size:1rem;font-weight:800;color:#22c55e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Session Active</div>
+      <div id="dash-pay-timer" style="font-size:.78rem;color:var(--muted)">Calculating...</div>
+      <button class="btn-primary" style="margin-top:1.1rem" onclick="openPayModal()">Renew Session — $5</button>
+    </div>
+
+    <div id="dash-pay-form">
+      <div class="amount-box" style="margin-bottom:1.5rem">
+        <div class="amount-label">Amount to Send</div>
+        <div class="amount-value">5.00 <span class="amount-currency">USDT</span></div>
+      </div>
+      <div class="net-tabs" role="tablist">
+        <button class="net-tab active" id="dash-net-bep20" onclick="dashSwitchNetwork('bep20')" role="tab" aria-selected="true">
+          <span class="net-tab-name">BEP-20</span><span class="net-tab-sub">BSC · Binance Smart Chain</span>
+        </button>
+        <button class="net-tab" id="dash-net-trc20" onclick="dashSwitchNetwork('trc20')" role="tab" aria-selected="false">
+          <span class="net-tab-name">TRC-20</span><span class="net-tab-sub">Tron Network</span>
+        </button>
+      </div>
+      <div class="chain-warning">
+        <span class="chain-warning-icon">⚠️</span>
+        <div>Send <strong>USDT</strong> on the <strong id="dash-warn-net">BEP-20 (BSC)</strong> network only. Wrong chain = <strong>permanent loss of funds</strong>.</div>
+      </div>
+      <div class="qr-section">
+        <div class="qr-img">
+          <img id="dash-wallet-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x38621289ac44502529758704689a5a1afa4e9fd0&color=000000&bgcolor=ffffff" alt="Wallet QR" />
+        </div>
+        <div class="wallet-info">
+          <div class="wallet-label">Wallet Address (tap to copy)</div>
+          <div class="wallet-addr" id="dash-wallet-addr" onclick="dashCopyWallet()">0x38621289ac44502529758704689a5a1afa4e9fd0</div>
+          <div class="copy-note" id="dash-copy-note">✓ Copied!</div>
+          <div class="network-badge" id="dash-network-badge">🔸 BSC · BEP-20 Network</div>
+        </div>
+      </div>
+      <div class="instructions">
+        <li>Open your wallet (Trust Wallet, MetaMask, Binance, etc.)</li>
+        <li>Select USDT and choose <strong id="dash-instr-net">BEP-20 (BSC)</strong> network</li>
+        <li>Paste the wallet address above — double-check it matches</li>
+        <li>Enter amount: <strong>5 USDT</strong> and confirm the transaction</li>
+        <li>Take a screenshot, then click below to upload it</li>
+      </div>
+      <button class="btn-pay" onclick="openPayStep2Direct()" style="margin-top:.5rem">✅ &nbsp;I've Sent the Payment →</button>
+    </div>
+  </div>
+
+  <!-- ── HISTORY PANEL ── -->
+  <div id="dash-panel-history" class="dash-panel">
+    <div class="section-eyebrow" style="text-align:left;padding:2rem 0 0">Account</div>
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:900;text-transform:uppercase;color:#fff;margin-bottom:2rem;letter-spacing:-.01em">Payment History</h2>
+    <div class="hist-card">
+      <div class="hist-card-hdr">
+        <div class="hist-card-title">Transaction History</div>
+        <button class="hist-refresh-btn" onclick="loadPaymentHistory()">↻ Refresh</button>
+      </div>
+      <div class="hist-table-wrap">
+        <table class="hist-table">
+          <thead><tr>
+            <th>Email</th><th>Amount</th><th>Status</th><th>Paid At</th><th>Expires</th>
+          </tr></thead>
+          <tbody id="hist-tbody">
+            <tr><td colspan="5" style="padding:2rem;text-align:center;color:var(--muted)">Select History tab to load...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REVIEWS PANEL ── -->
+  <div id="dash-panel-reviews" class="dash-panel">
+    <div class="section-eyebrow" style="text-align:center;padding-top:2rem">What Traders Say</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem">Real Results.<br>Real Traders.</h2>
+    <div class="dash-reviews-grid">
+      <div class="review-card" style="--dur:7s;--delay:0s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Made $340 profit in 2 hours following the BUY signal on EUR/USD. This is absolutely insane. I've been trading for 3 years and never had accuracy like this."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/71.jpg" alt="Ahmed K."/><div><div class="author-name">Ahmed K.</div><div class="author-loc">🇦🇪 UAE · Forex Trader</div></div><div class="profit-chip">+$340</div></div>
+      </div>
+      <div class="review-card" style="--dur:8s;--delay:-1.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Called the exact resistance on Gold to the pip. Closed +180 pips on that single trade. Best $5 I've ever spent — made it back in 15 minutes flat."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Marcus T."/><div><div class="author-name">Marcus T.</div><div class="author-loc">🇬🇧 United Kingdom · Gold Trader</div></div><div class="profit-chip">+180 pips</div></div>
+      </div>
+      <div class="review-card" style="--dur:6s;--delay:-3s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Complete beginner here. AlphaEdge explained every chart pattern like a real mentor. Up $220 this week just following its guidance. Mind blown."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya M."/><div><div class="author-name">Priya M.</div><div class="author-loc">🇮🇳 India · Beginner Trader</div></div><div class="profit-chip">+$220</div></div>
+      </div>
+      <div class="review-card" style="--dur:8.5s;--delay:-4s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Called the NASDAQ breakout before it happened. I was in the trade before everyone else. Felt like having insider information — completely legal, just pure intelligence."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/83.jpg" alt="James O."/><div><div class="author-name">James O.</div><div class="author-loc">🇳🇬 Nigeria · Indices Trader</div></div><div class="profit-chip">+$260</div></div>
+      </div>
+      <div class="review-card" style="--dur:6.5s;--delay:-1s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Was losing money every week. Since using AlphaEdge I'm up $480 this month alone. It doesn't just give signals — it teaches you WHY. Life changing honestly."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Layla H."/><div><div class="author-name">Layla H.</div><div class="author-loc">🇦🇪 UAE · Full-Time Trader</div></div><div class="profit-chip">+$480</div></div>
+      </div>
+      <div class="review-card" style="--dur:8s;--delay:-0.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Turned $200 into $580 in one trading day following AlphaEdge signals. The BUY on ETH/USDT was perfect timing. I renew every single day now."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/60.jpg" alt="Yusuf A."/><div><div class="author-name">Yusuf A.</div><div class="author-loc">🇹🇷 Turkey · Crypto Trader</div></div><div class="profit-chip">+$380</div></div>
+      </div>
+      <div class="review-card" style="--dur:9s;--delay:-0.8s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"SELL signal on BTC/USDT was spot on. Hit my target price in under 30 minutes. I was skeptical at first but this thing is genuinely accurate."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/55.jpg" alt="Carlos R."/><div><div class="author-name">Carlos R.</div><div class="author-loc">🇧🇷 Brazil · Crypto Trader</div></div><div class="profit-chip">+$195</div></div>
+      </div>
+      <div class="review-card" style="--dur:7s;--delay:-3.5s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"The candlestick analysis is better than any $200 course I've bought. Worth 100x the price. I ask follow-up questions and it explains like a real trading coach."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/men/12.jpg" alt="Ravi S."/><div><div class="author-name">Ravi S.</div><div class="author-loc">🇸🇬 Singapore · Options Trader</div></div><div class="profit-chip">Worth 100x</div></div>
+      </div>
+      <div class="review-card" style="--dur:7.5s;--delay:-2s">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Made my $5 back in literally 15 minutes on one EUR/GBP trade. Then made another $180 the same day. This tool pays for itself in the first trade."</div>
+        <div class="review-author"><img class="author-avatar" src="https://randomuser.me/api/portraits/women/21.jpg" alt="Sofia L."/><div><div class="author-name">Sofia L.</div><div class="author-loc">🇩🇪 Germany · Swing Trader</div></div><div class="profit-chip">+$180</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1286,6 +1507,13 @@ function updateNavAuth() {
   const mIn  = document.getElementById('mobile-auth-loggedin');
   if (mOut) mOut.style.display = currentUser ? 'none' : 'flex';
   if (mIn)  mIn.style.display  = currentUser ? 'flex'  : 'none';
+  // Toggle dashboard/landing mode
+  if (currentUser) {
+    document.body.classList.add('app-mode');
+    enterDashboardMode();
+  } else {
+    document.body.classList.remove('app-mode');
+  }
   if (currentUser) {
     const em  = currentUser.email;
     const ini = em[0].toUpperCase();
@@ -1318,6 +1546,27 @@ function updateNavAuth() {
     const mBadge = document.getElementById('mobile-admin-badge');
     if (mEmail) mEmail.textContent = em.length > 22 ? em.slice(0, 20) + '…' : em;
     if (mBadge) mBadge.style.display = isAdminUser ? 'inline-block' : 'none';
+    // Sync dashboard topbar
+    const dashAv  = document.getElementById('dash-avatar-lg');
+    const dashNm  = document.getElementById('dash-user-name');
+    const dashSub = document.getElementById('dash-sub-status');
+    if (dashAv)  dashAv.textContent  = ini;
+    if (dashNm)  dashNm.textContent  = nm;
+    if (dashSub) {
+      if (isAdminUser) {
+        dashSub.textContent = '👑 Admin — Unlimited Access';
+        dashSub.className = 'dash-sub-status admin';
+      } else if (sessionExpiry && sessionExpiry > Date.now()) {
+        dashSub.textContent = '● Session Active';
+        dashSub.className = 'dash-sub-status active';
+      } else if (sessionExpiry) {
+        dashSub.textContent = '● Session Expired';
+        dashSub.className = 'dash-sub-status expired';
+      } else {
+        dashSub.textContent = '○ No Active Session';
+        dashSub.className = 'dash-sub-status none';
+      }
+    }
   }
 }
 function toggleUserDropdown() {
@@ -1366,19 +1615,42 @@ function showLockedTool() {
   document.getElementById('access-banner').classList.remove('show');
   clearInterval(timerInterval);
   updateNavAuth();
+  syncPaymentPanel(false, null);
 }
 function showUnlockedTool(expiresAt) {
   document.getElementById('tool-locked').style.display = 'none';
   document.getElementById('tool-unlocked').style.display = 'block';
   sessionExpiry = expiresAt;
   updateNavAuth();
+  syncPaymentPanel(true, expiresAt);
   if (expiresAt) {
     document.getElementById('access-banner').classList.add('show');
     startTimer();
   } else {
-    // Admin — no timer, show "Unlimited"
     document.getElementById('access-banner').classList.add('show');
     document.getElementById('access-timer').textContent = 'Admin — Unlimited Access';
+  }
+}
+function syncPaymentPanel(hasAccess, expiresAt) {
+  const activeCard = document.getElementById('dash-access-active');
+  const form = document.getElementById('dash-pay-form');
+  if (!activeCard || !form) return;
+  if (hasAccess) {
+    activeCard.style.display = 'block';
+    if (expiresAt) {
+      const ms = expiresAt - Date.now();
+      if (ms > 0) {
+        const h = Math.floor(ms / 3600000);
+        const m = Math.floor((ms % 3600000) / 60000);
+        const timerEl = document.getElementById('dash-pay-timer');
+        if (timerEl) timerEl.textContent = `${h}h ${m}m remaining — renew anytime below`;
+      }
+    } else {
+      const timerEl = document.getElementById('dash-pay-timer');
+      if (timerEl) timerEl.textContent = 'Admin — Unlimited Access';
+    }
+  } else {
+    activeCard.style.display = 'none';
   }
 }
 function hideAdminPanel() {
@@ -1410,6 +1682,7 @@ function updateTimerDisplay() {
 
 async function handleSignOut() {
   await sb.auth.signOut();
+  window.location.reload();
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1663,7 +1936,11 @@ async function validateAndUnlock() {
       setTimeout(() => {
         closePayModal();
         showUnlockedTool(data.expires_at);
-        document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
+        if (document.body.classList.contains('app-mode')) {
+          switchDashTab('analyzer');
+        } else {
+          document.getElementById('tool').scrollIntoView({ behavior: 'smooth' });
+        }
       }, 1800);
     } else {
       const e = document.getElementById('unlock-error');
@@ -1842,7 +2119,8 @@ btnNewTrade.addEventListener('click', () => {
   if (!pendingNewImage) return;
   newChartBar.style.display='none';
   loadMain(pendingNewImage); pendingNewImage=null;
-  document.getElementById('tool').scrollIntoView({behavior:'smooth'});
+  const target = document.body.classList.contains('app-mode') ? document.getElementById('dash-panel-analyzer') : document.getElementById('tool');
+  if (target) target.scrollIntoView({behavior:'smooth'});
   setTimeout(()=>analyzeBtn.click(),600);
 });
 
@@ -1871,6 +2149,130 @@ function addAiMsg(raw){ const e=document.createElement('div'); e.className='msg 
 function addAiRaw(html){ const e=document.createElement('div'); e.className='msg ai'; e.innerHTML=html; chatLog.appendChild(e); chatLog.scrollTop=chatLog.scrollHeight; return e; }
 function addImgMsg(file){ const w=document.createElement('div'); w.className='msg-img'; const img=document.createElement('img'); img.src=URL.createObjectURL(file); const l=document.createElement('div'); l.className='img-label'; l.textContent='📎 New chart uploaded'; w.appendChild(img); w.appendChild(l); chatLog.appendChild(w); chatLog.scrollTop=chatLog.scrollHeight; }
 function toB64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(file); }); }
+
+/* ══════════════════════════════════════════════════════════════
+   DASHBOARD MODE
+══════════════════════════════════════════════════════════════ */
+let dashboardEntered = false;
+
+function enterDashboardMode() {
+  if (dashboardEntered) return;
+  dashboardEntered = true;
+  // Move tool section content into the analyzer panel
+  const analyzerInner = document.querySelector('#dash-panel-analyzer > div');
+  const toolSection   = document.getElementById('tool');
+  if (analyzerInner && toolSection) {
+    Array.from(toolSection.children).forEach(child => analyzerInner.appendChild(child));
+  }
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+const DASH_TABS = ['analyzer', 'payment', 'history', 'reviews'];
+function switchDashTab(tab) {
+  DASH_TABS.forEach(t => {
+    const panel = document.getElementById('dash-panel-' + t);
+    const btn   = document.getElementById('dash-tab-' + t);
+    if (panel) { panel.style.display = t === tab ? 'block' : 'none'; panel.classList.toggle('active', t === tab); }
+    if (btn)   btn.classList.toggle('active', t === tab);
+  });
+  // Sync app nav links highlight
+  document.querySelectorAll('.nav-links-app a').forEach(a => {
+    a.style.opacity = a.dataset.tab === tab ? '1' : '';
+    a.style.color   = a.dataset.tab === tab ? 'var(--blue-bright)' : '';
+  });
+  if (tab === 'history') loadPaymentHistory();
+  document.getElementById('app-dashboard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function openPayStep2Direct() {
+  resetPayModal();
+  document.getElementById('modal-step1').style.display = 'none';
+  document.getElementById('modal-step2').style.display = 'block';
+  document.getElementById('si1').className = 'si-step done';
+  document.getElementById('si2').className = 'si-step active';
+  document.getElementById('pay-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+let dashActiveNetwork = 'bep20';
+function dashSwitchNetwork(net) {
+  if (!PAYMENT_NETWORKS[net]) return;
+  dashActiveNetwork = net;
+  const cfg = PAYMENT_NETWORKS[net];
+  document.getElementById('dash-net-bep20').classList.toggle('active', net === 'bep20');
+  document.getElementById('dash-net-bep20').setAttribute('aria-selected', net === 'bep20');
+  document.getElementById('dash-net-trc20').classList.toggle('active', net === 'trc20');
+  document.getElementById('dash-net-trc20').setAttribute('aria-selected', net === 'trc20');
+  document.getElementById('dash-wallet-addr').textContent = cfg.address;
+  document.getElementById('dash-wallet-qr').src = cfg.qr;
+  const badge = document.getElementById('dash-network-badge');
+  badge.className = cfg.badgeClass; badge.textContent = cfg.badgeText;
+  document.getElementById('dash-warn-net').textContent = cfg.name;
+  document.getElementById('dash-instr-net').textContent = cfg.name;
+  const note = document.getElementById('dash-copy-note');
+  if (note) note.classList.remove('show');
+}
+
+function dashCopyWallet() {
+  const addr = PAYMENT_NETWORKS[dashActiveNetwork].address;
+  navigator.clipboard.writeText(addr).then(() => {
+    const n = document.getElementById('dash-copy-note');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 2500);
+    showToast('success', 'Address copied', `${PAYMENT_NETWORKS[dashActiveNetwork].name} wallet address`);
+  });
+}
+
+let histLoaded = false;
+async function loadPaymentHistory() {
+  if (!currentUser) return;
+  histLoaded = true;
+  const tbody = document.getElementById('hist-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="5" style="padding:1.5rem;text-align:center;color:var(--muted)"><span class="spinner"></span> Loading...</td></tr>';
+  try {
+    if (isAdminUser) {
+      const res = await fetch('/api/admin/payments', { headers: { 'X-Admin-Email': currentUser.email } });
+      const data = await res.json();
+      const payments = Array.isArray(data) ? data : (data.payments || []);
+      if (!payments.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="padding:1.5rem;text-align:center;color:var(--muted)">No payments yet.</td></tr>';
+        return;
+      }
+      const now = Date.now();
+      tbody.innerHTML = payments.map(p => {
+        const isActive = p.expires_at && p.expires_at > now;
+        const dt  = p.created_at ? new Date(p.created_at).toLocaleDateString() : '—';
+        const exp = p.expires_at  ? new Date(p.expires_at).toLocaleString()   : '—';
+        return `<tr>
+          <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem">${p.user_email || '—'}</td>
+          <td style="color:var(--blue-bright);font-weight:700">${p.amount || '$5 USDT'}</td>
+          <td><span class="status-chip ${isActive ? 'active' : 'expired'}">${isActive ? 'Active' : 'Expired'}</span></td>
+          <td style="font-size:.75rem;color:var(--muted)">${dt}</td>
+          <td style="font-size:.75rem;color:var(--muted)">${exp}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      const res  = await fetch('/api/check-access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: currentUser.email }) });
+      const data = await res.json();
+      if (data.hasAccess && data.expiresAt) {
+        const exp = new Date(data.expiresAt).toLocaleString();
+        tbody.innerHTML = `<tr>
+          <td style="font-size:.78rem">${currentUser.email}</td>
+          <td style="color:var(--blue-bright);font-weight:700">$5 USDT</td>
+          <td><span class="status-chip active">Active</span></td>
+          <td style="font-size:.75rem;color:var(--muted)">—</td>
+          <td style="font-size:.75rem;color:var(--muted)">${exp}</td>
+        </tr>`;
+      } else {
+        tbody.innerHTML = '<tr><td colspan="5" style="padding:1.5rem;text-align:center;color:var(--muted)">No active payments. Get access below.</td></tr>';
+      }
+    }
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="5" style="padding:1.5rem;text-align:center;color:var(--red)">Error: ${e.message}</td></tr>`;
+  }
+}
 
 /* Scroll animations */
 const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold:.07 });
