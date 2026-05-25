@@ -36,7 +36,7 @@
     .btn-pay:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
     /* ── NAV ── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,15,.72);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(96,165,250,.12);box-shadow:0 1px 0 rgba(96,165,250,.05),0 8px 32px rgba(0,0,0,.35)}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,15,.72);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(96,165,250,.12);box-shadow:0 1px 0 rgba(96,165,250,.05),0 8px 32px rgba(0,0,0,.35);transform:translateZ(0);-webkit-transform:translateZ(0);will-change:transform}
     .nav-inner{max-width:1280px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;gap:1.25rem;padding:.7rem 1.5rem;min-height:64px}
     .nav-logo{display:flex;align-items:center;gap:.55rem;cursor:default;user-select:none;flex-shrink:0}
     .nav-logo-img{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(96,165,250,.55))}
@@ -127,7 +127,7 @@
     .live-dot{width:7px;height:7px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 8px var(--blue-bright);animation:lp 2s ease-in-out infinite;flex-shrink:0}
     @keyframes lp{0%,100%{opacity:1}50%{opacity:.35}}
     .hero-logo-wrap{position:relative;z-index:3;margin-bottom:1.5rem;animation:fua .8s .06s ease both;perspective:1200px;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
-    .hero-logo-3d{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;animation:logo-float 6s ease-in-out infinite}
+    .hero-logo-3d{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:logo-float 6s ease-in-out infinite}
     .hero-logo{position:relative;z-index:3;width:120px;height:120px;object-fit:contain;animation:logo-spin 16s linear infinite;filter:drop-shadow(0 0 22px rgba(96,165,250,.7)) drop-shadow(0 0 60px rgba(37,99,235,.45))}
     .logo-glow{position:absolute;top:50%;left:50%;width:180px;height:180px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(37,99,235,.35) 0%,transparent 65%);filter:blur(22px);animation:logo-glow-pulse 3.6s ease-in-out infinite;pointer-events:none;z-index:1}
     .logo-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px solid rgba(96,165,250,.25);pointer-events:none;z-index:2}
@@ -138,7 +138,7 @@
     .logo-orbit::before,.logo-orbit::after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 14px var(--blue-bright),0 0 28px rgba(96,165,250,.55)}
     .logo-orbit::before{top:-4px;left:50%;margin-left:-4px}
     .logo-orbit::after{bottom:-4px;left:50%;margin-left:-4px;width:5px;height:5px;opacity:.7}
-    @keyframes logo-spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+    @keyframes logo-spin{from{transform:rotateZ(0)}to{transform:rotateZ(360deg)}}
     @keyframes logo-float{0%,100%{transform:translateY(0) rotateZ(-1.5deg)}50%{transform:translateY(-10px) rotateZ(1.5deg)}}
     @keyframes logo-glow-pulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}}
     @keyframes ring-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
