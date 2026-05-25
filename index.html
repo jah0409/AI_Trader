@@ -13,8 +13,10 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html,body{background:#07080F;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;scroll-behavior:smooth}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;min-width:0}
+    html,body{background:#07080F;color:#E8F0F5;font-family:'Kanit',sans-serif;overflow-x:hidden;scroll-behavior:smooth;width:100%;max-width:100%;-webkit-text-size-adjust:100%}
+    img,svg,video{max-width:100%}
+    button,a{-webkit-tap-highlight-color:transparent}
     :root{
       --blue:#2563eb;--blue-bright:#60a5fa;
       --blue-dim:rgba(37,99,235,.11);--blue-glow:rgba(37,99,235,.30);
@@ -332,28 +334,93 @@
 
     .fade-up{opacity:0;transform:translateY(36px);transition:opacity .78s ease,transform .78s ease}
     .fade-up.visible{opacity:1;transform:translateY(0)}
+    /* Tablet & below — collapse nav into hamburger */
     @media(max-width:960px){
       .nav-links,.nav-auth{display:none!important}
       .nav-toggle{display:flex}
+      #hero{padding:7rem 1.5rem 4rem}
+      #how-it-works{padding:6rem 1.5rem 4rem}
+      #pricing{padding:4rem 1.5rem 5rem}
+      #services{padding:5rem 1.5rem 4.5rem}
+      #tool{padding:1.5rem 1.5rem 7rem}
+      #reviews .section-eyebrow,#reviews .section-title{padding:0 1.5rem}
+      footer{padding:3rem 1.5rem 2.5rem}
+      .trust-bar{gap:1.5rem;padding:1rem 1.5rem}
+      .section-title{margin-bottom:3rem}
     }
+
+    /* Phone — keep only logo visible, tighten spacing */
     @media(max-width:640px){
-      .nav-inner{padding:.6rem 1rem;min-height:58px}
-      .mobile-menu{top:58px}
-      .nav-wordmark{font-size:.95rem}
-      .hero-logo{width:78px;height:78px}
-      .hero-title{font-size:clamp(2.4rem,15vw,5rem);white-space:normal}
-      .hero-stats{gap:1.5rem}
-      .stat-sep{display:none}
-      #services{border-radius:0}
-      .service-row{flex-direction:column;gap:.3rem}
-      .reviews-marquee .review-card{flex:0 0 280px;width:280px;min-width:280px}
-      .qr-section{flex-direction:column}
-      .admin-stats-grid{grid-template-columns:1fr}
-      .nav-user-email{max-width:110px}
-      .trust-bar{gap:1.2rem;padding:1rem 1.25rem}
-    }
-    @media(max-width:380px){
+      .nav-inner{padding:.55rem .9rem;min-height:56px;gap:.75rem}
+      .nav-logo-img{width:30px;height:30px}
       .nav-wordmark{display:none}
+      .mobile-menu{top:56px;padding:.85rem 1rem 1.25rem}
+      .mobile-menu a{font-size:.78rem;padding:.8rem .9rem}
+      #hero{padding:6rem 1.1rem 3.5rem}
+      .hero-badge{font-size:.62rem;letter-spacing:.16em;padding:.4rem 1rem;margin-bottom:1.5rem}
+      .hero-logo{width:74px;height:74px}
+      .hero-title{font-size:clamp(2.4rem,14vw,4.5rem);white-space:normal;line-height:.92}
+      .hero-tagline{font-size:.78rem;letter-spacing:.08em;margin-bottom:2rem;line-height:1.7}
+      .hero-tagline br{display:none}
+      .hero-cta{flex-direction:column;width:100%;gap:.7rem}
+      .hero-cta .btn-primary,.hero-cta .btn-ghost{width:100%;padding:.85rem 1.25rem}
+      .hero-stats{gap:1.25rem;margin-top:3rem}
+      .stat-sep{display:none}
+      .stat-value{font-size:1.65rem}
+      .scroll-cue{bottom:1rem}
+      .trust-bar{gap:1rem;padding:.9rem 1rem;font-size:.6rem}
+      .trust-item{font-size:.6rem;letter-spacing:.14em}
+      #how-it-works{padding:4.5rem 1.1rem 3rem}
+      .step-card{padding:1.75rem 1.4rem;border-radius:22px}
+      .step-num-bg{font-size:4.5rem;right:.9rem}
+      #pricing{padding:3rem 1.1rem 4rem}
+      .pricing-card{padding:2.25rem 1.4rem;border-radius:24px}
+      .pricing-features{max-width:100%}
+      .pricing-card::after{width:280px;height:280px}
+      #services{padding:4rem 1.1rem 3.5rem;border-radius:0;margin-top:1rem}
+      .service-row{flex-direction:column;gap:.4rem;padding:1.75rem 0}
+      .service-num{width:auto}
+      .services-list{padding:0}
+      #reviews{padding:4.5rem 0}
+      #reviews .section-eyebrow,#reviews .section-title{padding:0 1.1rem}
+      .reviews-marquee{gap:.75rem}
+      .reviews-marquee .review-card{flex:0 0 270px;width:270px;min-width:270px;padding:1.25rem;border-radius:20px}
+      .review-text{font-size:.8rem;line-height:1.65}
+      #tool{padding:1.25rem 1.1rem 6rem}
+      .tool-locked{padding:2.75rem 1.25rem;border-radius:22px}
+      .upload-zone{padding:2.5rem 1.25rem;border-radius:22px}
+      .upload-icon-wrap{width:60px;height:60px;font-size:1.65rem;margin-bottom:1.1rem}
+      .upload-title{font-size:.95rem}
+      .result-card,.chat-card{padding:1.25rem;border-radius:22px}
+      .chat-top{padding:1rem 1.1rem;gap:.7rem}
+      .chat-log{padding:1rem;max-height:380px}
+      .chat-input-bar{padding:.85rem 1rem;gap:.5rem}
+      .chat-input{padding:.7rem 1.1rem;font-size:.85rem}
+      .msg{padding:.85rem 1rem;font-size:.85rem}
+      .qr-section{flex-direction:column;align-items:center;text-align:center}
+      .wallet-addr{font-size:.68rem}
+      .admin-stats-grid{grid-template-columns:1fr;gap:.75rem}
+      #admin-panel{padding:2rem 1.1rem 5rem}
+      .modal{border-radius:22px}
+      .modal-top{padding:1.4rem 1.4rem 1rem}
+      .modal-body{padding:1.4rem}
+      .nav-user-email{max-width:140px}
+      footer{padding:2.5rem 1.1rem 2rem}
+      .footer-links{gap:1.1rem}
+      .footer-wordmark{font-size:1.5rem}
+      .section-title{margin-bottom:2.5rem}
+    }
+
+    /* iPhone SE / very small phones */
+    @media(max-width:380px){
+      .nav-inner{padding:.5rem .75rem;gap:.5rem}
+      .hero-badge{font-size:.58rem;padding:.35rem .85rem}
+      .hero-stats{gap:.9rem}
+      .stat-value{font-size:1.4rem}
+      .stat-label{font-size:.55rem;letter-spacing:.16em}
+      .trust-bar{gap:.75rem}
+      .reviews-marquee .review-card{flex:0 0 245px;width:245px;min-width:245px}
+      .footer-links{gap:.9rem;font-size:.6rem}
     }
   </style>
 </head>
