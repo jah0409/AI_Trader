@@ -35,7 +35,7 @@
 
     /* ── NAV ── */
     nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;background:rgba(7,8,15,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(37,99,235,.13)}
-    .nav-logo{display:flex;align-items:center;gap:.65rem;cursor:default;user-select:none}
+    .nav-logo{display:flex;align-items:center;gap:.65rem;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
     .nav-logo-img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(37,99,235,.65))}
     .nav-wordmark{font-size:1.18rem;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.03em;line-height:1}
     .nav-links{display:flex;gap:2rem;list-style:none}
@@ -306,6 +306,107 @@
 
     .fade-up{opacity:0;transform:translateY(36px);transition:opacity .78s ease,transform .78s ease}
     .fade-up.visible{opacity:1;transform:translateY(0)}
+
+    /* ── 3D GLASS LOGO SPIN ── */
+    .hero-logo-wrap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .hero-logo-wrap.spinning .hero-logo{animation:logo-glass-spin 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards}
+    .nav-logo.spinning .nav-logo-img{animation:logo-glass-spin 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards !important}
+    @keyframes logo-glass-spin{
+      0%  {transform:perspective(600px) rotateY(0deg)   scale(1);   filter:drop-shadow(0 0 20px rgba(37,99,235,.8))}
+      12% {transform:perspective(600px) rotateY(45deg)  scale(1.06);filter:drop-shadow(0 0 40px rgba(96,165,250,.9)) brightness(1.1)}
+      25% {transform:perspective(600px) rotateY(90deg)  scaleX(.05) scale(1.1);filter:drop-shadow(0 0 60px rgba(147,197,253,1)) brightness(1.7) hue-rotate(25deg)}
+      50% {transform:perspective(600px) rotateY(180deg) scale(1);   filter:drop-shadow(0 0 20px rgba(37,99,235,.8))}
+      75% {transform:perspective(600px) rotateY(270deg) scaleX(.05) scale(1.1);filter:drop-shadow(0 0 60px rgba(147,197,253,1)) brightness(1.7) hue-rotate(-25deg)}
+      100%{transform:perspective(600px) rotateY(360deg) scale(1);   filter:drop-shadow(0 0 20px rgba(37,99,235,.8))}
+    }
+
+    /* ── WINS TICKER ── */
+    .wins-ticker-wrap{overflow:hidden;background:rgba(37,99,235,.055);border-top:1px solid rgba(37,99,235,.12);border-bottom:1px solid rgba(37,99,235,.12);padding:.58rem 0;white-space:nowrap;position:relative}
+    .wins-ticker-wrap::before,.wins-ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+    .wins-ticker-wrap::before{left:0;background:linear-gradient(90deg,#07080F,transparent)}
+    .wins-ticker-wrap::after{right:0;background:linear-gradient(270deg,#07080F,transparent)}
+    .wins-ticker{display:inline-block;animation:ticker-scroll 42s linear infinite;white-space:nowrap}
+    .wt-item{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);padding:0 1.75rem;display:inline-block}
+    .wt-item:nth-child(odd){color:rgba(96,165,250,.9)}
+    @keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ── HERO FOMO ── */
+    .hero-fomo{font-size:.64rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;color:rgba(248,113,113,.88);margin-top:.9rem;position:relative;z-index:3;animation:fua .8s .54s ease both}
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle{position:fixed;bottom:1.75rem;right:1.75rem;z-index:500;width:48px;height:48px;border-radius:50%;border:1px solid rgba(37,99,235,.3);background:rgba(7,8,15,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;font-size:1.2rem;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.45),0 0 0 1px rgba(37,99,235,.1);transition:transform .22s,box-shadow .22s;font-family:'Kanit',sans-serif;color:#fff}
+    .theme-toggle:hover{transform:scale(1.12) rotate(18deg);box-shadow:0 8px 28px rgba(37,99,235,.32)}
+
+    /* ── SOCIAL PROOF TOASTS ── */
+    .sp-toast{background:rgba(9,11,22,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(37,99,235,.28);border-radius:16px;padding:.82rem 1rem;display:flex;align-items:center;gap:.7rem;box-shadow:0 8px 30px rgba(0,0,0,.5);transform:translateX(-120%);transition:transform .42s cubic-bezier(0.34,1.56,0.64,1)}
+    .sp-toast.show{transform:translateX(0)}
+    .sp-toast-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(37,99,235,.4);flex-shrink:0}
+    .sp-toast-body{flex:1;min-width:0}
+    .sp-toast-name{font-size:.73rem;font-weight:700;color:#fff;margin-bottom:.06rem;white-space:nowrap}
+    .sp-toast-msg{font-size:.61rem;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;white-space:nowrap}
+    .sp-toast-profit{font-size:.72rem;font-weight:800;color:#4ade80;white-space:nowrap;padding-left:.35rem;flex-shrink:0}
+
+    /* ── LIGHT THEME ── */
+    body.light{background:#eef2ff}
+    body.light nav{background:rgba(238,242,255,.97);border-bottom-color:rgba(37,99,235,.18)}
+    body.light .nav-wordmark{color:#0c1428}
+    body.light .nav-links a{color:#0c1428}
+    body.light .modal{background:#fff;border-color:rgba(37,99,235,.18)}
+    body.light .modal-top{background:linear-gradient(135deg,rgba(37,99,235,.05),rgba(243,186,47,.03))}
+    body.light .modal-title{color:#0c1428}
+    body.light .modal-sub{color:rgba(12,20,40,.5)}
+    body.light .modal-close{color:rgba(12,20,40,.45)}
+    body.light .auth-field label{color:rgba(12,20,40,.55)}
+    body.light .auth-field input{background:rgba(0,0,0,.05);border-color:rgba(12,20,40,.14);color:#0c1428}
+    body.light .auth-field input::placeholder{color:rgba(12,20,40,.38)}
+    body.light .auth-tab{color:rgba(12,20,40,.55);border-color:rgba(12,20,40,.14)}
+    body.light .step-card{background:rgba(37,99,235,.045);border-color:rgba(37,99,235,.14)}
+    body.light .step-title{color:#0c1428}
+    body.light .step-desc{color:rgba(12,20,40,.55)}
+    body.light .review-card{background:rgba(255,255,255,.96);border-color:rgba(37,99,235,.13)}
+    body.light .review-text{color:rgba(12,20,40,.8)}
+    body.light .author-name{color:#0c1428}
+    body.light .pricing-card{background:rgba(255,255,255,.97);border-color:rgba(37,99,235,.22)}
+    body.light .pricing-name{color:#0c1428}
+    body.light #services{background:rgba(37,99,235,.05)}
+    body.light .service-row{border-top-color:rgba(37,99,235,.1)}
+    body.light .service-row:last-child{border-bottom-color:rgba(37,99,235,.1)}
+    body.light .service-name{color:#0c1428}
+    body.light .service-desc{color:rgba(12,20,40,.55)}
+    body.light footer{background:#e8ecff;border-top-color:rgba(37,99,235,.14)}
+    body.light .footer-wordmark{color:#0c1428}
+    body.light .footer-sub{color:rgba(12,20,40,.38)}
+    body.light .footer-links a{color:rgba(12,20,40,.55)}
+    body.light .wins-ticker-wrap{background:rgba(37,99,235,.07);border-color:rgba(37,99,235,.14)}
+    body.light .wins-ticker-wrap::before{background:linear-gradient(90deg,#eef2ff,transparent)}
+    body.light .wins-ticker-wrap::after{background:linear-gradient(270deg,#eef2ff,transparent)}
+    body.light .trust-bar{background:rgba(37,99,235,.05)}
+    body.light .trust-item{color:rgba(12,20,40,.55)}
+    body.light .upload-zone{background:rgba(37,99,235,.045);border-color:rgba(37,99,235,.18)}
+    body.light .upload-title{color:#0c1428}
+    body.light .result-card{background:rgba(255,255,255,.93)}
+    body.light .chat-card{background:rgba(255,255,255,.93)}
+    body.light .chat-top{border-bottom-color:rgba(37,99,235,.12)}
+    body.light .msg.ai{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.12);color:#0c1428}
+    body.light .md-body{color:#0c1428}
+    body.light .tool-locked{background:rgba(37,99,235,.04);border-color:rgba(37,99,235,.14)}
+    body.light .lock-title{color:#0c1428}
+    body.light .lock-sub{color:rgba(12,20,40,.55)}
+    body.light .chat-input{background:rgba(0,0,0,.05);border-color:rgba(12,20,40,.14);color:#0c1428}
+    body.light .chat-input::placeholder{color:rgba(12,20,40,.38)}
+    body.light .sp-toast{background:rgba(255,255,255,.98);border-color:rgba(37,99,235,.18)}
+    body.light .sp-toast-name{color:#0c1428}
+    body.light .sp-toast-msg{color:rgba(12,20,40,.5)}
+    body.light .theme-toggle{background:rgba(238,242,255,.95);border-color:rgba(37,99,235,.28);color:#0c1428}
+    body.light .section-title{background:linear-gradient(180deg,#1e3a8a 0%,#0c1428 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    body.light .hero-title{background:linear-gradient(180deg,#1e3a8a 0%,#0c1428 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    body.light .hero-tagline{color:rgba(12,20,40,.55)}
+    body.light .stat-label{color:rgba(12,20,40,.5)}
+    body.light .access-banner{background:rgba(37,99,235,.07)}
+    body.light .amount-box{background:rgba(243,186,47,.06)}
+    body.light .instructions{background:rgba(0,0,0,.04)}
+    body.light .guarantee{background:rgba(37,99,235,.05)}
+
     @media(max-width:640px){
       nav{padding:.9rem 1.25rem}
       .nav-links{gap:1.25rem}
@@ -388,17 +489,25 @@
     <button class="btn-primary" onclick="handleGetAccess()">📊 &nbsp;Get Access — $5/Day</button>
     <button class="btn-ghost" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How It Works</button>
   </div>
+  <div class="hero-fomo">🔥 87 traders joined this week &nbsp;·&nbsp; Limited daily slots available</div>
   <div class="hero-stats">
     <div class="stat-item"><div class="stat-value">20+</div><div class="stat-label">Years Experience</div></div>
     <div class="stat-sep"></div>
     <div class="stat-item"><div class="stat-value">$5</div><div class="stat-label">Per Day Access</div></div>
     <div class="stat-sep"></div>
-    <div class="stat-item"><div class="stat-value">∞</div><div class="stat-label">Questions Answered</div></div>
+    <div class="stat-item"><div class="stat-value" id="live-count">340</div><div class="stat-label">Active Traders</div></div>
     <div class="stat-sep"></div>
     <div class="stat-item"><div class="stat-value">24h</div><div class="stat-label">Full Access</div></div>
   </div>
   <div class="scroll-cue"><span>Scroll</span><span>↓</span></div>
 </section>
+
+<!-- ── WINS TICKER ── -->
+<div class="wins-ticker-wrap" aria-hidden="true">
+  <div class="wins-ticker">
+    <span class="wt-item">🇦🇪 Ahmed · EUR/USD · +$340</span><span class="wt-item">🇬🇧 Marcus · Gold · +180 pips</span><span class="wt-item">🇮🇳 Priya · BTC/USDT · +$220</span><span class="wt-item">🇧🇷 Carlos · ETH/USDT · +$195</span><span class="wt-item">🇩🇪 Sofia · EUR/GBP · +$180</span><span class="wt-item">🇳🇬 James · NASDAQ · +$260</span><span class="wt-item">🇦🇪 Layla · XAU/USD · +$480</span><span class="wt-item">🇸🇬 Ravi · Options · +$310</span><span class="wt-item">🇦🇺 Emma · GBP/JPY · +$140</span><span class="wt-item">🇹🇷 Yusuf · ETH/USDT · +$380</span><span class="wt-item">🇦🇪 Ahmed · EUR/USD · +$340</span><span class="wt-item">🇬🇧 Marcus · Gold · +180 pips</span><span class="wt-item">🇮🇳 Priya · BTC/USDT · +$220</span><span class="wt-item">🇧🇷 Carlos · ETH/USDT · +$195</span><span class="wt-item">🇩🇪 Sofia · EUR/GBP · +$180</span><span class="wt-item">🇳🇬 James · NASDAQ · +$260</span><span class="wt-item">🇦🇪 Layla · XAU/USD · +$480</span><span class="wt-item">🇸🇬 Ravi · Options · +$310</span><span class="wt-item">🇦🇺 Emma · GBP/JPY · +$140</span><span class="wt-item">🇹🇷 Yusuf · ETH/USDT · +$380</span>
+  </div>
+</div>
 
 <!-- ── TRUST BAR ── -->
 <div class="trust-bar">
@@ -406,7 +515,7 @@
   <div class="trust-item"><span class="trust-icon">⚡</span>Instant Verification</div>
   <div class="trust-item"><span class="trust-icon">🌍</span>Global Traders</div>
   <div class="trust-item"><span class="trust-icon">💎</span>Elite-Grade Analysis</div>
-  <div class="trust-item"><span class="trust-icon">₿</span>Binance Payments</div>
+  <div class="trust-item"><span class="trust-icon">₿</span>USDT Payments</div>
 </div>
 
 <!-- ── HOW IT WORKS ── -->
@@ -423,8 +532,8 @@
     <div class="step-card fade-up" style="transition-delay:.15s">
       <div class="step-num-bg">02</div>
       <div class="step-icon-wrap">💳</div>
-      <div class="step-title">Pay $5 via Binance</div>
-      <p class="step-desc">Send $5 USDT (BEP-20) to our Binance wallet. Upload your confirmation screenshot — verified in seconds, automatically.</p>
+      <div class="step-title">Pay $5 USDT (any wallet)</div>
+      <p class="step-desc">Send $5 USDT (BEP-20) to our wallet address from any exchange or crypto app. Upload your confirmation screenshot — verified in seconds, automatically.</p>
     </div>
     <div class="step-card fade-up" style="transition-delay:.25s">
       <div class="step-num-bg">03</div>
@@ -453,9 +562,9 @@
       <div class="pf-item"><div class="pf-icon">✓</div>Instant access, no waiting</div>
     </div>
     <button class="btn-pay" onclick="handleGetAccess()">
-      <span style="font-size:1.2rem">₿</span> Pay with Binance — $5 USDT
+      <span style="font-size:1.2rem">₿</span> Pay with USDT — $5
     </button>
-    <div class="binance-note"><span class="bnb-badge">BEP-20</span> USDT on Binance Smart Chain</div>
+    <div class="binance-note"><span class="bnb-badge">BEP-20</span> USDT — any exchange or wallet</div>
     <div class="guarantee">⚡ Our system verifies your payment screenshot instantly. No manual review. No waiting. Access unlocks in seconds.</div>
   </div>
 </div>
@@ -495,7 +604,7 @@
           </div>
         </div>
         <div class="instructions">
-          <li>Open Binance app → Wallets → Send</li>
+          <li>Open your crypto wallet or exchange app (Binance, Trust Wallet, etc.)</li>
           <li>Choose USDT and select <strong>BEP-20 (BSC)</strong> network</li>
           <li>Paste the wallet address above</li>
           <li>Enter amount: <strong>5 USDT</strong> and confirm</li>
@@ -507,11 +616,11 @@
       <!-- STEP 2: Upload proof -->
       <div id="modal-step2" style="display:none">
         <div style="background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.2);border-radius:14px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.75rem;color:var(--blue-bright);line-height:1.6">
-          🔍 <strong>AlphaEdge</strong> will verify your screenshot automatically — checks Binance confirmation, wallet address, amount, and status.
+          🔍 <strong>AlphaEdge</strong> will verify your screenshot automatically — checks payment confirmation, wallet address, amount, and status.
         </div>
         <div class="proof-zone" id="proof-zone" onclick="document.getElementById('proof-input').click()">
           <div class="proof-icon">📸</div>
-          <div class="proof-title">Upload Binance Confirmation</div>
+          <div class="proof-title">Upload Payment Confirmation</div>
           <div class="proof-sub">Tap to select your payment screenshot</div>
         </div>
         <input type="file" id="proof-input" accept="image/*" style="display:none" />
@@ -608,7 +717,7 @@
   <div class="tool-locked" id="tool-locked">
     <span class="lock-icon">🔒</span>
     <div class="lock-title">AlphaEdge — Locked</div>
-    <div class="lock-sub">Create a free account, pay $5 USDT via Binance, and unlock 24-hour full access. Our system verifies your payment instantly.</div>
+    <div class="lock-sub">Create a free account, pay $5 USDT (any platform), and unlock 24-hour full access. Our system verifies your payment instantly.</div>
     <button class="btn-pay" style="max-width:340px;margin:0 auto" onclick="handleGetAccess()">
       <span style="font-size:1.2rem">₿</span> Get Access — $5 USDT
     </button>
@@ -726,6 +835,12 @@
     <a href="#services">Features</a>
   </div>
 </footer>
+
+<!-- ── THEME TOGGLE ── -->
+<button class="theme-toggle" id="theme-toggle" title="Toggle light / dark mode" onclick="toggleTheme()">🌙</button>
+
+<!-- ── SOCIAL PROOF TOAST CONTAINER ── -->
+<div id="toast-container" style="position:fixed;bottom:5.5rem;left:1.5rem;z-index:600;display:flex;flex-direction:column;gap:.6rem;pointer-events:none;max-width:280px"></div>
 
 <script>
 if(typeof marked!=='undefined') marked.setOptions({breaks:true,gfm:true});
@@ -1244,6 +1359,82 @@ function toB64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); 
 /* Scroll animations */
 const io = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold:.07 });
 document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+/* ══════════════════════════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════════════════════════ */
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.documentElement.style.background = isLight ? '#eef2ff' : '';
+  localStorage.setItem('ae-theme', isLight ? 'light' : 'dark');
+  document.getElementById('theme-toggle').textContent = isLight ? '☀️' : '🌙';
+}
+(function initTheme() {
+  const saved = localStorage.getItem('ae-theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    document.documentElement.style.background = '#eef2ff';
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = '☀️';
+  }
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   3D GLASS LOGO SPIN
+══════════════════════════════════════════════════════════════ */
+function triggerLogoSpin(wrapper) {
+  if (wrapper.classList.contains('spinning')) return;
+  if (navigator.vibrate) navigator.vibrate([30, 20, 30]);
+  wrapper.classList.add('spinning');
+  setTimeout(() => wrapper.classList.remove('spinning'), 1300);
+}
+document.querySelector('.hero-logo-wrap').addEventListener('click', function() { triggerLogoSpin(this); });
+document.querySelector('.hero-logo-wrap').addEventListener('touchstart', function() { triggerLogoSpin(this); }, { passive: true });
+document.querySelector('.nav-logo').addEventListener('click', function() { triggerLogoSpin(this); });
+document.querySelector('.nav-logo').addEventListener('touchstart', function() { triggerLogoSpin(this); }, { passive: true });
+
+/* ══════════════════════════════════════════════════════════════
+   LIVE TRADER COUNTER
+══════════════════════════════════════════════════════════════ */
+const LIVE_BASE = 340;
+function updateLiveCount() {
+  const el = document.getElementById('live-count');
+  if (!el) return;
+  el.textContent = LIVE_BASE + Math.floor(Math.random() * 81) - 40;
+}
+setInterval(updateLiveCount, 8000);
+
+/* ══════════════════════════════════════════════════════════════
+   SOCIAL PROOF TOASTS
+══════════════════════════════════════════════════════════════ */
+const TOAST_DATA = [
+  { name:'Ahmed K.',  flag:'🇦🇪', trade:'EUR/USD',  profit:'+$340',    avatar:'https://randomuser.me/api/portraits/men/71.jpg' },
+  { name:'Marcus T.', flag:'🇬🇧', trade:'Gold',     profit:'+180 pips', avatar:'https://randomuser.me/api/portraits/men/32.jpg' },
+  { name:'Priya M.',  flag:'🇮🇳', trade:'BTC/USDT', profit:'+$220',    avatar:'https://randomuser.me/api/portraits/women/44.jpg' },
+  { name:'Carlos R.', flag:'🇧🇷', trade:'ETH/USDT', profit:'+$195',    avatar:'https://randomuser.me/api/portraits/men/55.jpg' },
+  { name:'Sofia L.',  flag:'🇩🇪', trade:'EUR/GBP',  profit:'+$180',    avatar:'https://randomuser.me/api/portraits/women/21.jpg' },
+  { name:'James O.',  flag:'🇳🇬', trade:'NASDAQ',   profit:'+$260',    avatar:'https://randomuser.me/api/portraits/men/83.jpg' },
+  { name:'Layla H.',  flag:'🇦🇪', trade:'XAU/USD',  profit:'+$480',    avatar:'https://randomuser.me/api/portraits/women/68.jpg' },
+  { name:'Ravi S.',   flag:'🇸🇬', trade:'Options',  profit:'+$310',    avatar:'https://randomuser.me/api/portraits/men/12.jpg' },
+  { name:'Emma W.',   flag:'🇦🇺', trade:'GBP/JPY',  profit:'+$140',    avatar:'https://randomuser.me/api/portraits/women/33.jpg' },
+  { name:'Yusuf A.',  flag:'🇹🇷', trade:'ETH/USDT', profit:'+$380',    avatar:'https://randomuser.me/api/portraits/men/60.jpg' },
+];
+let toastIdx = 0;
+function showSocialToast() {
+  const t = TOAST_DATA[toastIdx % TOAST_DATA.length]; toastIdx++;
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const el = document.createElement('div');
+  el.className = 'sp-toast';
+  el.innerHTML = `<img class="sp-toast-avatar" src="${t.avatar}" alt="${t.name}"><div class="sp-toast-body"><div class="sp-toast-name">${t.flag} ${t.name}</div><div class="sp-toast-msg">Just traded ${t.trade}</div></div><div class="sp-toast-profit">${t.profit}</div>`;
+  container.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 480); }, 5000);
+}
+setTimeout(function scheduleToast() {
+  showSocialToast();
+  setTimeout(scheduleToast, 30000 + Math.random() * 15000);
+}, 12000);
 </script>
 </body>
 </html>
